@@ -20,9 +20,27 @@ class Metabolism(object):
     Parameter:
     'object' = ###list###
     """
-    def __init__(self, reactions=None, name=''):
-        super(Metabolism, self).__init__()
-        self.name = name
+    _metabolism_memory = dict()
+    _metabolism_counter = 0
+    
+    def __new__(cls, reactions=None, name='', *args, **kwargs):
+        if name:
+            name = str(name)
+        if name in cls._metabolism_memory:
+            return cls._metabolism_memory[name]
+        else:
+            instance = super(Metabolism, cls).__new__(cls, *args, **kwargs)
+            return instance
+    
+    def __init__(self, reactions=None, name=None, *args, **kwargs):
+        if name in self.__class__._metabolism_memory:
+            return None
+        super(Metabolism, self).__init__(*args, **kwargs)
+        if name:
+            self.name = name
+        else:
+            self.name = "Metabolism-%d" % self.__class__._metabolism_counter
+            self.__class__._metabolism_counter += 1
         if reactions:
             self.reactions = list(reactions)
         self.compounds = set()
@@ -30,6 +48,7 @@ class Metabolism(object):
             self.compounds.update(rxn.get_compounds()) 
         # self.reactions_dictionary = dict([(reac.id, reac) for reac in reactions])
         # self.metabolite_centric = MetaboliteCentricNetwork(self.reactions, name=self.name)
+        self.__class__._metabolism_memory[self.name] = self
     
     def __str__(self):
         """Provides some statistics about the system e.g. no. of reactions"""
@@ -47,13 +66,12 @@ Number of Metabolites: %i"""
         if isinstance(reaction, Reaction):
             if reaction in self.reactions:
                 return True
-            else:
-                False
         else:
-            if reaction in self.reactions_dictionary:
-                return True
-            else:
-                return False
+            reaction = str(reaction)
+            for item in self.reactions:
+                if reaction == item.identifier:
+                    return True
+        return False
     
     def __getitem__(self, indexkey):
         """Provides item access
@@ -71,6 +89,9 @@ Number of Metabolites: %i"""
                 print " ".join(("Reaction",indexkey,"is not in the system!"))
                 raise KeyError(msg)
     
+    def __cmp__(self, other):
+        return cmp(id(self), id(other))
+    
     def get_compounds(self):
         return list(self.compounds())
         
@@ -87,8 +108,8 @@ class StoichiometricMatrix(object):
     Rows represent compounds
     Coefficients ...
     """
-    def __init__(self):
-        super(StoichiometricMatrix, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(StoichiometricMatrix, self).__init__(*args, **kwargs)
         self.matrix = None
         self.compound_map = dict()
         self.reaction_map = dict()
@@ -105,13 +126,17 @@ class StoichiometricMatrix(object):
                     continue
                 self.reaction_map[reaction] = j
                 j += 1
-                self.matrix = hstack((self.matrix, zeros((self.matrix.shape[0], 1))))
+                self.matrix = hstack((self.matrix, zeros((self.matrix.shape[0],
+                    1))))
                 for compound in reaction:
                     if compound not in self.compound_map:
                         self.compound_map[compound] = i
                         i += 1
-                        self.matrix = vstack((self.matrix, zeros((1, self.matrix.shape[1]))))
-                    self.matrix[self.compound_map[compound]][self.reaction_map[reaction]] = -reaction.get_stoich_coeff(compound)
+                        self.matrix = vstack((self.matrix, zeros((1,
+                            self.matrix.shape[1]))))
+                    self.matrix[self.compound_map[compound]]\
+                        [self.reaction_map[reaction]] =\
+                        -reaction.get_stoich_coeff(compound)
     
     def _init_matrix(self, reaction):
         num = len(reaction)
@@ -130,30 +155,53 @@ class Compound(object):
         id = compound id
         ...
     """
-    def __init__(self, id, compartment=None, synonyms=None, formula=None, InChI=None, InCheyKey=None, SMILES=None, Charge=None, Mass=None):
-        super(Compound, self).__init__()
-        self.id = id
+    _compound_memory = dict()
+    
+    def __new__(cls, identifier, compartment=None, synonyms=None,
+        formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
+        mass=None, *args, **kwargs):
+        identifier = str(identifier)
+        if identifier in cls._compound_memory:
+            return cls._compound_memory[identifier]
+        else:
+            instance = super(Compound, cls).__new__(cls, *args, **kwargs)
+            return instance
+    
+    def __init__(self, identifier, compartment=None, synonyms=None,
+        formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
+        mass=None, *args, **kwargs):
+        if identifier in self.__class__._compound_memory:
+            return None
+        super(Compound, self).__init__(*args, **kwargs)
+        self.identifier = identifier
         self.compartment = compartment
         self.synonyms = synonyms
         self.formula = formula
-        self.InChI = InChI
-        self.InCheyKey = InCheyKey
-        self.SMILES = SMILES
-        self.Charge = Charge
-        self.Mass = Mass
+        self.in_chi = in_chi
+        self.in_chey_key = in_chey_key
+        self.smiles = smiles
+        if charge:
+            self.charge = int(charge)
+        else:
+            self.charge = None
+        if mass:
+            self.mass = float(mass)
+        else:
+            self.mass = None
+        self.__class__._compound_memory[self.identifier] = self
         
     def __str__(self):
-        return str(id)
+        return self.identifier
         
     def __contains__(self, element):
         """Checks for atomic element in compound."""
         raise NotImplemented
     
     def __hash__(self):
-        return hash(self.id)
+        return hash(self.identifier)
     
     def __cmp__(self, other):
-        return hash(self.id) - hash(other.id)
+        return cmp(id(self), id(other))
 
 
 class Reaction(object):
@@ -166,32 +214,48 @@ class Reaction(object):
         e.g. 2 A + 4.3 B -> 1 C => [2, 4.3, 1]
     reversibleQ = If the reaction is reversible [False]
     """
-    def __init__(self, id, substrates, products, stoichiometry, reversibleQ=False):
-        super(Reaction, self).__init__()
+    _reaction_memory = dict()
+    
+    def __new__(cls, identifier, substrates, products, stoichiometry,
+        reversible=False, synonyms=None, *args, **kwargs):
+        identifier = str(identifier)
+        if identifier in cls._reaction_memory:
+            return cls._reaction_memory[identifier]
+        else:
+            instance = super(Reaction, cls).__new__(cls, *args, **kwargs)
+            return instance
+    
+    def __init__(self, identifier, substrates, products, stoichiometry,
+        reversible=False, synonyms=None, *args, **kwargs):
+        if identifier in self.__class__._reaction_memory:
+            return None
+        super(Reaction, self).__init__(*args, **kwargs)
+        self.identifier = identifier
         try:
-            hash(id)
+            hash(self.identifier)
         except TypeError, msg:
             print "Sorry, the provided reaction id cannot be used as a dictionary key!"
             raise TypeError(msg)
-        if type(id) == int:
-            self.id = str(id)
-        else:
-            self.id = id
         self.substrates = tuple(substrates)
         self.products = tuple(products)
-        self.stoichiometry = tuple(stoichiometry)
-        self.stoichiometry_dict = dict(zip(list(self.substrates) + list(products), self.stoichiometry))
-        self.reversibleQ = reversibleQ
-        self.__consistency_check()
+        self.stoichiometry = tuple([int(coeff) for coeff in stoichiometry])
+        self.stoichiometry_dict = dict(zip(list(self.substrates)
+            + list(self.products), self.stoichiometry))
+        self.reversible = bool(reversible)
+        self._consistency_check()
+        self.__class__._reaction_memory[self.identifier] = self
     
-    def __consistency_check(self):
+    def _consistency_check(self):
         """Makes some consistency checks.
         
         1. Equal No. of substrates + products and stoichiometric factors
-        2. Check for stoichiometric balancing (if enough meta information e.g. elemental composition, mass etc is available)
+        2. Check for stoichiometric balancing (if enough meta information e.g.
+        elemental composition, mass etc is available)
         ...
         """
-        assert len(self.products) + len(self.substrates) == len(self.stoichiometry), "The number of stoichimetric factory does not match the number of compounds"
+        assert (len(self.products) + len(self.substrates)) ==\
+            len(self.stoichiometry), "The number of stoichimetric factory does"\
+            " not match the number of compounds"
         assert (set(self.products) & set(self.substrates)) == set([])
     
     def __iter__(self):
@@ -202,41 +266,41 @@ class Reaction(object):
         e.g. 2 A + 4.3 B -> 1 C or 2 A + 4.3 B <=> 1 C for reversible reactions.
         """
         def util(compound_list):
-            reactionStringList = list()
+            reaction_string = list()
             for compound in compound_list:
-                reactionStringList.append(str(stoichTmp.pop(0)))
-                reactionStringList.append(compound.id)
-                if not compound == compound_list[-1]:
-                    reactionStringList.append('+')
-            return reactionStringList
-        stoichTmp = list(self.stoichiometry)
-        reactionStringList = list()
-        reactionStringList += util(self.substrates)
-        if self.reversibleQ:
-            reactionStringList.append('<=>')
+                reaction_string.append(str(self.stoichiometry_dict[compound]))
+                reaction_string.append(compound.identifier)
+                if not (compound == compound_list[-1]):
+                    reaction_string.append('+')
+            return reaction_string
+        reaction_string = list()
+        reaction_string.extend(util(self.substrates))
+        if self.reversible:
+            reaction_string.append('<=>')
         else:
-            reactionStringList.append('->')
-        reactionStringList += util(self.products)
-        return ' '.join(reactionStringList)
+            reaction_string.append('->')
+        reaction_string.extend(util(self.products))
+        return ' '.join(reaction_string)
     
     def __contains__(self, compound):
         if isinstance(compound, Compound):
             if compound in self.substrates or compound in self.products:
                 return True
-            else:
-                False
         else:
-            flag = False
+            compound = str(compound)
             for item in self.products:
-                if compound == item.id:
-                    flag = True
+                if compound == item.identifier:
+                    return True
             for item in self.substrates:
-                if compound == item.id:
-                    flag = True
-            return flag
+                if compound == item.identifier:
+                    return True
+        return False
     
     def __len__(self):
         return len(self.substrates) + len(self.products)
+    
+    def __cmp__(self, other):
+        return cmp(id(self), id(other))
     
     def get_compounds(self):
         """Return both """
@@ -250,7 +314,8 @@ class Reaction(object):
             elif compound in self.products:
                 return self.stoichiometry_dict[compound]
         except KeyError, msg:
-            print ' '.join((compound.id,"is not participating in reaction", reaction.id))
+            print ' '.join((compound.idenifier, "is not participating in"\
+                " reaction", reaction.identifier))
             raise KeyError(msg)
 
 
@@ -274,10 +339,10 @@ class Reaction(object):
 #         else:
 #             return subEdges + prodEdges
 
-class MetaboliteCentricNetwork(networkx.MultiDiGraph):
+class MetaboliteCentricNetwork(networkx.DiGraph):
     """"""
-    def __init__(self, reactions=None, name='', weighted=True):
-        super(MetaboliteCentricNetwork, self).__init__(name=name, weighted=weighted)
+    def __init__(self, reactions=None, name='', weighted=True, *args, **kwargs):
+        super(MetaboliteCentricNetwork, self).__init__(name=name, weighted=weighted, *args, **kwargs)
         if reactions:
             self.__populate_graph_on_init(reactions)
     
@@ -288,7 +353,7 @@ class MetaboliteCentricNetwork(networkx.MultiDiGraph):
     def add_reaction(self, reaction):
         """docstring for add_reaction"""
         edges = [(substr, prod, reaction) for prod in reaction.products for substr in reaction.substrates]
-        if reaction.reversibleQ:
+        if reaction.reversible:
             self.add_edges_from(edges + [(j, i, d) for i, j, d in edges])
         else:
             self.add_edges_from(edges)
@@ -299,21 +364,16 @@ if __name__ == '__main__':
     # rxns = io.read_reactions_from_csv(open('./test_data/iAF1260_cytsolicNet_CurrencyFree.csv', 'rU'))
     # met_system = MetabolicSystem(rxns, name='test_system')
     # print met_system
-
-    print Compound('atp') == Compound('atp')
-    print hash(Compound('atp'))
-    print hash(Compound('atp'))
-    rxn1 = Reaction('ATPhyrdolysis', (Compound('atp'), Compound('h2o')), (Compound('adp'), Compound('pi')), (1,1,1,1), reversibleQ=True)
+    rxn1 = Reaction('ATPhyrdolysis', (Compound('atp'), Compound('h2o')), (Compound('adp'), Compound('pi')), (1,1,1,1), reversible=True)
     rxn2 = Reaction('GTPhyrdolysis', (Compound('gtp'), Compound('h2o')), (Compound('gdp'), Compound('pi')), (1,1,1,1), True)
     rxn3 = Reaction('CTPhyrdolysis', (Compound('ctp'), Compound('h2o')), (Compound('cdp'), Compound('pi')), (1,1,1,1))    
     sys = Metabolism((rxn1, rxn2, rxn3))
     s = StoichiometricMatrix()
     s.add_stoichiometry_from(sys)
     print s.matrix
-    print s.compound_map
-    print s.reaction_map
-    # print rxn3 in sys
-    # print 'ATPhyrdolysis' in sys
+    print rxn3 in sys
+    print 'ATPhyrdolysis' in sys
     # 
-    # testGraph = MetaboliteCentricNetwork((rxn1, rxn2, rxn3), name='testGraph')
+    test_graph = MetaboliteCentricNetwork((rxn1, rxn2, rxn3), name='testGraph')
+    print test_graph.edges()
     
