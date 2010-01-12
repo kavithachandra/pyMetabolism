@@ -1,13 +1,8 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
 """
-rnd_metb_from_bipartite.py
+Multiple ways of generating a null model for the statistical analysis of a
+L{Metabolism} instance.
 
-Created by Moritz Beber on 2009-09-30.
-Copyright (c) 2009 All rights reserved.
-
+@todo: set up logging, complete docs, complete functionality
 """
 
 

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>pyMetabolism.graph_view</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="pyMetabolism-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="pyMetabolism-module.html">Package&nbsp;pyMetabolism</a> ::
+        Module&nbsp;graph_view
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="pyMetabolism.graph_view-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="pyMetabolism.graph_view-module.html">Module pyMetabolism.graph_view</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"><tt class="py-docstring">Multiple ways of creating a graph representation of a L{Metabolism} instance.</tt> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-docstring">Generation of a stoichiometric matrix is also possible.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-docstring">@todo: set up logging, complete docs</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">"""</tt> </tt>
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"> </tt>
+<a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">networkx</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">numpy</tt> <tt class="py-keyword">import</tt> <tt class="py-name">hstack</tt><tt class="py-op">,</tt> <tt class="py-name">vstack</tt><tt class="py-op">,</tt> <tt class="py-name">zeros</tt> </tt>
+<a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"> </tt>
+<a name="BipartiteMetabolicNetwork"></a><div id="BipartiteMetabolicNetwork-def"><a name="L13"></a><tt class="py-lineno"> 13</tt> <a class="py-toggle" href="#" id="BipartiteMetabolicNetwork-toggle" onclick="return toggle('BipartiteMetabolicNetwork');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html">BipartiteMetabolicNetwork</a><tt class="py-op">(</tt><tt class="py-base-class">networkx</tt><tt class="py-op">.</tt><tt class="py-base-class">DiGraph</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BipartiteMetabolicNetwork-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="BipartiteMetabolicNetwork-expanded"><a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring">A bipartite graph representation of a L{Metabolism} instance.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring">@todo: many things</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line">     </tt>
+<a name="BipartiteMetabolicNetwork.__init__"></a><div id="BipartiteMetabolicNetwork.__init__-def"><a name="L20"></a><tt class="py-lineno"> 20</tt> <a class="py-toggle" href="#" id="BipartiteMetabolicNetwork.__init__-toggle" onclick="return toggle('BipartiteMetabolicNetwork.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">reactions</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">name</tt><tt class="py-op">=</tt><tt class="py-string">''</tt><tt class="py-op">,</tt> <tt class="py-param">weighted</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-param">node_info</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">,</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line">        <tt class="py-op">*</tt><tt class="py-param">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BipartiteMetabolicNetwork.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BipartiteMetabolicNetwork.__init__-expanded"><a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">@param reactions: A list of L{Reaction}s from which the graph can be populated.</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">@type reactions: C{list}</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">@param name: A simple string to identify the graph if desired.</tt> </tt>
+<a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring">@type name: C{str}</tt> </tt>
+<a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">@param weighted: By default the stoichiometric factors are used as edge weights,</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">                this can be turned off.</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring">@type weighted: C{bool}</tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">@param node_info: If true, information will be added to the graph's nodes.</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring">                 For compound nodes the following information will be tried in</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">                 order:</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">                 </tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring">                    1. L{Compound.charge}</tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">                    2. L{Compound.mass}</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">                 </tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring">                 For reaction nodes L{Reaction.rate} will be used.</tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">@type node_info: C{bool}</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line">        <tt class="py-name">super</tt><tt class="py-op">(</tt><tt id="link-0" class="py-name" targets="Class pyMetabolism.graph_view.BipartiteMetabolicNetwork=pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html"><a title="pyMetabolism.graph_view.BipartiteMetabolicNetwork" class="py-name" href="#" onclick="return doclink('link-0', 'BipartiteMetabolicNetwork', 'link-0');">BipartiteMetabolicNetwork</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Method pyMetabolism.Compound.__init__()=pyMetabolism.Compound-class.html#__init__,Method pyMetabolism.Metabolism.__init__()=pyMetabolism.Metabolism-class.html#__init__,Method pyMetabolism.Reaction.__init__()=pyMetabolism.Reaction-class.html#__init__,Method pyMetabolism.graph_view.BipartiteMetabolicNetwork.__init__()=pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#__init__,Method pyMetabolism.graph_view.MetaboliteCentricNetwork.__init__()=pyMetabolism.graph_view.MetaboliteCentricNetwork-class.html#__init__,Method pyMetabolism.graph_view.StoichiometricMatrix.__init__()=pyMetabolism.graph_view.StoichiometricMatrix-class.html#__init__"><a title="pyMetabolism.Compound.__init__
+pyMetabolism.Metabolism.__init__
+pyMetabolism.Reaction.__init__
+pyMetabolism.graph_view.BipartiteMetabolicNetwork.__init__
+pyMetabolism.graph_view.MetaboliteCentricNetwork.__init__
+pyMetabolism.graph_view.StoichiometricMatrix.__init__" class="py-name" href="#" onclick="return doclink('link-1', '__init__', 'link-1');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">name</tt><tt class="py-op">=</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">name</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-name">args</tt><tt class="py-op">,</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line">            <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">reactions</tt><tt class="py-op">:</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Method pyMetabolism.graph_view.BipartiteMetabolicNetwork._populate_graph_on_init()=pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#_populate_graph_on_init"><a title="pyMetabolism.graph_view.BipartiteMetabolicNetwork._populate_graph_on_init" class="py-name" href="#" onclick="return doclink('link-2', '_populate_graph_on_init', 'link-2');">_populate_graph_on_init</a></tt><tt class="py-op">(</tt><tt class="py-name">reactions</tt><tt class="py-op">,</tt> <tt class="py-name">weighted</tt><tt class="py-op">,</tt> <tt class="py-name">node_info</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">     </tt>
+<a name="BipartiteMetabolicNetwork._populate_graph_on_init"></a><div id="BipartiteMetabolicNetwork._populate_graph_on_init-def"><a name="L48"></a><tt class="py-lineno"> 48</tt> <a class="py-toggle" href="#" id="BipartiteMetabolicNetwork._populate_graph_on_init-toggle" onclick="return toggle('BipartiteMetabolicNetwork._populate_graph_on_init');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#_populate_graph_on_init">_populate_graph_on_init</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">reactions</tt><tt class="py-op">,</tt> <tt class="py-param">weighted</tt><tt class="py-op">,</tt> <tt class="py-param">node_info</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BipartiteMetabolicNetwork._populate_graph_on_init-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BipartiteMetabolicNetwork._populate_graph_on_init-expanded"><a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">rxn</tt> <tt class="py-keyword">in</tt> <tt class="py-name">reactions</tt><tt class="py-op">:</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Method pyMetabolism.graph_view.BipartiteMetabolicNetwork.add_reaction()=pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#add_reaction,Method pyMetabolism.graph_view.MetaboliteCentricNetwork.add_reaction()=pyMetabolism.graph_view.MetaboliteCentricNetwork-class.html#add_reaction"><a title="pyMetabolism.graph_view.BipartiteMetabolicNetwork.add_reaction
+pyMetabolism.graph_view.MetaboliteCentricNetwork.add_reaction" class="py-name" href="#" onclick="return doclink('link-3', 'add_reaction', 'link-3');">add_reaction</a></tt><tt class="py-op">(</tt><tt class="py-name">rxn</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L51"></a><tt class="py-lineno"> 51</tt>  <tt class="py-line">     </tt>
+<a name="BipartiteMetabolicNetwork.add_reaction"></a><div id="BipartiteMetabolicNetwork.add_reaction-def"><a name="L52"></a><tt class="py-lineno"> 52</tt> <a class="py-toggle" href="#" id="BipartiteMetabolicNetwork.add_reaction-toggle" onclick="return toggle('BipartiteMetabolicNetwork.add_reaction');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#add_reaction">add_reaction</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">rxn</tt><tt class="py-op">,</tt> <tt class="py-param">weighted</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-param">node_info</tt><tt class="py-op">=</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="BipartiteMetabolicNetwork.add_reaction-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="BipartiteMetabolicNetwork.add_reaction-expanded"><a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">docstring for add_reaction</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line">        <tt class="py-name">subEdges</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">elem</tt><tt class="py-op">,</tt> <tt class="py-name">reaction</tt><tt class="py-op">,</tt> <tt class="py-name">reaction</tt><tt class="py-op">.</tt><tt class="py-name">getStoichiometricFactor</tt><tt class="py-op">(</tt><tt class="py-name">elem</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">elem</tt> <tt class="py-keyword">in</tt> <tt class="py-name">reaction</tt><tt class="py-op">.</tt><tt class="py-name">substrates</tt><tt class="py-op">]</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line">        <tt class="py-name">prodEdges</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">reaction</tt><tt class="py-op">,</tt> <tt class="py-name">elem</tt><tt class="py-op">,</tt> <tt class="py-name">reaction</tt><tt class="py-op">.</tt><tt class="py-name">getStoichiometricFactor</tt><tt class="py-op">(</tt><tt class="py-name">elem</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">elem</tt> <tt class="py-keyword">in</tt> <tt class="py-name">reaction</tt><tt class="py-op">.</tt><tt class="py-name">products</tt><tt class="py-op">]</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">reaction</tt><tt class="py-op">.</tt><tt class="py-name">reversibleQ</tt><tt class="py-op">:</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">subEdges</tt> <tt class="py-op">+</tt> <tt class="py-name">prodEdges</tt> <tt class="py-op">+</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">j</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">d</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">j</tt><tt class="py-op">,</tt> <tt class="py-name">d</tt> <tt class="py-keyword">in</tt> <tt class="py-name">subEdges</tt><tt class="py-op">]</tt> <tt class="py-op">+</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">j</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">d</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">j</tt><tt class="py-op">,</tt> <tt class="py-name">d</tt> <tt class="py-keyword">in</tt> <tt class="py-name">prodEdges</tt><tt class="py-op">]</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">subEdges</tt> <tt class="py-op">+</tt> <tt class="py-name">prodEdges</tt> </tt>
+</div></div><a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line"> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line"> </tt>
+<a name="MetaboliteCentricNetwork"></a><div id="MetaboliteCentricNetwork-def"><a name="L64"></a><tt class="py-lineno"> 64</tt> <a class="py-toggle" href="#" id="MetaboliteCentricNetwork-toggle" onclick="return toggle('MetaboliteCentricNetwork');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="pyMetabolism.graph_view.MetaboliteCentricNetwork-class.html">MetaboliteCentricNetwork</a><tt class="py-op">(</tt><tt class="py-base-class">networkx</tt><tt class="py-op">.</tt><tt class="py-base-class">DiGraph</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="MetaboliteCentricNetwork-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="MetaboliteCentricNetwork-expanded"><a name="L65"></a><tt class="py-lineno"> 65</tt>  <tt class="py-line">    <tt class="py-docstring">""""""</tt> </tt>
+<a name="MetaboliteCentricNetwork.__init__"></a><div id="MetaboliteCentricNetwork.__init__-def"><a name="L66"></a><tt class="py-lineno"> 66</tt> <a class="py-toggle" href="#" id="MetaboliteCentricNetwork.__init__-toggle" onclick="return toggle('MetaboliteCentricNetwork.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyMetabolism.graph_view.MetaboliteCentricNetwork-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">reactions</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">,</tt> <tt class="py-param">name</tt><tt class="py-op">=</tt><tt class="py-string">''</tt><tt class="py-op">,</tt> <tt class="py-param">weighted</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-param">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="MetaboliteCentricNetwork.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="MetaboliteCentricNetwork.__init__-expanded"><a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line">        <tt class="py-name">super</tt><tt class="py-op">(</tt><tt id="link-4" class="py-name" targets="Class pyMetabolism.graph_view.MetaboliteCentricNetwork=pyMetabolism.graph_view.MetaboliteCentricNetwork-class.html"><a title="pyMetabolism.graph_view.MetaboliteCentricNetwork" class="py-name" href="#" onclick="return doclink('link-4', 'MetaboliteCentricNetwork', 'link-4');">MetaboliteCentricNetwork</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="pyMetabolism.Compound.__init__
+pyMetabolism.Metabolism.__init__
+pyMetabolism.Reaction.__init__
+pyMetabolism.graph_view.BipartiteMetabolicNetwork.__init__
+pyMetabolism.graph_view.MetaboliteCentricNetwork.__init__
+pyMetabolism.graph_view.StoichiometricMatrix.__init__" class="py-name" href="#" onclick="return doclink('link-5', '__init__', 'link-1');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-name">name</tt><tt class="py-op">=</tt><tt class="py-name">str</tt><tt class="py-op">(</tt><tt class="py-name">name</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-name">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">reactions</tt><tt class="py-op">:</tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method pyMetabolism.graph_view.MetaboliteCentricNetwork.__populate_graph_on_init()=pyMetabolism.graph_view.MetaboliteCentricNetwork-class.html#__populate_graph_on_init"><a title="pyMetabolism.graph_view.MetaboliteCentricNetwork.__populate_graph_on_init" class="py-name" href="#" onclick="return doclink('link-6', '__populate_graph_on_init', 'link-6');">__populate_graph_on_init</a></tt><tt class="py-op">(</tt><tt class="py-name">reactions</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line">     </tt>
+<a name="MetaboliteCentricNetwork.__populate_graph_on_init"></a><div id="MetaboliteCentricNetwork.__populate_graph_on_init-def"><a name="L71"></a><tt class="py-lineno"> 71</tt> <a class="py-toggle" href="#" id="MetaboliteCentricNetwork.__populate_graph_on_init-toggle" onclick="return toggle('MetaboliteCentricNetwork.__populate_graph_on_init');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyMetabolism.graph_view.MetaboliteCentricNetwork-class.html#__populate_graph_on_init">__populate_graph_on_init</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">reactions</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="MetaboliteCentricNetwork.__populate_graph_on_init-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="MetaboliteCentricNetwork.__populate_graph_on_init-expanded"><a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">reac</tt> <tt class="py-keyword">in</tt> <tt class="py-name">reactions</tt><tt class="py-op">:</tt> </tt>
+<a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="pyMetabolism.graph_view.BipartiteMetabolicNetwork.add_reaction
+pyMetabolism.graph_view.MetaboliteCentricNetwork.add_reaction" class="py-name" href="#" onclick="return doclink('link-7', 'add_reaction', 'link-3');">add_reaction</a></tt><tt class="py-op">(</tt><tt class="py-name">reac</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L74"></a><tt class="py-lineno"> 74</tt>  <tt class="py-line">     </tt>
+<a name="MetaboliteCentricNetwork.add_reaction"></a><div id="MetaboliteCentricNetwork.add_reaction-def"><a name="L75"></a><tt class="py-lineno"> 75</tt> <a class="py-toggle" href="#" id="MetaboliteCentricNetwork.add_reaction-toggle" onclick="return toggle('MetaboliteCentricNetwork.add_reaction');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyMetabolism.graph_view.MetaboliteCentricNetwork-class.html#add_reaction">add_reaction</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">reaction</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="MetaboliteCentricNetwork.add_reaction-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="MetaboliteCentricNetwork.add_reaction-expanded"><a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line">        <tt class="py-docstring">"""docstring for add_reaction"""</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line">        <tt class="py-name">edges</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">substr</tt><tt class="py-op">,</tt> <tt class="py-name">prod</tt><tt class="py-op">,</tt> <tt class="py-name">reaction</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">prod</tt> <tt class="py-keyword">in</tt> <tt class="py-name">reaction</tt><tt class="py-op">.</tt><tt class="py-name">products</tt> <tt class="py-keyword">for</tt> <tt class="py-name">substr</tt> <tt class="py-keyword">in</tt> <tt class="py-name">reaction</tt><tt class="py-op">.</tt><tt class="py-name">substrates</tt><tt class="py-op">]</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">reaction</tt><tt class="py-op">.</tt><tt class="py-name">reversible</tt><tt class="py-op">:</tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">add_edges_from</tt><tt class="py-op">(</tt><tt class="py-name">edges</tt> <tt class="py-op">+</tt> <tt class="py-op">[</tt><tt class="py-op">(</tt><tt class="py-name">j</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">d</tt><tt class="py-op">)</tt> <tt class="py-keyword">for</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">j</tt><tt class="py-op">,</tt> <tt class="py-name">d</tt> <tt class="py-keyword">in</tt> <tt class="py-name">edges</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line">        <tt class="py-keyword">else</tt><tt class="py-op">:</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">add_edges_from</tt><tt class="py-op">(</tt><tt class="py-name">edges</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line"> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line"> </tt>
+<a name="StoichiometricMatrix"></a><div id="StoichiometricMatrix-def"><a name="L84"></a><tt class="py-lineno"> 84</tt> <a class="py-toggle" href="#" id="StoichiometricMatrix-toggle" onclick="return toggle('StoichiometricMatrix');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="pyMetabolism.graph_view.StoichiometricMatrix-class.html">StoichiometricMatrix</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="StoichiometricMatrix-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="StoichiometricMatrix-expanded"><a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">    <tt class="py-docstring">"""A class representing a stoichiometric matrix.</tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"><tt class="py-docstring">    </tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-docstring">    Columns represent reactions</tt> </tt>
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-docstring">    Rows represent compounds</tt> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"><tt class="py-docstring">    Coefficients ...</tt> </tt>
+<a name="L90"></a><tt class="py-lineno"> 90</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="StoichiometricMatrix.__init__"></a><div id="StoichiometricMatrix.__init__-def"><a name="L91"></a><tt class="py-lineno"> 91</tt> <a class="py-toggle" href="#" id="StoichiometricMatrix.__init__-toggle" onclick="return toggle('StoichiometricMatrix.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyMetabolism.graph_view.StoichiometricMatrix-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-op">*</tt><tt class="py-param">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-param">kwargs</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="StoichiometricMatrix.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="StoichiometricMatrix.__init__-expanded"><a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line">        <tt class="py-name">super</tt><tt class="py-op">(</tt><tt id="link-8" class="py-name" targets="Class pyMetabolism.graph_view.StoichiometricMatrix=pyMetabolism.graph_view.StoichiometricMatrix-class.html"><a title="pyMetabolism.graph_view.StoichiometricMatrix" class="py-name" href="#" onclick="return doclink('link-8', 'StoichiometricMatrix', 'link-8');">StoichiometricMatrix</a></tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="pyMetabolism.Compound.__init__
+pyMetabolism.Metabolism.__init__
+pyMetabolism.Reaction.__init__
+pyMetabolism.graph_view.BipartiteMetabolicNetwork.__init__
+pyMetabolism.graph_view.MetaboliteCentricNetwork.__init__
+pyMetabolism.graph_view.StoichiometricMatrix.__init__" class="py-name" href="#" onclick="return doclink('link-9', '__init__', 'link-1');">__init__</a></tt><tt class="py-op">(</tt><tt class="py-op">*</tt><tt class="py-name">args</tt><tt class="py-op">,</tt> <tt class="py-op">**</tt><tt class="py-name">kwargs</tt><tt class="py-op">)</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">compound_map</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reaction_map</tt> <tt class="py-op">=</tt> <tt class="py-name">dict</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">         </tt>
+<a name="StoichiometricMatrix.add_stoichiometry_from"></a><div id="StoichiometricMatrix.add_stoichiometry_from-def"><a name="L97"></a><tt class="py-lineno"> 97</tt> <a class="py-toggle" href="#" id="StoichiometricMatrix.add_stoichiometry_from-toggle" onclick="return toggle('StoichiometricMatrix.add_stoichiometry_from');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyMetabolism.graph_view.StoichiometricMatrix-class.html#add_stoichiometry_from">add_stoichiometry_from</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">metabolism</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="StoichiometricMatrix.add_stoichiometry_from-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="StoichiometricMatrix.add_stoichiometry_from-expanded"><a name="L98"></a><tt class="py-lineno"> 98</tt>  <tt class="py-line">        <tt class="py-docstring">""""""</tt> </tt>
+<a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-name">j</tt> <tt class="py-op">=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reaction_map</tt><tt class="py-op">)</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">        <tt class="py-name">i</tt> <tt class="py-op">=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">compound_map</tt><tt class="py-op">)</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">reaction</tt> <tt class="py-keyword">in</tt> <tt class="py-name">metabolism</tt><tt class="py-op">.</tt><tt class="py-name">reactions</tt><tt class="py-op">:</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">reaction</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reaction_map</tt><tt class="py-op">:</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt> <tt class="py-op">==</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">                    <tt class="py-name">i</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Method pyMetabolism.graph_view.StoichiometricMatrix._init_matrix()=pyMetabolism.graph_view.StoichiometricMatrix-class.html#_init_matrix"><a title="pyMetabolism.graph_view.StoichiometricMatrix._init_matrix" class="py-name" href="#" onclick="return doclink('link-10', '_init_matrix', 'link-10');">_init_matrix</a></tt><tt class="py-op">(</tt><tt class="py-name">reaction</tt><tt class="py-op">)</tt> </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">                    <tt class="py-name">j</tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">                    <tt class="py-keyword">continue</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reaction_map</tt><tt class="py-op">[</tt><tt class="py-name">reaction</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">j</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">                <tt class="py-name">j</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt> <tt class="py-op">=</tt> <tt class="py-name">hstack</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt><tt class="py-op">,</tt> <tt class="py-name">zeros</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt><tt class="py-op">.</tt><tt class="py-name">shape</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line">                    <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L111"></a><tt class="py-lineno">111</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">compound</tt> <tt class="py-keyword">in</tt> <tt class="py-name">reaction</tt><tt class="py-op">:</tt> </tt>
+<a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">                    <tt class="py-keyword">if</tt> <tt class="py-name">compound</tt> <tt class="py-keyword">not</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">compound_map</tt><tt class="py-op">:</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">compound_map</tt><tt class="py-op">[</tt><tt class="py-name">compound</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">i</tt> </tt>
+<a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line">                        <tt class="py-name">i</tt> <tt class="py-op">+=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L115"></a><tt class="py-lineno">115</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt> <tt class="py-op">=</tt> <tt class="py-name">vstack</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt><tt class="py-op">,</tt> <tt class="py-name">zeros</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> </tt>
+<a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">                            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt><tt class="py-op">.</tt><tt class="py-name">shape</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line">                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt><tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">compound_map</tt><tt class="py-op">[</tt><tt class="py-name">compound</tt><tt class="py-op">]</tt><tt class="py-op">]</tt>\ </tt>
+<a name="L118"></a><tt class="py-lineno">118</tt>  <tt class="py-line">                        <tt class="py-op">[</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reaction_map</tt><tt class="py-op">[</tt><tt class="py-name">reaction</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt>\ </tt>
+<a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">                        <tt class="py-name">reaction</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Method pyMetabolism.Reaction.get_stoich_coeff()=pyMetabolism.Reaction-class.html#get_stoich_coeff"><a title="pyMetabolism.Reaction.get_stoich_coeff" class="py-name" href="#" onclick="return doclink('link-11', 'get_stoich_coeff', 'link-11');">get_stoich_coeff</a></tt><tt class="py-op">(</tt><tt class="py-name">compound</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">     </tt>
+<a name="StoichiometricMatrix._init_matrix"></a><div id="StoichiometricMatrix._init_matrix-def"><a name="L121"></a><tt class="py-lineno">121</tt> <a class="py-toggle" href="#" id="StoichiometricMatrix._init_matrix-toggle" onclick="return toggle('StoichiometricMatrix._init_matrix');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="pyMetabolism.graph_view.StoichiometricMatrix-class.html#_init_matrix">_init_matrix</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">reaction</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="StoichiometricMatrix._init_matrix-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="StoichiometricMatrix._init_matrix-expanded"><a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">        <tt class="py-name">num</tt> <tt class="py-op">=</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">reaction</tt><tt class="py-op">)</tt> </tt>
+<a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt> <tt class="py-op">=</tt> <tt class="py-name">zeros</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">num</tt><tt class="py-op">,</tt> <tt class="py-number">1</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">compound</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">reaction</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">compound_map</tt><tt class="py-op">[</tt><tt class="py-name">compound</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">i</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">matrix</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">]</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-name">reaction</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="pyMetabolism.Reaction.get_stoich_coeff" class="py-name" href="#" onclick="return doclink('link-12', 'get_stoich_coeff', 'link-11');">get_stoich_coeff</a></tt><tt class="py-op">(</tt><tt class="py-name">compound</tt><tt class="py-op">)</tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">reaction_map</tt><tt class="py-op">[</tt><tt class="py-name">reaction</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">num</tt> </tt>
+</div></div><a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="pyMetabolism-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Tue Jan 12 03:15:28 2010
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
