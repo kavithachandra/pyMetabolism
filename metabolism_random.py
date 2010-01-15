@@ -181,13 +181,13 @@ Returns:
     rnd_graph = graph.copy()
     num_rnd = graph.size() * flip
     print "Number of bi-directional edges in the graph: %d"\
-        % len(_double_edges(graph))
+        % len(_double_edges(rnd_graph))
     while num_rnd > 0:
         # keep attempting to switch edges until right conditions are met
         if _flip_bipartite_edge(rnd_graph, metbs, rxns):
             num_rnd -= 1
     print "Number of bi-directional edges in the graph after randomisation: %d"\
-        % len(_double_edges(graph))
+        % len(_double_edges(rnd_graph))
     return rnd_graph
 
 
