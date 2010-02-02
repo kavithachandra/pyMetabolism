@@ -202,9 +202,8 @@ intialises a new L{Reaction} instance.
         self.identifier = identifier
         self.substrates = tuple(substrates)
         self.products = tuple(products)
-        self.stoichiometry = tuple([int(coeff) for coeff in stoichiometry])
-        self.stoichiometry_dict = dict(zip(list(self.substrates).extend(
-            list(self.products)), self.stoichiometry))
+        self.stoichiometry = tuple([int(coeff) for coeff in stoichiometry]) # TODO float coeff should be possible
+        self.stoichiometry_dict = dict(zip(list(self.substrates) + list(self.products), self.stoichiometry))
         self.reversible = bool(reversible)
         if synonyms:
             self.synonyms = synonyms
