@@ -2,16 +2,22 @@
 Multiple ways of creating a graph representation of a L{Metabolism} instance.
 Generation of a stoichiometric matrix is also possible.
 
+@author: Nikolaus Sonnenschein
+@author: Moritz Beber
+@contact: niko(at)foo.org
+@contact: moritz(at)foo.org
+@copyright: Jacobs University Bremen. All rights reserved.
+@since: 2009-09-11
 @attention: Graph instances and L{Metabolism} instances are not interlinked:
             Adding or removing reactions from one does not affect the other.
 @todo: set up logging, complete docs
 """
 
 
-import random as rnd
+import random
 import networkx
 from numpy import hstack, vstack, zeros
-from pyMetabolism import Compound, Reaction
+from pyMetabolism.metabolism import Compound, Reaction
 
 
 class BipartiteMetabolicNetwork(networkx.DiGraph):
@@ -174,7 +180,7 @@ Switching of a double edge is treated separately from a unidirectional edge.
         # not enough bi-directional edges in the graph
         if len(double_edges) < 2:
             return False
-        second = rnd.choice(double_edges)
+        second = random.choice(double_edges)
         if first[0] in second:
             return False
         if first[1] in second:
@@ -206,14 +212,14 @@ Select two edges whose sources lie in the same node set.
         """
         # source is a metabolite
         edges = graph.edges()
-        first = rnd.choice(edges)
-        second = rnd.choice(edges)
+        first = random.choice(edges)
+        second = random.choice(edges)
         if isinstance(first[0], Compound):
             while not isinstance(second[0], Compound):
-                second = rnd.choice(edges)
+                second = random.choice(edges)
         else:
             while not isinstance(second[0], Reaction):
-                second = rnd.choice(edges)
+                second = random.choice(edges)
         return (first, second)
     
     def _flip_bipartite_edge(self, graph):
@@ -291,7 +297,7 @@ preserve the bipartite nature of the graph.
         return rnd_graph
 
 
-class MetaboliteCentricNetwork(networkx.DiGraph):
+class MetaboliteCentricNetwork(networkx.MultiDiGraph):
     """"""
     def __init__(self, reactions=None, name='', weighted=True, *args, **kwargs):
         super(MetaboliteCentricNetwork, self).__init__(name=str(name), *args, **kwargs)
