@@ -9,7 +9,7 @@ Copyright (c) 2010 Jacobs University of Bremen. All rights reserved.
 
 import sys
 import os
-from pyMetabolism import Metabolism, Reaction, Compound
+from pyMetabolism.metabolism import Metabolism, Reaction, Compound
 try:
     import libsbml
 except ImportError, msg:
