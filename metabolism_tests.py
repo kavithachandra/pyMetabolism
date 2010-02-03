@@ -10,19 +10,19 @@ Copyright (c) 2009 . All rights reserved.
 import sys
 import os
 import unittest
-from pyMetabolism import *
+from pyMetabolism.metabolism import Metabolism, Compound, Reaction
 
-class MetabolicSystemTests(unittest.TestCase):
+class MetabolismTests(unittest.TestCase):
     def setUp(self):
-        self.r1 = Reaction('ATPhyrdolysis', (Compound('atp'), Compound('h2o')), (Compound('adp'), Compound('pi')), (1,1,1,1))
-        self.r2 = Reaction('GTPhyrdolysis', (Compound('gtp'), Compound('h2o')), (Compound('gdp'), Compound('pi')), (1,1,1,1))
-        self.r3 = Reaction('CTPhyrdolysis', (Compound('ctp'), Compound('h2o')), (Compound('cdp'), Compound('pi')), (1,1,1,1))
-        self.metabolic_system = MetabolicSystem((self.r1, self.r2, self.r3))
-        self.smaller_metabolic_system = MetabolicSystem((self.r1, self.r2))
+        self.r1 = Reaction('ATPhyrdolysis', (Compound('atp'), Compound('h2o')), (Compound('adp'), Compound('pi')), (-1,-1,1,1))
+        self.r2 = Reaction('GTPhyrdolysis', (Compound('gtp'), Compound('h2o')), (Compound('gdp'), Compound('pi')), (-1,-1,1,1))
+        self.r3 = Reaction('CTPhyrdolysis', (Compound('ctp'), Compound('h2o')), (Compound('cdp'), Compound('pi')), (-1,-1,1,1))
+        self.metabolic_system = Metabolism((self.r1, self.r2, self.r3))
+        self.smaller_metabolic_system = Metabolism((self.r1, self.r2))
     
-    def test__str__(self):
-        """Tests if the __str__ methods provides the correct statistics"""
-        self.assertTrue(type(self.metabolic_system.__str__()) == str)
+    # def test__str__(self):
+    #     """Tests if the __str__ methods provides the correct statistics"""
+    #     self.assertTrue(type(self.metabolic_system.__str__()) == str)
         
     def test__getitem__(self):
         """Test if metabolic_system[y] provides the correct x"""
@@ -71,9 +71,15 @@ class ReactionTests(unittest.TestCase):
         """Tests if the __str__ method works correctly"""
         self.assertEqual(self.reaction.__str__(), '1 atp 1 h2o -> 1 adp 1 pi')
 
+    def test_contains_string_input(self):
+        self.assertTrue('atp' in self.reaction)
+        
+    def test_contains_string_input(self):
+        self.assertTrue(Compound('atp') in self.reaction)
+
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(MetabolicSystemTests)
+    suite = unittest.TestLoader().loadTestsFromTestCase(MetabolismTests)
     unittest.TextTestRunner(verbosity=4).run(suite)
     suite = unittest.TestLoader().loadTestsFromTestCase(ReactionTests)
     unittest.TextTestRunner(verbosity=4).run(suite)
