@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+# !/usr/bin/env python -V
 # encoding: utf-8
 """
 sbml.py
@@ -29,14 +29,14 @@ class SBMLParser(object):
     def __parse_sbml_reactant(self, sbml_compound):
         """Able to parse entries from getListOfReactants or getListOfProducts
         
-        @todo Check for meta information and parse if available
+        @todo: Check for meta information and parse if available
         """
         return Compound(sbml_compound.getSpecies())
 
     def __parse_sbml_species(self, sbml_compound):
         """Able to parse entries from getListOfSpecies
         
-        @todo Check for meta information and parse if available
+        @todo: Check for meta information and parse if available
         """
         return Compound(sbml_compound.getId())
     
@@ -67,13 +67,14 @@ class SBMLParser(object):
 if __name__ == '__main__':
     smallModel = '../test_data/Ec_core_flux1.xml'
     bigModel = '../test_data/iAF1260.xml'
-    parser = SBMLParser(smallModel)
+    parser = SBMLParser(bigModel)
     print 'Compounds:\n'
     for elem in parser.get_compounds():
         print elem
-    print
+    print len(parser.get_compounds())
     print 'Reactions:\n'
     for elem in parser.get_reactions():
         print elem
+    print len(parser.get_reactions())
     print parser.get_metabolic_system()
     

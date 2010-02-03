@@ -8,20 +8,30 @@ Copyright (c) 2010 Jacobs University of Bremen. All rights reserved.
 """
 
 from ifba.glpki.glpki import *
-from ifba.GlpkWrap.metabolism import Metabolism
+from ifba.GlpkWrap.metabolism import Metabolism, StoichiometricMatrix
 from pyMetabolism.io.sbml import SBMLParser
 
+class Metabolism2glpk(object):
+    """docstring for metabolism2glpk"""
+    def __init__(self, metabolism):
+        super(Metabolism2glpk, self).__init__()
+        self.metabolism = metabolism
+        
+    def convert_to_ifba_metabolism(self):
+        """docstring for convert_to_ifba_metabolism"""
+        lp = glp_create_prob()
+        
+    def convert_to_ifba_glpk(self):
+        """docstring for convert_to_ifba_metabolism"""
+        pass
+    
 
 if __name__ == '__main__':
     smallModel = '../test_data/Ec_core_flux1.xml'
     bigModel = '../test_data/iAF1260.xml'
     parser = SBMLParser(smallModel)
-    print 'Compounds:\n'
-    for elem in parser.get_compounds():
-        print elem
-    print
-    print 'Reactions:\n'
-    for elem in parser.get_reactions():
-        print elem
-    print parser.get_metabolic_system()
+    metbol = parser.get_metabolic_system()
+    converter = Metabolism2glpk(metbol)
+    converter.convert_to_ifba_metabolism()
+    
 

@@ -11,7 +11,7 @@ import sys
 import os
 import csv
 import re
-from pyMetabolism import Reaction, Compound
+from pyMetabolism.metabolism import Reaction, Compound
 
 test_reac = '1.3 Mcrnc + 4 Mctbtcoac <=> Mcrncoac'
 

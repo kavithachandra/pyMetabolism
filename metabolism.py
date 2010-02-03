@@ -14,57 +14,58 @@ Basic classes modelling compounds, reactions, and metabolism.
 
 class Compound(object):
     """
-A class modeling a chemical compound. Primary identifier of L{Compound}s is a
-simple string C{identifier} although many synonymous identifiers may be set up.
-
-@cvar _compound_memory: A dictionary that stores instances of L{Compound} as
-                        values to their C{identifier} key.
-@type _compound_memory: C{dict}
-
-@ivar identifier: The main name of the compound will be used for comparisons and
-                  representation.
-@type identifier: C{str}
-
-@ivar compartment: Define a compartment where this compound occurs for a multi-
-                   compartmentalised metabolism.
-@type compartment: C{str}
-
-@ivar synonyms: Alternative names for the compound.
-@type synonyms: C{list}
-
-@ivar formula: Elemental formula of the compound.
-@type formula: C{str}
-
-@ivar in_chi:
-@type in_chi: C{str}
-
-@ivar in_chey_key:
-@type in_chey_key: C{str}
-
-@ivar smiles:
-@type smiles: C{str}
-
-@ivar charge: Electric charge of the compound.
-@type charge: C{int}
-
-@ivar mass: Mass of the compound.
-@type mass: C{float}
-@note: Currently, no unit system for mass is implemented it is left up to the
-       user.
-
-@todo: clarify compartment use, describe synonymous strings better
+    A class modeling a chemical compound. Primary identifier of L{Compound}s is a
+    simple string C{identifier} although many synonymous identifiers may be set up.
+    
+    @cvar _compound_memory: A dictionary that stores instances of L{Compound} as
+                            values to their C{identifier} key.
+    @type _compound_memory: C{dict}
+    
+    @ivar identifier: The main name of the compound will be used for comparisons and
+                      representation.
+    @type identifier: C{str}
+    
+    @ivar compartment: Define a compartment where this compound occurs for a multi-
+                       compartmentalised metabolism.
+    @type compartment: C{str}
+    
+    @ivar synonyms: Alternative names for the compound.
+    @type synonyms: C{list}
+    
+    @ivar formula: Elemental formula of the compound.
+    @type formula: C{str}
+    
+    @ivar in_chi:
+    @type in_chi: C{str}
+    
+    @ivar in_chey_key:
+    @type in_chey_key: C{str}
+    
+    @ivar smiles:
+    @type smiles: C{str}
+    
+    @ivar charge: Electric charge of the compound.
+    @type charge: C{int}
+    
+    @ivar mass: Mass of the compound.
+    @type mass: C{float}
+    @note: Currently, no unit system for mass is implemented it is left up to the
+           user.
+    
+    @todo: clarify compartment use, describe synonymous strings better
     """
+    
     _compound_memory = dict()
     
     def __new__(cls, identifier, compartment=None, synonyms=None,
         formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
         mass=None, *args, **kwargs):
         """
-@return: Either returns an old L{Compound} instance if the name already exists
-or passes a new L{Compound} C{class instance} to be initialised.
-@rtype: L{Compound} C{class instance}
+        @return: Either returns an old L{Compound} instance if the name already exists
+        or passes a new L{Compound} C{class instance} to be initialised.
+        @rtype: L{Compound} C{class instance}
 
-@attention: This method is never called directly.
+        @attention: This method is never called directly.
         """
         identifier = str(identifier)
         if identifier in cls._compound_memory:
@@ -77,8 +78,8 @@ or passes a new L{Compound} C{class instance} to be initialised.
         formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
         mass=None, *args, **kwargs):
         """
-Either does nothing if the L{Compound} instance already exists or
-intialises a new L{Compound} instance.
+        Either does nothing if the L{Compound} instance already exists or
+        intialises a new L{Compound} instance.
         """
         if identifier in self.__class__._compound_memory:
             return None
@@ -102,80 +103,87 @@ intialises a new L{Compound} instance.
         
     def __str__(self):
         """
-@rtype: C{str}
+        @rtype: C{str}
         """
         return self.identifier
         
     def __contains__(self, element):
         """
-Checks for atomic element in compound.
+        Checks for atomic element in compound.
 
-@raise NotImplementedError:
+        @raise NotImplementedError:
         """
         raise NotImplementedError
     
     def __hash__(self):
         """
-@rtype: C{int}
+        @rtype: C{int}
         """
         return hash(self.identifier)
     
     def __cmp__(self, other):
         """
-@rtype: C{int}
+        @rtype: C{int}
         """
         return cmp(id(self), id(other))
+    
+    def get_id(self):
+        """
+        @return: Returns identifier of compound.
+        @rtype: C{str}        
+        """
+        pass
 
 
 class Reaction(object):
     """
-A class modeling a chemical reaction.
+    A class modeling a chemical reaction.
 
-@cvar _reaction_memory: A dictionary that stores instances of L{Reaction} as
-                        values to their C{identifier} key.
-@type _reaction_memory: C{dict}
+    @cvar _reaction_memory: A dictionary that stores instances of L{Reaction} as
+                            values to their C{identifier} key.
+    @type _reaction_memory: C{dict}
 
-@ivar identifier: The main name of the reaction will be used for comparisons and
-                  representation.
-@type identifier: C{str}
+    @ivar identifier: The main name of the reaction will be used for comparisons and
+                      representation.
+    @type identifier: C{str}
 
-@ivar substrates: L{Compound}s being consumed by this reaction.
-@type substrates: C{tuple}
+    @ivar substrates: L{Compound}s being consumed by this reaction.
+    @type substrates: C{tuple}
 
-@ivar products: L{Compound}s being produced by this reaction.
-@type products: C{tuple}
+    @ivar products: L{Compound}s being produced by this reaction.
+    @type products: C{tuple}
 
-@ivar stoichiometry: Tuple containing the positive integer stoichiometric
-                     factors of all substrates and products in the order
-                     supplied to C{substrates} and C{products}.
-@type stoichiometry: C{tuple}
-@attention: The stoichiometric factors given in C{stoichiometry} should be
-            positive integers, their sign will be adjusted if necessary.
+    @ivar stoichiometry: Tuple containing the positive integer stoichiometric
+                         factors of all substrates and products in the order
+                         supplied to C{substrates} and C{products}.
+    @type stoichiometry: C{tuple}
+    @attention: The stoichiometric factors given in C{stoichiometry} should be
+                positive integers, their sign will be adjusted if necessary.
 
-@ivar synonyms: Synonymous names for this reaction.
-@type synonyms: C{list}
+    @ivar synonyms: Synonymous names for this reaction.
+    @type synonyms: C{list}
 
-@ivar rate: Define the value of the rate constant for this reaction.
-@type rate: C{float}
+    @ivar rate: Define the value of the rate constant for this reaction.
+    @type rate: C{float}
 
-@ivar stoichiometry_dict: Dictionary providing easy access to stoichiometric
-                          factors (values) of all compounds (keys) in the
-                          reaction.
-@type stoichiometry_dict: C{dict}
+    @ivar stoichiometry_dict: Dictionary providing easy access to stoichiometric
+                              factors (values) of all compounds (keys) in the
+                              reaction.
+    @type stoichiometry_dict: C{dict}
 
-@ivar reversible: Specify whether the reaction is considered reversible.
-@type reversible: C{bool}
+    @ivar reversible: Specify whether the reaction is considered reversible.
+    @type reversible: C{bool}
     """
     _reaction_memory = dict()
     
     def __new__(cls, identifier, substrates, products, stoichiometry,
         reversible=False, synonyms=None, rate=None, *args, **kwargs):
         """
-@return: Either returns an old L{Reaction} instance if the name already exists
-or passes a new L{Reaction} C{class instance} to be initialised.
-@rtype: L{Reaction} C{class instance}
+        @return: Either returns an old L{Reaction} instance if the name already exists
+        or passes a new L{Reaction} C{class instance} to be initialised.
+        @rtype: L{Reaction} C{class instance}
 
-@attention: This method is never called directly.
+        @attention: This method is never called directly.
         """
         identifier = str(identifier)
         if identifier in cls._reaction_memory:
@@ -187,8 +195,8 @@ or passes a new L{Reaction} C{class instance} to be initialised.
     def __init__(self, identifier, substrates, products, stoichiometry,
         reversible=False, synonyms=None, rate=None, *args, **kwargs):
         """
-Either does nothing if the L{Reaction} instance already exists or
-intialises a new L{Reaction} instance.
+        Either does nothing if the L{Reaction} instance already exists or
+        intialises a new L{Reaction} instance.
         """
         if identifier in self.__class__._reaction_memory:
             return None
@@ -196,7 +204,7 @@ intialises a new L{Reaction} instance.
         self.identifier = identifier
         self.substrates = tuple(substrates)
         self.products = tuple(products)
-        self.stoichiometry = tuple([int(coeff) for coeff in stoichiometry]) # TODO float coeff should be possible
+        self.stoichiometry = tuple([coeff for coeff in stoichiometry])
         self.stoichiometry_dict = dict(zip(list(self.substrates) + list(self.products), self.stoichiometry))
         self.reversible = bool(reversible)
         if synonyms:
@@ -212,17 +220,17 @@ intialises a new L{Reaction} instance.
     
     def _consistency_check(self):
         """
-Asserts some basic consistency of the L{Reaction} instance.
+        Asserts some basic consistency of the L{Reaction} instance.
 
-    1. The number of substrates plus products equals the number of
-       stoichiometric factors.
+            1. The number of substrates plus products equals the number of
+               stoichiometric factors.
 
-    2. With enough meta data (L{Compound} formula, charge, or mass) stoichiometric
-       balancing is checked.
+            2. With enough meta data (L{Compound} formula, charge, or mass) stoichiometric
+               balancing is checked.
 
-@raise AssertionError: If the reaction is not well balanced.
+        @raise AssertionError: If the reaction is not well balanced.
 
-@todo: Elemental balancing.
+        @todo: Elemental balancing.
         """
         assert (len(self.products) + len(self.substrates)) ==\
             len(self.stoichiometry), "The number of stoichimetric factors does"\
@@ -282,14 +290,14 @@ Asserts some basic consistency of the L{Reaction} instance.
     
     def __str__(self):
         """
-@return: A C{str} representation of the reaction, e.g., 2 A + 4 B -> 1 C or
-         2 A + 4 B <=> 1 C for a reversible reaction.
-@rtype: C{str}
+        @return: A C{str} representation of the reaction, e.g., 2 A + 4 B -> 1 C or
+                 2 A + 4 B <=> 1 C for a reversible reaction.
+        @rtype: C{str}
         """
         def util(compound_list):
             reaction_str = list()
             for compound in compound_list:
-                reaction_str.append(str(self.stoichiometry_dict[compound]))
+                reaction_str.append(str(abs(self.stoichiometry_dict[compound])))
                 reaction_str.append(compound.identifier)
                 if not (compound == compound_list[-1]):
                     reaction_str.append('+')
@@ -305,45 +313,45 @@ Asserts some basic consistency of the L{Reaction} instance.
     
     def __contains__(self, compound):
         """
-Checks for the presence of compound in the reaction.
+        Checks for the presence of compound in the reaction.
 
-@param compound: Presence tested for.
-@type compound: L{Compound} or C{str}
-@rtype: C{bool}
+        @param compound: Presence tested for.
+        @type compound: L{Compound} or C{str}
+        @rtype: C{bool}
         """
         if isinstance(compound, str):
-            compound = Compound(compound)
+            return compound in [c.get_id() for c in self.get_compounds()]
         if isinstance(compound, Compound):
-            return self.stoichiometry_dict.has_key(compound)
+            return compound in self.get_compounds()
         else:
             return False
     
     def __len__(self):
         """
-@rtype: C{int}
+        @rtype: C{int}
         """
         return len(self.substrates) + len(self.products)
     
     def __cmp__(self, other):
         """
-@rtype: C{int}
+        @rtype: C{int}
         """
         return cmp(id(self), id(other))
     
     def get_compounds(self):
         """
-@return: Return a list of all L{Compound}s participating in this reaction.
-@rtype: C{list}
+        @return: Return a list of all L{Compound}s participating in this reaction.
+        @rtype: C{list}
         """
         return list(self.substrates + self.products)
     
     def get_stoich_coeff(self, compound):
         """
-@param compound: The compound whose stoichiometric factor is queried.
-@type compound: L{Compound} or C{str}
-@return: Return the stoichiometric coefficient of a compound.
-@rtype: C{int}
-@raise KeyError: If C{compound} is not contained in the reaction.
+        @param compound: The compound whose stoichiometric factor is queried.
+        @type compound: L{Compound} or C{str}
+        @return: Return the stoichiometric coefficient of a compound.
+        @rtype: C{int}
+        @raise KeyError: If C{compound} is not contained in the reaction.
         """
         if compound in self:
             if isinstance(compound, str):
@@ -360,38 +368,38 @@ Checks for the presence of compound in the reaction.
 
 class Metabolism(object):
     """
-Implements the representation of a metabolism.
+    Implements the representation of a metabolism.
 
-@cvar _metabolism_memory: A dictionary that stores instances of L{Metabolism} as
-                        values to their C{name} key.
-@type _metabolism_memory: C{dict}
+    @cvar _metabolism_memory: A dictionary that stores instances of L{Metabolism} as
+                            values to their C{name} key.
+    @type _metabolism_memory: C{dict}
 
-@cvar _metabolism_counter: A counter of global existing L{Metabolism} instances.
-@type _metabolism_counter: C{int}
+    @cvar _metabolism_counter: A counter of global existing L{Metabolism} instances.
+    @type _metabolism_counter: C{int}
 
-@ivar reactions: A list of all reactions.
-@type reactions: C{list}
+    @ivar reactions: A list of all reactions.
+    @type reactions: C{list}
 
-@ivar name: Identifier of the metabolism, automatically set if not provided.
-@type name: C{str}
+    @ivar name: Identifier of the metabolism, automatically set if not provided.
+    @type name: C{str}
 
-@ivar compounds: A set of all compounds found in all the reactions.
-@type compounds: C{set}
+    @ivar compounds: A set of all compounds found in all the reactions.
+    @type compounds: C{set}
 
-@ivar reactions_dict: Convenience dictionary allows access to reactions (values)
-                      by their identifier (key).
-@type reactions_dict: C{dict}
+    @ivar reactions_dict: Convenience dictionary allows access to reactions (values)
+                          by their identifier (key).
+    @type reactions_dict: C{dict}
     """
     _metabolism_memory = dict()
     _metabolism_counter = 0
     
     def __new__(cls, reactions=None, name='', *args, **kwargs):
         """
-@return: Either returns an old L{Metabolism} instance if the name already exists
-or passes a new L{Metabolism} C{class instance} to be initialised.
-@rtype: L{Metabolism} C{class instance}
+        @return: Either returns an old L{Metabolism} instance if the name already exists
+        or passes a new L{Metabolism} C{class instance} to be initialised.
+        @rtype: L{Metabolism} C{class instance}
 
-@attention: This method is never called directly.
+        @attention: This method is never called directly.
         """
         if name:
             name = str(name)
@@ -403,8 +411,8 @@ or passes a new L{Metabolism} C{class instance} to be initialised.
     
     def __init__(self, reactions=None, name=None, *args, **kwargs):
         """
-Either does nothing if the L{Metabolism} instance already exists or
-intialises a new L{Metabolism} instance.
+        Either does nothing if the L{Metabolism} instance already exists or
+        intialises a new L{Metabolism} instance.
         """
         if name in self.__class__._metabolism_memory:
             return None
@@ -425,48 +433,44 @@ intialises a new L{Metabolism} instance.
     
     def __str__(self):
         """
-@return: Provides some statistics about the system e.g. no. of reactions.
-@rtype: C{str}
+        @return: Provides some statistics about the system e.g. no. of reactions.
+        @rtype: C{str}
         """
-        info = """
-System name: '%s'.
-Number of reactions: %i.
-Number of compounds: %i.
-        """ % (self.name, len(self), len(self.compounds))
+        info = "System name: '%s'\nNumber of reactions: %i\nNumber of compounds: %i" % (self.name, len(self), len(self.compounds))
         return info 
     
     def __len__(self):
         """
-@return: Returns the number of reactions.
-@rtype: C{int}
+        @return: Returns the number of reactions.
+        @rtype: C{int}
         """
         return len(self.reactions)
     
-    def __contains__(self, rxn):
+    def __contains__(self, reaction):
         """
-Checks for the presence of a reaction in the metabolism.
+        Checks for the presence of a reaction in the metabolism.
 
-@param rxn: Presence tested for.
-@type rxn: L{Reaction} or C{str}
-@rtype: C{bool}
+        @param reaction: Presence tested for.
+        @type reaction: L{Reaction} or C{str}
+        @rtype: C{bool}
         """
-        if isinstance(rxn, str):
-            rxn = Reaction(rxn)
-        if isinstance(rxn, Reaction):
-            return self.reactions_dict.has_key(rxn)
+        if isinstance(reaction, str):
+            return reaction in [r.get_id() for r in self.get_reactions()]
+        if isinstance(reaction, Reaction):
+            return reaction in self.get_reactions()
         else:
             return False
     
     def __getitem__(self, rxn):
         """
-@param rxn: The reaction to be returned.
-@type rxn: C{str} or C{int}
+        @param rxn: The reaction to be returned.
+        @type rxn: C{str} or C{int}
 
-@return: Returns a reaction either by string identifier or index.
-@rtype: L{Reaction}
+        @return: Returns a reaction either by string identifier or index.
+        @rtype: L{Reaction}
 
-@raise IndexError: If C{rxn} is an integer out of bounds.
-@raise KeyError: If C{rxn} is a string and not present in the C{reactions_dict}.
+        @raise IndexError: If C{rxn} is an integer out of bounds.
+        @raise KeyError: If C{rxn} is a string and not present in the C{reactions_dict}.
         """
         if isinstance(rxn, int):
             return self.reactions[rxn]
@@ -475,13 +479,67 @@ Checks for the presence of a reaction in the metabolism.
     
     def __cmp__(self, other):
         """
-@rtype: C{int}
+        @rtype: C{int}
         """
         return cmp(id(self), id(other))
     
     def get_compounds(self):
         """
-@return: Return a list of all L{Compound}s.
-@rtype: C{list}
+        @return: Return a list of all L{Compound}s.
+        @rtype: C{list}
         """
         return list(self.compounds)
+        
+    def get_reactions(self):
+        """
+        @return: Return a list of all L{Reaction}s.
+        @rtype: C{list}
+        """
+        return list(self.reactions)
+        
+class StoichiometricMatrix(object):
+    """A class representing a stoichiometric matrix.
+    
+    Columns represent reactions
+    Rows represent compounds
+    Coefficients ...
+    """
+    def __init__(self, *args, **kwargs):
+        super(StoichiometricMatrix, self).__init__(*args, **kwargs)
+        self.matrix = None
+        self.compound_map = dict()
+        self.reaction_map = dict()
+        
+    def add_stoichiometry_from(self, metabolism):
+        """"""
+        j = len(self.reaction_map)
+        i = len(self.compound_map)
+        for reaction in metabolism.reactions:
+            if reaction not in self.reaction_map:
+                if self.matrix == None:
+                    i = self._init_matrix(reaction)
+                    j = 1
+                    continue
+                self.reaction_map[reaction] = j
+                j += 1
+                self.matrix = hstack((self.matrix, zeros((self.matrix.shape[0],
+                    1))))
+                for compound in reaction:
+                    if compound not in self.compound_map:
+                        self.compound_map[compound] = i
+                        i += 1
+                        self.matrix = vstack((self.matrix, zeros((1,
+                            self.matrix.shape[1]))))
+                    self.matrix[self.compound_map[compound]]\
+                        [self.reaction_map[reaction]] =\
+                        reaction.get_stoich_coeff(compound)
+    
+    def _init_matrix(self, reaction):
+        num = len(reaction)
+        self.matrix = zeros((num, 1))
+        for i, compound in enumerate(reaction):
+            self.compound_map[compound] = i
+            self.matrix[i][0] = reaction.get_stoich_coeff(compound)
+        self.reaction_map[reaction] = 0
+        return num
+
