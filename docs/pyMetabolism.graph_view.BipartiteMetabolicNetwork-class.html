@@ -69,8 +69,8 @@ networkx.classes.digraph.DiGraph --+
 
 <hr />
 <p>A bipartite graph representation of a <a 
-  href="pyMetabolism.Metabolism-class.html" class="link">Metabolism</a> 
-  instance.</p>
+  href="pyMetabolism.metabolism.Metabolism-class.html" 
+  class="link">Metabolism</a> instance.</p>
 
 <hr />
 <div class="fields">      <p><strong>To Do:</strong>
@@ -106,7 +106,7 @@ networkx.classes.digraph.DiGraph --+
         <span class="summary-sig-arg">node_info</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      Initialize an empty directed graph.</td>
+      Initialize a graph with edges, name, graph attributes.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.__init__">source&nbsp;code</a></span>
             
@@ -141,13 +141,130 @@ networkx.classes.digraph.DiGraph --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="add_reaction"></a><span class="summary-sig-name">add_reaction</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#add_reaction" class="summary-sig-name">add_reaction</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">rxn</span>,
         <span class="summary-sig-arg">weighted</span>=<span class="summary-sig-default">True</span>,
         <span class="summary-sig-arg">node_info</span>=<span class="summary-sig-default">False</span>)</span><br />
-      docstring for add_reaction</td>
+      Add edges to the bipartite representation of <a 
+      href="pyMetabolism.metabolism.Metabolism-class.html" 
+      class="link">Metabolism</a> as necessary to represent a reaction.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.add_reaction">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>list</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#_double_edges" class="summary-sig-name" onclick="show_private();">_double_edges</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">graph</span>)</span><br />
+      Finds all bi-directional edges in the <code>graph</code>.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._double_edges">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>bool</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#_check_conditions" class="summary-sig-name" onclick="show_private();">_check_conditions</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">graph</span>,
+        <span class="summary-sig-arg">first</span>,
+        <span class="summary-sig-arg">second</span>)</span><br />
+      Checks if all necessary conditions to flip an edge <code>first</code>
+      with another <code>second</code> are fulfilled.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._check_conditions">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>bool</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#_switch_double_edge" class="summary-sig-name" onclick="show_private();">_switch_double_edge</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">graph</span>,
+        <span class="summary-sig-arg">first</span>)</span><br />
+      Switching of a double edge is treated separately from a 
+      unidirectional edge.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._switch_double_edge">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>tuple</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#_select_edges" class="summary-sig-name" onclick="show_private();">_select_edges</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">graph</span>)</span><br />
+      Select two edges whose sources lie in the same node set.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._select_edges">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>bool</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#_flip_bipartite_edge" class="summary-sig-name" onclick="show_private();">_flip_bipartite_edge</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">graph</span>)</span><br />
+      Switching of two selected edges according to a set of rules.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._flip_bipartite_edge">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><a 
+      href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html" 
+      class="link">BipartiteMetabolicNetwork</a></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#randomise" class="summary-sig-name">randomise</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">flip</span>=<span class="summary-sig-default">100</span>)</span><br />
+      Produces a randomised version of the bipartite graph.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.randomise">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -164,19 +281,21 @@ networkx.classes.digraph.DiGraph --+
       <code>add_nodes_from</code>,
       <code>clear</code>,
       <code>degree_iter</code>,
-      <code>delete_edge</code>,
-      <code>delete_edges_from</code>,
-      <code>delete_node</code>,
-      <code>delete_nodes_from</code>,
       <code>edges_iter</code>,
       <code>has_predecessor</code>,
       <code>has_successor</code>,
       <code>in_degree</code>,
       <code>in_degree_iter</code>,
+      <code>in_edges</code>,
+      <code>in_edges_iter</code>,
+      <code>is_directed</code>,
+      <code>is_multigraph</code>,
       <code>neighbors</code>,
       <code>neighbors_iter</code>,
       <code>out_degree</code>,
       <code>out_degree_iter</code>,
+      <code>out_edges</code>,
+      <code>out_edges_iter</code>,
       <code>predecessors</code>,
       <code>predecessors_iter</code>,
       <code>remove_edge</code>,
@@ -199,14 +318,14 @@ networkx.classes.digraph.DiGraph --+
       <code>add_cycle</code>,
       <code>add_path</code>,
       <code>add_star</code>,
+      <code>add_weighted_edges_from</code>,
       <code>adjacency_iter</code>,
       <code>adjacency_list</code>,
       <code>copy</code>,
       <code>degree</code>,
       <code>edges</code>,
-      <code>get_edge</code>,
+      <code>get_edge_data</code>,
       <code>has_edge</code>,
-      <code>has_neighbor</code>,
       <code>has_node</code>,
       <code>nbunch_iter</code>,
       <code>nodes</code>,
@@ -231,34 +350,6 @@ networkx.classes.digraph.DiGraph --+
       <code>__setattr__</code>,
       <code>__sizeof__</code>,
       <code>__subclasshook__</code>
-      </p>
-    </td>
-  </tr>
-</table>
-<!-- ==================== CLASS VARIABLES ==================== -->
-<a name="section-ClassVariables"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Class Variables</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-ClassVariables"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>networkx.classes.digraph.DiGraph</code></b>:
-      <code>directed</code>
-      </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>networkx.classes.graph.Graph</code></b>:
-      <code>multigraph</code>
       </p>
     </td>
   </tr>
@@ -328,19 +419,43 @@ networkx.classes.digraph.DiGraph --+
   </tr></table>
   
   <pre class="literalblock">
-Initialize an empty directed graph.
+Initialize a graph with edges, name, graph attributes.
 
+Parameters
+----------
+data : input graph
+    Data to initialize graph.  If data=None (default) an empty
+    graph is created.  The data can be an edge list, or any
+    NetworkX graph object.  If the corresponding optional Python
+    packages are installed the data can also be a NumPy matrix
+    or 2d ndarray, a SciPy sparse matrix, or a PyGraphviz graph.
+name : string, optional (default='')
+    An optional name for the graph.
+attr : keyword arguments, optional (default= no attributes)
+    Attributes to add to graph as key=value pairs.
+
+See Also
+--------
+convert
+    
 Examples
 --------
-&gt;&gt;&gt; G=nx.DiGraph()
-&gt;&gt;&gt; G=nx.DiGraph(name='my graph')
-&gt;&gt;&gt; G=nx.DiGraph(weighted=False)  # don't assume edge data are weights
+&gt;&gt;&gt; G = nx.Graph()   # or DiGraph, MultiGraph, MultiDiGraph, etc
+&gt;&gt;&gt; G = nx.Graph(name='my graph')
+&gt;&gt;&gt; e = [(1,2),(2,3),(3,4)] # list of edges
+&gt;&gt;&gt; G = nx.Graph(e)
+
+Arbitrary graph attribute pairs (key=value) may be assigned
+
+&gt;&gt;&gt; G=nx.Graph(e, day=&quot;Friday&quot;)
+&gt;&gt;&gt; G.graph
+{'day': 'Friday'}
 
 </pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>reactions</code></strong> (<code>list</code>) - A list of <a href="pyMetabolism.Reaction-class.html" 
+        <li><strong class="pname"><code>reactions</code></strong> (<code>list</code>) - A list of <a href="pyMetabolism.metabolism.Reaction-class.html" 
           class="link">Reaction</a>s from which the graph can be populated.</li>
         <li><strong class="pname"><code>name</code></strong> (<code>str</code>) - A simple string to identify the graph if desired.</li>
         <li><strong class="pname"><code>weighted</code></strong> (<code>bool</code>) - By default the stoichiometric factors are used as edge weights, 
@@ -349,21 +464,256 @@ Examples
           compound nodes the following information will be tried in order:
           <ol start="1">
             <li>
-              <a href="pyMetabolism.Compound-class.html#charge" 
+              <a href="pyMetabolism.metabolism.Compound-class.html#charge" 
               class="link">Compound.charge</a>
             </li>
             <li>
-              <a href="pyMetabolism.Compound-class.html#mass" 
+              <a href="pyMetabolism.metabolism.Compound-class.html#mass" 
               class="link">Compound.mass</a>
             </li>
           </ol>
           <p>For reaction nodes <a 
-          href="pyMetabolism.Reaction-class.html#rate" 
+          href="pyMetabolism.metabolism.Reaction-class.html#rate" 
           class="link">Reaction.rate</a> will be used.</p></li>
     </ul></dd>
     <dt>Overrides:
         object.__init__
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="add_reaction"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">add_reaction</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">rxn</span>,
+        <span class="sig-arg">weighted</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">node_info</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.add_reaction">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add edges to the bipartite representation of <a 
+  href="pyMetabolism.metabolism.Metabolism-class.html" 
+  class="link">Metabolism</a> as necessary to represent a reaction.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>rxn</code></strong> (<a href="pyMetabolism.metabolism.Reaction-class.html" 
+          class="link">Reaction</a>) - Instance to be added.</li>
+        <li><strong class="pname"><code>weighted</code></strong> (<code>bool</code>) - By default the stoichiometric factors are used as edge weights, 
+          this can be turned off.</li>
+        <li><strong class="pname"><code>node_info</code></strong> (<code>bool</code>) - If true, information will be added to the graph's nodes. For 
+          compound nodes the following information will be tried in order:
+          <ol start="1">
+            <li>
+              <a href="pyMetabolism.metabolism.Compound-class.html#charge" 
+              class="link">Compound.charge</a>
+            </li>
+            <li>
+              <a href="pyMetabolism.metabolism.Compound-class.html#mass" 
+              class="link">Compound.mass</a>
+            </li>
+          </ol>
+          <p>For reaction nodes <a 
+          href="pyMetabolism.metabolism.Reaction-class.html#rate" 
+          class="link">Reaction.rate</a> will be used.</p></li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        <code>node_info</code> is purely aimed at graph output to a format 
+        that supports node attributes.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="_double_edges"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_double_edges</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">graph</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._double_edges">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Finds all bi-directional edges in the <code>graph</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>graph</code></strong> (<a 
+          href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html"
+          class="link">BipartiteMetabolicNetwork</a>) - Directed graph instance.</li>
+    </ul></dd>
+    <dt>Returns: <code>list</code></dt>
+        <dd>A list of all bi-directional edges, contains each edge in both 
+          directions.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_check_conditions"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_check_conditions</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">graph</span>,
+        <span class="sig-arg">first</span>,
+        <span class="sig-arg">second</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._check_conditions">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Checks if all necessary conditions to flip an edge <code>first</code> 
+  with another <code>second</code> are fulfilled.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>graph</code></strong> (<a 
+          href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html"
+          class="link">BipartiteMetabolicNetwork</a>) - Directed graph instance.</li>
+        <li><strong class="pname"><code>first</code></strong> (Two <code>tuple</code>) - Directed edge.</li>
+        <li><strong class="pname"><code>second</code></strong> (Two <code>tuple</code>) - Directed edge.</li>
+    </ul></dd>
+    <dt>Returns: <code>bool</code></dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_switch_double_edge"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_switch_double_edge</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">graph</span>,
+        <span class="sig-arg">first</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._switch_double_edge">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Switching of a double edge is treated separately from a unidirectional
+  edge.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>graph</code></strong> (<a 
+          href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html"
+          class="link">BipartiteMetabolicNetwork</a>) - Directed graph instance.</li>
+        <li><strong class="pname"><code>first</code></strong> (Two <code>tuple</code>) - Directed edge, known to be bidirectional.</li>
+    </ul></dd>
+    <dt>Returns: <code>bool</code></dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_select_edges"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_select_edges</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">graph</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._select_edges">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Select two edges whose sources lie in the same node set.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>graph</code></strong> (<a 
+          href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html"
+          class="link">BipartiteMetabolicNetwork</a>) - Directed graph instance.</li>
+    </ul></dd>
+    <dt>Returns: <code>tuple</code></dt>
+        <dd>Returns a pair of edges.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="_flip_bipartite_edge"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">_flip_bipartite_edge</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">graph</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._flip_bipartite_edge">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Switching of two selected edges according to a set of rules.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>graph</code></strong> (<a 
+          href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html"
+          class="link">BipartiteMetabolicNetwork</a>) - Directed graph instance.</li>
+    </ul></dd>
+    <dt>Returns: <code>bool</code></dt>
+        <dd>Whether edge flipping was successful.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="randomise"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">randomise</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">flip</span>=<span class="sig-default">100</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.randomise">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Produces a randomised version of the bipartite graph. This is achieved
+  by switching edges in the graph a number of times equal to the number of 
+  edges present times <code>flip</code>. This function is intended as a 
+  basis for calculating three-node subgraph statistics in metabolic 
+  networks. As such only degrees of nodes, bi-directional link properties, 
+  etc. (see: R Milo, S Shen-Orr, S Itzkovitz, N Kashtan, D Chklovskii &amp;
+  U Alon, Network Motifs: Simple Building Blocks of Complex Networks 
+  Science, 298:824-827 (2002) ) are conserved. For larger subgraph 
+  statistics also the smaller subgraph statistics would have to be 
+  conserved. The novelty of this function is to preserve the bipartite 
+  nature of the graph.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>flip</code></strong> (<code>int</code>) - How often each edge should be switched ideally.</li>
+    </ul></dd>
+    <dt>Returns: <a 
+      href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html" 
+      class="link">BipartiteMetabolicNetwork</a></dt>
+        <dd>A randomised version of the bipartite graph.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -394,7 +744,7 @@ Examples
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jan 12 03:15:28 2010
+    Generated by Epydoc 3.0.1 on Wed Feb  3 11:44:36 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

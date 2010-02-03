@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pyMetabolism</title>
+  <title>pyMetabolism.metabolism</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -15,8 +15,8 @@
        bgcolor="#a0c0ff" cellspacing="0">
   <tr valign="middle">
   <!-- Home link -->
-      <th bgcolor="#70b0f0" class="navbar-select"
-          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="pyMetabolism-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
 
   <!-- Tree link -->
       <th>&nbsp;&nbsp;&nbsp;<a
@@ -37,7 +37,8 @@
   <tr valign="top">
     <td width="100%">
       <span class="breadcrumbs">
-        Package&nbsp;pyMetabolism
+        <a href="pyMetabolism-module.html">Package&nbsp;pyMetabolism</a> ::
+        Module&nbsp;metabolism
       </span>
     </td>
     <td>
@@ -47,21 +48,15 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pyMetabolism-module.html"
+            >]&nbsp;|&nbsp;<a href="pyMetabolism.metabolism-module.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
-<!-- ==================== PACKAGE DESCRIPTION ==================== -->
-<h1 class="epydoc">Package pyMetabolism</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism-pysrc.html">source&nbsp;code</a></span></p>
-<p>A python package to easily represent metabolism as an ensemble of 
-  reactions which describe transformations of compounds. It aims to provide
-  intuitive interfaces using <a 
-  href="pyMetabolism.metabolism.Metabolism-class.html" 
-  class="link">Metabolism</a> objects in flux balance analysis (FBA), 
-  statistics (random), graph theory (graph_view), and in connecting 
-  metabolism with transcription data (PDA).</p>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module metabolism</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html">source&nbsp;code</a></span></p>
+<p>Basic classes modelling compounds, reactions, and metabolism.</p>
 
 <hr />
 <div class="fields">      <dl><dt>Authors:</dt>
@@ -82,55 +77,51 @@
       <p><strong>Since:</strong>
         2009-09-11
       </p>
-      <p><strong>Version:</strong>
-        0.1
-      </p>
-      <p><strong>Status:</strong>
-        development
-      </p>
       <p><strong>To Do:</strong>
-        set up logging, graph_view module, random module, fba interface, pda 
-    module
+        set up logging
       </p>
-</div><!-- ==================== SUBMODULES ==================== -->
-<a name="section-Submodules"></a>
+</div><!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
   <td colspan="2" class="table-header">
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr valign="top">
-        <td align="left"><span class="table-header">Submodules</span></td>
+        <td align="left"><span class="table-header">Classes</span></td>
         <td align="right" valign="top"
-         ><span class="options">[<a href="#section-Submodules"
+         ><span class="options">[<a href="#section-Classes"
          class="privatelink" onclick="toggle_private();"
          >hide private</a>]</span></td>
       </tr>
     </table>
   </td>
 </tr>
-  <tr><td class="summary">
-  <ul class="nomargin">
-    <li> <strong class="uidlink"><a href="pyMetabolism.graph_view-module.html">pyMetabolism.graph_view</a></strong>: <em class="summary">Multiple ways of creating a graph representation of a <a 
-        href="pyMetabolism.metabolism.Metabolism-class.html" 
-        class="link">Metabolism</a> instance.</em>    </li>
-    <li> <strong class="uidlink"><a href="pyMetabolism.io-module.html">pyMetabolism.io</a></strong>: <em class="summary">Creating a <a href="pyMetabolism.metabolism.Metabolism-class.html" 
-        class="link">Metabolism</a> instance from different file formats.</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="pyMetabolism.io.io_tests-module.html">pyMetabolism.io.io_tests</a></strong>: <em class="summary">io_Tests.py</em>    </li>
-    <li> <strong class="uidlink"><a href="pyMetabolism.io.sbml-module.html">pyMetabolism.io.sbml</a></strong>: <em class="summary">sbml.py</em>    </li>
-    </ul>
-    </li>
-    <li> <strong class="uidlink"><a href="pyMetabolism.metabolism-module.html">pyMetabolism.metabolism</a></strong>: <em class="summary">Basic classes modelling compounds, reactions, and metabolism.</em>    </li>
-    <li> <strong class="uidlink"><a href="pyMetabolism.metabolism_random-module.html">pyMetabolism.metabolism_random</a></strong>: <em class="summary">Multiple ways of generating a null model for the statistical 
-        analysis of a <a 
-        href="pyMetabolism.metabolism.Metabolism-class.html" 
-        class="link">Metabolism</a> instance.</em>    </li>
-    <li> <strong class="uidlink"><a href="pyMetabolism.metabolism_tests-module.html">pyMetabolism.metabolism_tests</a></strong>: <em class="summary">pyMetabolism_Tests.py</em>    </li>
-  </ul></td></tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Compound-class.html" class="summary-name">Compound</a><br />
+      A class modeling a chemical compound.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Reaction-class.html" class="summary-name">Reaction</a><br />
+      A class modeling a chemical reaction.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Metabolism-class.html" class="summary-name">Metabolism</a><br />
+      Implements the representation of a metabolism.
+    </td>
+  </tr>
 </table>
-
-<br />
 <!-- ==================== VARIABLES ==================== -->
 <a name="section-Variables"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -161,8 +152,8 @@
        bgcolor="#a0c0ff" cellspacing="0">
   <tr valign="middle">
   <!-- Home link -->
-      <th bgcolor="#70b0f0" class="navbar-select"
-          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="pyMetabolism-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
 
   <!-- Tree link -->
       <th>&nbsp;&nbsp;&nbsp;<a

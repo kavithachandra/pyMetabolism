@@ -10,7 +10,7 @@ Copyright (c) 2009 Jacobs University of Bremen. All rights reserved.
 import sys
 import os
 import unittest
-from pyMetabolism import *
+from pyMetabolism.metabolism import *
 from io import *
 
 
