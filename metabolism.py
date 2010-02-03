@@ -11,7 +11,6 @@ Basic classes modelling compounds, reactions, and metabolism.
 
 """
 
-
 class Compound(object):
     """
     A class modeling a chemical compound. Primary identifier of L{Compound}s is a
@@ -105,7 +104,10 @@ class Compound(object):
         """
         @rtype: C{str}
         """
-        return self.identifier
+        if self.compartment:
+            return self.identifier + '<' + self.compartment + '>'
+        else:
+            return self.identifier
         
     def __contains__(self, element):
         """
@@ -158,7 +160,7 @@ class Reaction(object):
                          supplied to C{substrates} and C{products}.
     @type stoichiometry: C{tuple}
     @attention: The stoichiometric factors given in C{stoichiometry} should be
-                positive integers, their sign will be adjusted if necessary.
+                positive integers or floats, their sign will be adjusted if necessary.
 
     @ivar synonyms: Synonymous names for this reaction.
     @type synonyms: C{list}
@@ -173,6 +175,8 @@ class Reaction(object):
 
     @ivar reversible: Specify whether the reaction is considered reversible.
     @type reversible: C{bool}
+    
+    @todo: Fix stoichiometry issues ...
     """
     _reaction_memory = dict()
     
@@ -204,7 +208,7 @@ class Reaction(object):
         self.identifier = identifier
         self.substrates = tuple(substrates)
         self.products = tuple(products)
-        self.stoichiometry = tuple([coeff for coeff in stoichiometry])
+        self.stoichiometry = tuple([abs(coeff) for coeff in stoichiometry])
         self.stoichiometry_dict = dict(zip(list(self.substrates) + list(self.products), self.stoichiometry))
         self.reversible = bool(reversible)
         if synonyms:
@@ -298,7 +302,7 @@ class Reaction(object):
             reaction_str = list()
             for compound in compound_list:
                 reaction_str.append(str(abs(self.stoichiometry_dict[compound])))
-                reaction_str.append(compound.identifier)
+                reaction_str.append(compound.__str__())
                 if not (compound == compound_list[-1]):
                     reaction_str.append('+')
             return reaction_str
@@ -364,13 +368,17 @@ class Reaction(object):
             if isinstance(compound, str):
                 compound = Compound(compound)
             if compound in self.substrates:
-                return - self.stoichiometry_dict[compound]
+                return -self.stoichiometry_dict[compound]
             elif compound in self.products:
                 return self.stoichiometry_dict[compound]
         else:
             msg = "'%s' is not participating in reaction '%s'" % (compound,
                 reaction.identifier)
             raise KeyError
+            
+    def reversibleQ(self):
+        """docstring for reversiblQ"""
+        return self.reversible
 
 
 class Metabolism(object):
@@ -504,49 +512,3 @@ class Metabolism(object):
         """
         return list(self.reactions)
         
-class StoichiometricMatrix(object):
-    """A class representing a stoichiometric matrix.
-    
-    Columns represent reactions
-    Rows represent compounds
-    Coefficients ...
-    """
-    def __init__(self, *args, **kwargs):
-        super(StoichiometricMatrix, self).__init__(*args, **kwargs)
-        self.matrix = None
-        self.compound_map = dict()
-        self.reaction_map = dict()
-        
-    def add_stoichiometry_from(self, metabolism):
-        """"""
-        j = len(self.reaction_map)
-        i = len(self.compound_map)
-        for reaction in metabolism.reactions:
-            if reaction not in self.reaction_map:
-                if self.matrix == None:
-                    i = self._init_matrix(reaction)
-                    j = 1
-                    continue
-                self.reaction_map[reaction] = j
-                j += 1
-                self.matrix = hstack((self.matrix, zeros((self.matrix.shape[0],
-                    1))))
-                for compound in reaction:
-                    if compound not in self.compound_map:
-                        self.compound_map[compound] = i
-                        i += 1
-                        self.matrix = vstack((self.matrix, zeros((1,
-                            self.matrix.shape[1]))))
-                    self.matrix[self.compound_map[compound]]\
-                        [self.reaction_map[reaction]] =\
-                        reaction.get_stoich_coeff(compound)
-    
-    def _init_matrix(self, reaction):
-        num = len(reaction)
-        self.matrix = zeros((num, 1))
-        for i, compound in enumerate(reaction):
-            self.compound_map[compound] = i
-            self.matrix[i][0] = reaction.get_stoich_coeff(compound)
-        self.reaction_map[reaction] = 0
-        return num
-
