@@ -337,7 +337,14 @@ class Reaction(object):
         @rtype: C{int}
         """
         return cmp(id(self), id(other))
-    
+        
+    def get_id(self):
+        """
+        @return: Identifier or reaction
+        @rtype: C{str}
+        """
+        return self.identifier
+        
     def get_compounds(self):
         """
         @return: Return a list of all L{Compound}s participating in this reaction.

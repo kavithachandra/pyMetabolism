@@ -29,7 +29,7 @@ def parse_reaction_from_string(reaction_string, id='',rev='<=>', irev='->'):
             compounds = re.findall('\s*(\w+)\s*', elem2)
             if len(stoich) > 1 or len(compounds) > 1 or len(compounds) < 1:
                 raise Exception, 'The reaction string "' + string +'" is probably malformed!'
-            reacs_plus_stoich[compounds[0]] = stoich[0]
+            reacs_plus_stoich[compounds[0]] = abs(float(stoich[0]))
         return reacs_plus_stoich
     if re.search(rev, reaction_string):
         revQ = True

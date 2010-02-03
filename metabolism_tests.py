@@ -43,7 +43,8 @@ class MetabolismTests(unittest.TestCase):
         self.assertTrue('CTPhyrdolysis' in self.metabolic_system)
         self.assertFalse('CTPhyrdolysis' in self.smaller_metabolic_system)
         
-        
+    
+    
     # def test__add__(self):
     #     """Tests if it is possible to merge metabolic systems"""
     #     pass
@@ -69,7 +70,7 @@ class ReactionTests(unittest.TestCase):
     
     def test__str__(self):
         """Tests if the __str__ method works correctly"""
-        self.assertEqual(self.reaction.__str__(), '1 atp 1 h2o -> 1 adp 1 pi')
+        self.assertEqual(self.reaction.__str__(), '1 atp + 1 h2o -> 1 adp + 1 pi')
 
     def test_contains_string_input(self):
         self.assertTrue('atp' in self.reaction)
