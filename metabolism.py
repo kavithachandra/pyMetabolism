@@ -132,7 +132,7 @@ class Compound(object):
         @return: Returns identifier of compound.
         @rtype: C{str}        
         """
-        pass
+        return self.identifier
 
 
 class Reaction(object):

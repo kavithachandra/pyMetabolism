@@ -57,7 +57,7 @@ class SBMLParser(object):
         
     def get_compounds(self):
         """Returns a list of all compounds parsed from the SBML model"""
-        return [elem.getId() for elem in self.model.getListOfSpecies()]
+        return [Compound(elem.getId()) for elem in self.model.getListOfSpecies()]
         
     def get_metabolic_system(self):
         """Returns an instance of Metabolism including all reactions from the parsed SBML model"""
