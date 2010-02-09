@@ -11,6 +11,58 @@ Basic classes modelling compounds, reactions, and metabolism.
 
 """
 
+class Compartment(object):
+    """
+    A class modeling a chemical compound. Primary identifier of L{Compound}s is a
+    simple string C{identifier} although many synonymous identifiers may be set up.
+    
+    @cvar _memory: A dictionary that stores instances of L{Compartment} as
+                            values to their C{identifier} key.
+    @type _memory: C{dict}
+    
+    @ivar identifier: The main name of the compartment will be used for comparisons and
+                      representation.
+    @type identifier: C{str}
+    
+    @ivar constant: @todo description
+    
+    @type identifier: @todo description
+    """
+    
+    _memory = dict()
+    
+    def __new__(cls, identifier, constant, name=None, spatial_dimensions=None, size=None, units=None, *args, **kwargs):
+        """
+        @return: Either returns an old L{Compartment} instance if the name already exists
+        or passes a new L{Compound} C{class instance} to be initialised.
+        @rtype: L{Compound} C{class instance}
+
+        @attention: This method is never called directly.
+        """
+        identifier = str(identifier)
+        if identifier in cls._memory:
+            return cls._memory[identifier]
+        else:
+            instance = super(Compartment, cls).__new__(cls, *args, **kwargs)
+            return instance
+    
+    def __init__(self, identifier, constant, name=None, spatial_dimensions=None, size=None, units=None, *args, **kwargs):
+        """
+        Either does nothing if the L{Compartment} instance already exists or
+        intialises a new L{Compartment} instance.
+        """
+        if identifier in self.__class__._memory:
+            return None
+        super(Compartment, self).__init__(*args, **kwargs)
+        self.identifier = identifier
+        self.constant = constant
+        self.__class__._memory[self.identifier] = self
+        
+    def __str__(self):
+        """docstring for __str__"""
+        return self.identifier
+        
+
 class Compound(object):
     """
     A class modeling a chemical compound. Primary identifier of L{Compound}s is a
@@ -23,10 +75,6 @@ class Compound(object):
     @ivar identifier: The main name of the compound will be used for comparisons and
                       representation.
     @type identifier: C{str}
-    
-    @ivar compartment: Define a compartment where this compound occurs for a multi-
-                       compartmentalised metabolism.
-    @type compartment: C{str}
     
     @ivar synonyms: Alternative names for the compound.
     @type synonyms: C{list}
@@ -56,7 +104,7 @@ class Compound(object):
     
     _compound_memory = dict()
     
-    def __new__(cls, identifier, compartment=None, synonyms=None,
+    def __new__(cls, identifier, synonyms=None,
         formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
         mass=None, *args, **kwargs):
         """
@@ -73,7 +121,7 @@ class Compound(object):
             instance = super(Compound, cls).__new__(cls, *args, **kwargs)
             return instance
     
-    def __init__(self, identifier, compartment=None, synonyms=None,
+    def __init__(self, identifier, synonyms=None,
         formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
         mass=None, *args, **kwargs):
         """
@@ -84,7 +132,6 @@ class Compound(object):
             return None
         super(Compound, self).__init__(*args, **kwargs)
         self.identifier = identifier
-        self.compartment = compartment
         self.synonyms = synonyms
         self.formula = formula
         self.in_chi = in_chi
@@ -104,10 +151,7 @@ class Compound(object):
         """
         @rtype: C{str}
         """
-        if self.compartment:
-            return self.identifier + '<' + self.compartment + '>'
-        else:
-            return self.identifier
+        return self.identifier
         
     def __contains__(self, element):
         """
@@ -180,7 +224,7 @@ class Reaction(object):
     """
     _reaction_memory = dict()
     
-    def __new__(cls, identifier, substrates, products, stoichiometry,
+    def __new__(cls, identifier, substrates, products, stoichiometry, compartments,
         reversible=False, synonyms=None, rate=None, *args, **kwargs):
         """
         @return: Either returns an old L{Reaction} instance if the name already exists
@@ -196,7 +240,7 @@ class Reaction(object):
             instance = super(Reaction, cls).__new__(cls, *args, **kwargs)
             return instance
     
-    def __init__(self, identifier, substrates, products, stoichiometry,
+    def __init__(self, identifier, substrates, products, stoichiometry, compartments,
         reversible=False, synonyms=None, rate=None, *args, **kwargs):
         """
         Either does nothing if the L{Reaction} instance already exists or
@@ -210,6 +254,7 @@ class Reaction(object):
         self.products = tuple(products)
         self.stoichiometry = tuple([abs(coeff) for coeff in stoichiometry])
         self.stoichiometry_dict = dict(zip(list(self.substrates) + list(self.products), self.stoichiometry))
+        self.compartments = tuple(compartments)
         self.reversible = bool(reversible)
         if synonyms:
             self.synonyms = synonyms

@@ -9,7 +9,7 @@ Copyright (c) 2010 Jacobs University of Bremen. All rights reserved.
 
 import sys
 import os
-from pyMetabolism.metabolism import Metabolism, Reaction, Compound
+from pyMetabolism.metabolism import Metabolism, Reaction, Compound, Compartment
 try:
     import libsbml
 except ImportError, msg:
@@ -18,7 +18,10 @@ except ImportError, msg:
 
 
 class SBMLParser(object):
-    """A class implementing methods for parsing a SBML model"""
+    """A class implementing methods for parsing a SBML model
+    
+    @todo: implement convenience stuff
+    """
     def __init__(self, path):
         super(SBMLParser, self).__init__()
         self.sbml_document = libsbml.readSBML(path)
@@ -26,39 +29,51 @@ class SBMLParser(object):
             raise Exception, "libsbml function getNumErrors return value greater 0!"
         self.model = self.sbml_document.getModel()
         
-    def __parse_sbml_reactant(self, sbml_species_reference):
+    def _parse_sbml_reactant(self, sbml_species_reference):
         """Able to parse entries from getListOfReactants or getListOfProducts
         
         @todo: Check for meta information and parse if available
         """
         sbml_species = self.model.getSpecies(sbml_species_reference.getSpecies())
-        return self.__parse_sbml_species(sbml_species)
+        return self._parse_sbml_species(sbml_species)
 
-    def __parse_sbml_species(self, sbml_compound):
+    def _parse_sbml_species(self, sbml_compound):
         """Able to parse entries from getListOfSpecies
         
         @todo: Check for meta information and parse if available
         """
-        return Compound(sbml_compound.getId(), compartment=sbml_compound.getCompartment())
+        return Compound(sbml_compound.getId()), Compartment(sbml_compound.getCompartment(), sbml_compound.getConstant())
     
-    def __parse_sbml_reaction(self, sbml_reaction):
+    def _parse_sbml_reaction(self, sbml_reaction):
         """Able to parse entries from getListOfReactions"""
         identifier = sbml_reaction.getId()
         list_of_reactants = sbml_reaction.getListOfReactants()
         list_of_products = sbml_reaction.getListOfProducts()
-        substrates = [self.__parse_sbml_reactant(elem) for elem in list_of_reactants]
-        products = [self.__parse_sbml_reactant(elem) for elem in list_of_products]
+        compartments = list()
+        substrates = list()
+        for elem in list_of_reactants:
+            species_tmp, compartment_tmp = self._parse_sbml_reactant(elem)
+            compartments.append(compartment_tmp)
+            substrates.append(species_tmp)
+        products = list()
+        for elem in list_of_products:
+            species_tmp, compartment_tmp = self._parse_sbml_reactant(elem)
+            compartments.append(compartment_tmp)
+            products.append(species_tmp)
         stoichiometry = tuple([-elem.getStoichiometry() for elem in list_of_reactants] + [elem.getStoichiometry() for elem in list_of_products])
-        return Reaction(identifier, substrates, products, stoichiometry, reversible=sbml_reaction.getReversible())
+        print identifier
+        print stoichiometry, [elem.identifier for elem in compartments]
+        print len(stoichiometry), len(compartments)
+        return Reaction(identifier, substrates, products, stoichiometry, compartments, reversible=sbml_reaction.getReversible())
     
     def get_reactions(self):
         """Returns a list of reactions parsed from the SBML model"""
         list_of_reactions = self.model.getListOfReactions()
-        return tuple([self.__parse_sbml_reaction(r) for r in list_of_reactions])
+        return tuple([self._parse_sbml_reaction(r) for r in list_of_reactions])
         
     def get_compounds(self):
         """Returns a list of all compounds parsed from the SBML model"""
-        return [self.__parse_sbml_species(elem) for elem in self.model.getListOfSpecies()]
+        return [self._parse_sbml_species(elem) for elem in self.model.getListOfSpecies()]
         
     def get_metabolic_system(self):
         """Returns an instance of Metabolism including all reactions from the parsed SBML model"""
@@ -72,7 +87,6 @@ if __name__ == '__main__':
     print 'Compounds:\n'
     for elem in parser.get_compounds():
         print elem
-        print elem.compartment
     print len(parser.get_compounds())
     print 'Reactions:\n'
     for elem in parser.get_reactions():
