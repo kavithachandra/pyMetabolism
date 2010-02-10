@@ -10,7 +10,7 @@ Copyright (c) 2009 . All rights reserved.
 import sys
 import os
 import unittest
-from pyMetabolism.metabolism import Metabolism, Compound, Reaction
+from pyMetabolism.metabolism import Metabolism, Compound, Reaction, Compartment
 
 class MetabolismTests(unittest.TestCase):
     def setUp(self):
