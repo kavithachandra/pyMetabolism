@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pyMetabolism.metabolism_tests</title>
+  <title>pyMetabolism.metabolism_logging</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,7 +38,7 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pyMetabolism-module.html">Package&nbsp;pyMetabolism</a> ::
-        Module&nbsp;metabolism_tests
+        Module&nbsp;metabolism_logging
       </span>
     </td>
     <td>
@@ -48,19 +48,55 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pyMetabolism.metabolism_tests-module.html"
+            >]&nbsp;|&nbsp;<a href="pyMetabolism.metabolism_logging-module.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
-<h1 class="epydoc">Module metabolism_tests</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html">source&nbsp;code</a></span></p>
-<p>pyMetabolism_Tests.py</p>
-  <p>Created by Nikolaus Sonnenschein on 2009-09-10. Copyright (c) 2009 . 
-  All rights reserved.</p>
+<h1 class="epydoc">Module metabolism_logging</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.metabolism_logging-pysrc.html">source&nbsp;code</a></span></p>
+<p>Logging of information from the pyMetabolism package is organised in a
+  hierarchical fashion. pyMetabolism uses logging for this pupose. If you 
+  want to use the logging facilities for your own purposes simply create 
+  your own top- level logger called &quot;pyMetabolism&quot; and then 
+  attach a handler of your choosing to it. All package internal loggers 
+  inherit from &quot;pyMetabolism&quot; so make sure not to over-ride your 
+  logger instance's attribute perpetuate to <code>False</code>. A simple 
+  code example of using logging with pyMetabolism is below.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> logging
+<span class="py-prompt">&gt;&gt;&gt; </span>logger = logging.getLogger(<span class="py-string">&quot;pyMetabolism&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>handler = logging.StreamHandler()
+<span class="py-prompt">&gt;&gt;&gt; </span>handler.setLevel(logging.DEBUG)
+<span class="py-prompt">&gt;&gt;&gt; </span>logger.addHandler(handler)</pre>
+  <p>Now all messages from within the pyMetabolism modules are propagated 
+  up to this logger and then handled by your handler. If you want more 
+  fine-grained control you can access the sub-loggers and attach other 
+  handlers to them. The logger inheritance path is always as follows:</p>
+  <p>pyMetabolism.Class.instance</p>
+  <p>That means if you want all messages occurring in reactions sent to you
+  by e-mail because they're so pretty then you can get the logger 
+  easily:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>reaction_logger = logging.getLogger(<span class="py-string">&quot;pyMetabolism.Reaction&quot;</span>)</pre>
+  <p>Just add your preferred handler to this logger and you're good to 
+  go.</p>
 
-<!-- ==================== CLASSES ==================== -->
+<hr />
+<div class="fields">      <dl><dt>Authors:</dt>
+        <dd>
+          Nikolaus Sonnenschein,
+          Moritz Beber
+        </dd>
+      </dl>
+      <p><strong>Copyright:</strong>
+        Jacobs University Bremen. All rights reserved.
+      </p>
+      <p><strong>Since:</strong>
+        2010-02-12
+      </p>
+</div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
@@ -81,14 +117,8 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pyMetabolism.metabolism_tests.MetabolismTests-class.html" class="summary-name">MetabolismTests</a>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pyMetabolism.metabolism_tests.ReactionTests-class.html" class="summary-name">ReactionTests</a>
+        <a href="pyMetabolism.metabolism_logging.NullHandler-class.html" class="summary-name">NullHandler</a><br />
+      Stub handler that does not emit any messages.
     </td>
   </tr>
 </table>

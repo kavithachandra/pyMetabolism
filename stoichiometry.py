@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+
 """
 Basic classes modelling compounds, reactions, and metabolism.
 
@@ -7,11 +11,15 @@ Basic classes modelling compounds, reactions, and metabolism.
 @contact: moritz(at)foo.org
 @copyright: Jacobs University Bremen. All rights reserved.
 @since: 2009-09-11
-@todo: set up logging
+@todo: plenty matrix operations
 
 """
 
+
+import logging
+from pyMetabolism.metabolism_logging import NullHandler
 from numpy import zeros, vstack, hstack, shape
+
 
 class StoichiometricMatrix(object):
     """A class representing a stoichiometric matrix.
@@ -20,8 +28,16 @@ class StoichiometricMatrix(object):
     Rows represent compounds
     Coefficients ...
     """
+    
+    _counter = 0
+    
     def __init__(self, *args, **kwargs):
+        self.__class__._counter += 1
         super(StoichiometricMatrix, self).__init__(*args, **kwargs)
+        self.logger = logging.getLogger("pyMetabolism.StoichiometricMatrix.%d"\
+            % self.__class__._counter)
+        self.handler = NullHandler
+        self.logger.addHandler(self.handler)
         self.matrix = None
         self.compound_map = dict()
         self.reaction_map = dict()

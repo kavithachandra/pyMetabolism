@@ -13,6 +13,6 @@ with transcription data (PDA).
 @since: 2009-09-11
 @version: 0.1
 @status: development
-@todo: set up logging, graph_view module, random module, fba interface, pda module
+@todo: fba interface, pda module
 
 """

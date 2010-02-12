@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pyMetabolism.metabolism_tests.ReactionTests</title>
+  <title>pyMetabolism.io.io_tests.sbmlTests</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,8 +38,9 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pyMetabolism-module.html">Package&nbsp;pyMetabolism</a> ::
-        <a href="pyMetabolism.metabolism_tests-module.html">Module&nbsp;metabolism_tests</a> ::
-        Class&nbsp;ReactionTests
+        <a href="pyMetabolism.io-module.html">Package&nbsp;io</a> ::
+        <a href="pyMetabolism.io.io_tests-module.html">Module&nbsp;io_tests</a> ::
+        Class&nbsp;sbmlTests
       </span>
     </td>
     <td>
@@ -49,23 +50,25 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pyMetabolism.metabolism_tests.ReactionTests-class.html"
+            >]&nbsp;|&nbsp;<a href="pyMetabolism.io.io_tests.sbmlTests-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class ReactionTests</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#ReactionTests">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class sbmlTests</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.io.io_tests-pysrc.html#sbmlTests">source&nbsp;code</a></span></p>
 <pre class="base-tree">
        object --+    
                 |    
 unittest.TestCase --+
                     |
-                   <strong class="uidshort">ReactionTests</strong>
+                   <strong class="uidshort">sbmlTests</strong>
 </pre>
 
 <hr />
+<p>docstring for sbmlTests</p>
+
 <!-- ==================== NESTED CLASSES ==================== -->
 <a name="section-NestedClasses"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -114,10 +117,10 @@ unittest.TestCase --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism_tests.ReactionTests-class.html#setUp" class="summary-sig-name">setUp</a>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a href="pyMetabolism.io.io_tests.sbmlTests-class.html#setUp" class="summary-sig-name">setUp</a>(<span class="summary-sig-arg">self</span>)</span><br />
       Hook method for setting up the test fixture before exercising it.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#ReactionTests.setUp">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.io.io_tests-pysrc.html#sbmlTests.setUp">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -131,10 +134,10 @@ unittest.TestCase --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="test__str__"></a><span class="summary-sig-name">test__str__</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Tests if the __str__ method works correctly</td>
+          <td><span class="summary-sig"><a name="test_sbml_parser_get_compounds"></a><span class="summary-sig-name">test_sbml_parser_get_compounds</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Tests if compounds in SBML models are correctly read.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#ReactionTests.test__str__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.io.io_tests-pysrc.html#sbmlTests.test_sbml_parser_get_compounds">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -148,9 +151,27 @@ unittest.TestCase --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="test_contains_string_input"></a><span class="summary-sig-name">test_contains_string_input</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="test_sbml_get_reactions"></a><span class="summary-sig-name">test_sbml_get_reactions</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Tests if reactions in SBML models are correctly read.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#ReactionTests.test_contains_string_input">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.io.io_tests-pysrc.html#sbmlTests.test_sbml_get_reactions">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="test_get_metabolic_systme"></a><span class="summary-sig-name">test_get_metabolic_systme</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Tests SBML models are correctly imported</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.io.io_tests-pysrc.html#sbmlTests.test_get_metabolic_systme">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -266,7 +287,7 @@ unittest.TestCase --+
   <h3 class="epydoc"><span class="sig"><span class="sig-name">setUp</span>(<span class="sig-arg">self</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#ReactionTests.setUp">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="pyMetabolism.io.io_tests-pysrc.html#sbmlTests.setUp">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   

@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pyMetabolism.metabolism_tests.ReactionTests</title>
+  <title>pyMetabolism.graph_view.ReactionCentricNetwork</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,8 +38,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pyMetabolism-module.html">Package&nbsp;pyMetabolism</a> ::
-        <a href="pyMetabolism.metabolism_tests-module.html">Module&nbsp;metabolism_tests</a> ::
-        Class&nbsp;ReactionTests
+        <a href="pyMetabolism.graph_view-module.html">Module&nbsp;graph_view</a> ::
+        Class&nbsp;ReactionCentricNetwork
       </span>
     </td>
     <td>
@@ -49,48 +49,33 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pyMetabolism.metabolism_tests.ReactionTests-class.html"
+            >]&nbsp;|&nbsp;<a href="pyMetabolism.graph_view.ReactionCentricNetwork-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class ReactionTests</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#ReactionTests">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class ReactionCentricNetwork</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#ReactionCentricNetwork">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-       object --+    
-                |    
-unittest.TestCase --+
-                    |
-                   <strong class="uidshort">ReactionTests</strong>
+                        object --+            
+                                 |            
+      networkx.classes.graph.Graph --+        
+                                     |        
+networkx.classes.multigraph.MultiGraph --+    
+                                         |    
+                        object --+       |    
+                                 |       |    
+      networkx.classes.graph.Graph --+   |    
+                                     |   |    
+      networkx.classes.digraph.DiGraph --+    
+                                         |    
+networkx.classes.multidigraph.MultiDiGraph --+
+                                             |
+                                            <strong class="uidshort">ReactionCentricNetwork</strong>
 </pre>
 
 <hr />
-<!-- ==================== NESTED CLASSES ==================== -->
-<a name="section-NestedClasses"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Nested Classes</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-NestedClasses"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>unittest.TestCase</code></b>:
-      <code><a href="exceptions.AssertionError-class.html">failureException</a></code>
-      </p>
-    </td>
-  </tr>
-</table>
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -114,10 +99,32 @@ unittest.TestCase --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism_tests.ReactionTests-class.html#setUp" class="summary-sig-name">setUp</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Hook method for setting up the test fixture before exercising it.</td>
+          <td><span class="summary-sig"><a href="pyMetabolism.graph_view.ReactionCentricNetwork-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">reactions</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">labelled</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Initialize a graph with edges, name, graph attributes.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#ReactionTests.setUp">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#ReactionCentricNetwork.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_populate_graph_on_init"></a><span class="summary-sig-name">_populate_graph_on_init</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">reactions</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#ReactionCentricNetwork._populate_graph_on_init">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -131,26 +138,12 @@ unittest.TestCase --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="test__str__"></a><span class="summary-sig-name">test__str__</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Tests if the __str__ method works correctly</td>
+          <td><span class="summary-sig"><a name="add_reaction_pair"></a><span class="summary-sig-name">add_reaction_pair</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">rxn1</span>,
+        <span class="summary-sig-arg">rxn2</span>)</span><br />
+      docstring for add_reaction</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#ReactionTests.test__str__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="test_contains_string_input"></a><span class="summary-sig-name">test_contains_string_input</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#ReactionTests.test_contains_string_input">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#ReactionCentricNetwork.add_reaction_pair">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -160,52 +153,83 @@ unittest.TestCase --+
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>unittest.TestCase</code></b>:
-      <code>__call__</code>,
-      <code>__eq__</code>,
-      <code>__hash__</code>,
-      <code>__init__</code>,
-      <code>__ne__</code>,
-      <code>__repr__</code>,
-      <code>__str__</code>,
-      <code>assertAlmostEqual</code>,
-      <code>assertAlmostEquals</code>,
-      <code>assertEqual</code>,
-      <code>assertEquals</code>,
-      <code>assertFalse</code>,
-      <code>assertNotAlmostEqual</code>,
-      <code>assertNotAlmostEquals</code>,
-      <code>assertNotEqual</code>,
-      <code>assertNotEquals</code>,
-      <code>assertRaises</code>,
-      <code>assertTrue</code>,
-      <code>assert_</code>,
-      <code>countTestCases</code>,
-      <code>debug</code>,
-      <code>defaultTestResult</code>,
-      <code>fail</code>,
-      <code>failIf</code>,
-      <code>failIfAlmostEqual</code>,
-      <code>failIfEqual</code>,
-      <code>failUnless</code>,
-      <code>failUnlessAlmostEqual</code>,
-      <code>failUnlessEqual</code>,
-      <code>failUnlessRaises</code>,
-      <code>id</code>,
-      <code>run</code>,
-      <code>shortDescription</code>,
-      <code>tearDown</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>networkx.classes.multidigraph.MultiDiGraph</code></b>:
+      <code>add_edge</code>,
+      <code>degree_iter</code>,
+      <code>edges_iter</code>,
+      <code>in_degree_iter</code>,
+      <code>in_edges_iter</code>,
+      <code>is_directed</code>,
+      <code>is_multigraph</code>,
+      <code>out_degree_iter</code>,
+      <code>out_edges_iter</code>,
+      <code>remove_edge</code>,
+      <code>to_directed</code>,
+      <code>to_undirected</code>
       </p>
-    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code>unittest.TestCase</code></b> (private):
-      <code>_exc_info</code>
-      </p></div>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>networkx.classes.multigraph.MultiGraph</code></b>:
+      <code>add_edges_from</code>,
+      <code>edges</code>,
+      <code>get_edge_data</code>,
+      <code>has_edge</code>,
+      <code>number_of_edges</code>,
+      <code>remove_edges_from</code>,
+      <code>selfloop_edges</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>networkx.classes.digraph.DiGraph</code></b>:
+      <code>add_node</code>,
+      <code>add_nodes_from</code>,
+      <code>clear</code>,
+      <code>has_predecessor</code>,
+      <code>has_successor</code>,
+      <code>in_degree</code>,
+      <code>in_edges</code>,
+      <code>neighbors</code>,
+      <code>neighbors_iter</code>,
+      <code>out_degree</code>,
+      <code>out_edges</code>,
+      <code>predecessors</code>,
+      <code>predecessors_iter</code>,
+      <code>remove_node</code>,
+      <code>remove_nodes_from</code>,
+      <code>reverse</code>,
+      <code>subgraph</code>,
+      <code>successors</code>,
+      <code>successors_iter</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>networkx.classes.graph.Graph</code></b>:
+      <code>__contains__</code>,
+      <code>__getitem__</code>,
+      <code>__iter__</code>,
+      <code>__len__</code>,
+      <code>__str__</code>,
+      <code>add_cycle</code>,
+      <code>add_path</code>,
+      <code>add_star</code>,
+      <code>add_weighted_edges_from</code>,
+      <code>adjacency_iter</code>,
+      <code>adjacency_list</code>,
+      <code>copy</code>,
+      <code>degree</code>,
+      <code>has_node</code>,
+      <code>nbunch_iter</code>,
+      <code>nodes</code>,
+      <code>nodes_iter</code>,
+      <code>nodes_with_selfloops</code>,
+      <code>number_of_nodes</code>,
+      <code>number_of_selfloops</code>,
+      <code>order</code>,
+      <code>size</code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
       <code>__format__</code>,
       <code>__getattribute__</code>,
+      <code>__hash__</code>,
       <code>__new__</code>,
       <code>__reduce__</code>,
       <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
       <code>__setattr__</code>,
       <code>__sizeof__</code>,
       <code>__subclasshook__</code>
@@ -256,24 +280,63 @@ unittest.TestCase --+
   </td>
 </tr>
 </table>
-<a name="setUp"></a>
+<a name="__init__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">setUp</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">reactions</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">labelled</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#ReactionTests.setUp">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#ReactionCentricNetwork.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>Hook method for setting up the test fixture before exercising it.</p>
+  <pre class="literalblock">
+Initialize a graph with edges, name, graph attributes.
+
+Parameters
+----------
+data : input graph
+    Data to initialize graph.  If data=None (default) an empty
+    graph is created.  The data can be an edge list, or any
+    NetworkX graph object.  If the corresponding optional Python
+    packages are installed the data can also be a NumPy matrix
+    or 2d ndarray, a SciPy sparse matrix, or a PyGraphviz graph.
+name : string, optional (default='')
+    An optional name for the graph.
+attr : keyword arguments, optional (default= no attributes)
+    Attributes to add to graph as key=value pairs.
+
+See Also
+--------
+convert
+    
+Examples
+--------
+&gt;&gt;&gt; G = nx.Graph()   # or DiGraph, MultiGraph, MultiDiGraph, etc
+&gt;&gt;&gt; G = nx.Graph(name='my graph')
+&gt;&gt;&gt; e = [(1,2),(2,3),(3,4)] # list of edges
+&gt;&gt;&gt; G = nx.Graph(e)
+
+Arbitrary graph attribute pairs (key=value) may be assigned
+
+&gt;&gt;&gt; G=nx.Graph(e, day=&quot;Friday&quot;)
+&gt;&gt;&gt; G.graph
+{'day': 'Friday'}
+
+</pre>
   <dl class="fields">
     <dt>Overrides:
-        unittest.TestCase.setUp
+        object.__init__
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>

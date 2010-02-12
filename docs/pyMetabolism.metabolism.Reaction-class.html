@@ -69,8 +69,11 @@ object --+
 <hr />
 <div class="fields">      <p><strong>Attention:</strong>
         The stoichiometric factors given in <code>stoichiometry</code> 
-        should be positive integers, their sign will be adjusted if 
-        necessary.
+        should be positive integers or floats, their sign will be adjusted 
+        if necessary.
+      </p>
+      <p><strong>To Do:</strong>
+        Fix stoichiometry issues ...
       </p>
 </div><!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -100,9 +103,10 @@ object --+
         <span class="summary-sig-arg">substrates</span>,
         <span class="summary-sig-arg">products</span>,
         <span class="summary-sig-arg">stoichiometry</span>,
+        <span class="summary-sig-arg">compartments</span>,
         <span class="summary-sig-arg">reversible</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">synonyms</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">rate</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">rate_constant</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Either does nothing if the <a 
@@ -226,6 +230,24 @@ object --+
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>str</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Reaction-class.html#get_id" class="summary-sig-name">get_id</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns:
+      Identifier or reaction</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.get_id">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>list</code></span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -256,6 +278,40 @@ object --+
       Return the stoichiometric coefficient of a compound.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.get_stoich_coeff">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="index"></a><span class="summary-sig-name">index</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">compound</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.index">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="is_substrate"></a><span class="summary-sig-name">is_substrate</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">compound</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.is_substrate">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -309,9 +365,10 @@ object --+
         <span class="summary-sig-arg">substrates</span>,
         <span class="summary-sig-arg">products</span>,
         <span class="summary-sig-arg">stoichiometry</span>,
+        <span class="summary-sig-arg">compartments</span>,
         <span class="summary-sig-arg">reversible</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">synonyms</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">rate</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">rate_constant</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Returns:
@@ -352,7 +409,7 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>dict</code></span>
     </td><td class="summary">
-        <a name="_reaction_memory"></a><span class="summary-name">_reaction_memory</span> = <code title="{}"><code class="variable-group">{</code><code class="variable-group">}</code></code><br />
+        <a name="_memory"></a><span class="summary-name">_memory</span> = <code title="{}"><code class="variable-group">{</code><code class="variable-group">}</code></code><br />
       A dictionary that stores instances of <a 
       href="pyMetabolism.metabolism.Reaction-class.html" 
       class="link">Reaction</a> as values to their <code>identifier</code> 
@@ -399,7 +456,7 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>float</code></span>
     </td><td class="summary">
-        <a name="rate"></a><span class="summary-name">rate</span><br />
+        <a name="rate_constant"></a><span class="summary-name">rate_constant</span><br />
       Define the value of the rate constant for this reaction.
     </td>
   </tr>
@@ -503,9 +560,10 @@ object --+
         <span class="sig-arg">substrates</span>,
         <span class="sig-arg">products</span>,
         <span class="sig-arg">stoichiometry</span>,
+        <span class="sig-arg">compartments</span>,
         <span class="sig-arg">reversible</span>=<span class="sig-default">False</span>,
         <span class="sig-arg">synonyms</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">rate</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">rate_constant</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">*args</span>,
         <span class="sig-arg">**kwargs</span>)</span>
     <br /><em class="fname">Static Method</em>
@@ -547,9 +605,10 @@ object --+
         <span class="sig-arg">substrates</span>,
         <span class="sig-arg">products</span>,
         <span class="sig-arg">stoichiometry</span>,
+        <span class="sig-arg">compartments</span>,
         <span class="sig-arg">reversible</span>=<span class="sig-default">False</span>,
         <span class="sig-arg">synonyms</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">rate</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">rate_constant</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">*args</span>,
         <span class="sig-arg">**kwargs</span>)</span>
     <br /><em class="fname">(Constructor)</em>
@@ -664,6 +723,27 @@ object --+
   </dl>
 </td></tr></table>
 </div>
+<a name="get_id"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_id</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.get_id">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Returns: <code>str</code></dt>
+        <dd>Identifier or reaction</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="get_compounds"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -745,7 +825,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Feb  3 11:44:36 2010
+    Generated by Epydoc 3.0.1 on Fri Feb 12 19:06:19 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

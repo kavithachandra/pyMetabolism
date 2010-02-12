@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pyMetabolism.metabolism.Compound</title>
+  <title>pyMetabolism.metabolism.Compartment</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -39,7 +39,7 @@
       <span class="breadcrumbs">
         <a href="pyMetabolism-module.html">Package&nbsp;pyMetabolism</a> ::
         <a href="pyMetabolism.metabolism-module.html">Module&nbsp;metabolism</a> ::
-        Class&nbsp;Compound
+        Class&nbsp;Compartment
       </span>
     </td>
     <td>
@@ -49,35 +49,27 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pyMetabolism.metabolism.Compound-class.html"
+            >]&nbsp;|&nbsp;<a href="pyMetabolism.metabolism.Compartment-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Compound</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class Compartment</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compartment">source&nbsp;code</a></span></p>
 <pre class="base-tree">
 object --+
          |
-        <strong class="uidshort">Compound</strong>
+        <strong class="uidshort">Compartment</strong>
 </pre>
 
 <hr />
 <p>A class modeling a chemical compound. Primary identifier of <a 
   href="pyMetabolism.metabolism.Compound-class.html" 
-  class="link">Compound</a>s is a simple string <code>identifier</code> 
-  although many synonymous identifiers may be set up.</p>
+  class="link">Compound</a>s is a simple string <code>name</code> although 
+  many synonymous identifiers may be set up.</p>
 
-<hr />
-<div class="fields">      <p><strong>Note:</strong>
-        Currently, no unit system for mass is implemented it is left up to 
-        the user.
-      </p>
-      <p><strong>To Do:</strong>
-        clarify compartment use, describe synonymous strings better
-      </p>
-</div><!-- ==================== INSTANCE METHODS ==================== -->
+<!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
@@ -100,41 +92,21 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Compound-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">identifier</span>,
-        <span class="summary-sig-arg">synonyms</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">formula</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">in_chi</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">in_chey_key</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">smiles</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">charge</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">mass</span>=<span class="summary-sig-default">None</span>,
+          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Compartment-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">constant</span>,
+        <span class="summary-sig-arg">spatial_dimensions</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">units</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Either does nothing if the <a 
-      href="pyMetabolism.metabolism.Compound-class.html" 
-      class="link">Compound</a> instance already exists or intialises a new
-      <a href="pyMetabolism.metabolism.Compound-class.html" 
-      class="link">Compound</a> instance.</td>
+      href="pyMetabolism.metabolism.Compartment-class.html" 
+      class="link">Compartment</a> instance already exists or intialises a 
+      new <a href="pyMetabolism.metabolism.Compartment-class.html" 
+      class="link">Compartment</a> instance.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__init__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>str</code></span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Compound-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      str(x)</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__str__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compartment.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -148,63 +120,10 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Compound-class.html#__contains__" class="summary-sig-name">__contains__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">element</span>)</span><br />
-      Checks for atomic element in compound.</td>
+          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Compartment-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      docstring for __str__</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__contains__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>int</code></span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Compound-class.html#__hash__" class="summary-sig-name">__hash__</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      hash(x)</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__hash__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>int</code></span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="__cmp__"></a><span class="summary-sig-name">__cmp__</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">other</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__cmp__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>str</code></span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Compound-class.html#get_id" class="summary-sig-name">get_id</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Returns:
-      Returns identifier of compound.</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.get_id">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compartment.__str__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -218,6 +137,7 @@ object --+
       <code>__delattr__</code>,
       <code>__format__</code>,
       <code>__getattribute__</code>,
+      <code>__hash__</code>,
       <code>__reduce__</code>,
       <code>__reduce_ex__</code>,
       <code>__repr__</code>,
@@ -252,26 +172,23 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Compound-class.html#__new__" class="summary-sig-name">__new__</a>(<span class="summary-sig-arg">cls</span>,
-        <span class="summary-sig-arg">identifier</span>,
-        <span class="summary-sig-arg">synonyms</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">formula</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">in_chi</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">in_chey_key</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">smiles</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">charge</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">mass</span>=<span class="summary-sig-default">None</span>,
+          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Compartment-class.html#__new__" class="summary-sig-name">__new__</a>(<span class="summary-sig-arg">cls</span>,
+        <span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">constant</span>,
+        <span class="summary-sig-arg">spatial_dimensions</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">units</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Returns:
       Either returns an old <a 
-      href="pyMetabolism.metabolism.Compound-class.html" 
-      class="link">Compound</a> instance if the name already exists or 
+      href="pyMetabolism.metabolism.Compartment-class.html" 
+      class="link">Compartment</a> instance if the name already exists or 
       passes a new <a href="pyMetabolism.metabolism.Compound-class.html" 
       class="link">Compound</a> <code>class instance</code> to be 
       initialised.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__new__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compartment.__new__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -303,9 +220,9 @@ object --+
     </td><td class="summary">
         <a name="_memory"></a><span class="summary-name">_memory</span> = <code title="{}"><code class="variable-group">{</code><code class="variable-group">}</code></code><br />
       A dictionary that stores instances of <a 
-      href="pyMetabolism.metabolism.Compound-class.html" 
-      class="link">Compound</a> as values to their <code>identifier</code> 
-      key.
+      href="pyMetabolism.metabolism.Compartment-class.html" 
+      class="link">Compartment</a> as values to their 
+      <code>identifier</code> key.
     </td>
   </tr>
 </table>
@@ -328,64 +245,19 @@ object --+
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>int</code></span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="charge"></a><span class="summary-name">charge</span><br />
-      Electric charge of the compound.
+        <a name="constant"></a><span class="summary-name">constant</span><br />
+      @todo description
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>str</code></span>
     </td><td class="summary">
-        <a name="formula"></a><span class="summary-name">formula</span><br />
-      Elemental formula of the compound.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>str</code></span>
-    </td><td class="summary">
-        <a name="identifier"></a><span class="summary-name">identifier</span><br />
-      The main name of the compound will be used for comparisons and 
+        <a name="name"></a><span class="summary-name">name</span><br />
+      The main name of the compartment will be used for comparisons and 
       representation.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>str</code></span>
-    </td><td class="summary">
-        <a name="in_chey_key"></a><span class="summary-name">in_chey_key</span>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>str</code></span>
-    </td><td class="summary">
-        <a name="in_chi"></a><span class="summary-name">in_chi</span>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>float</code></span>
-    </td><td class="summary">
-        <a name="mass"></a><span class="summary-name">mass</span><br />
-      Mass of the compound.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>str</code></span>
-    </td><td class="summary">
-        <a name="smiles"></a><span class="summary-name">smiles</span>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>list</code></span>
-    </td><td class="summary">
-        <a name="synonyms"></a><span class="summary-name">synonyms</span><br />
-      Alternative names for the compound.
     </td>
   </tr>
 </table>
@@ -440,20 +312,17 @@ object --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__new__</span>(<span class="sig-arg">cls</span>,
-        <span class="sig-arg">identifier</span>,
-        <span class="sig-arg">synonyms</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">formula</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">in_chi</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">in_chey_key</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">smiles</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">charge</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">mass</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">name</span>,
+        <span class="sig-arg">constant</span>,
+        <span class="sig-arg">spatial_dimensions</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">size</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">units</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">*args</span>,
         <span class="sig-arg">**kwargs</span>)</span>
     <br /><em class="fname">Static Method</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__new__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compartment.__new__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
@@ -462,9 +331,9 @@ object --+
     <dt>Returns: <a href="pyMetabolism.metabolism.Compound-class.html" 
       class="link">Compound</a> <code>class instance</code></dt>
         <dd>Either returns an old <a 
-          href="pyMetabolism.metabolism.Compound-class.html" 
-          class="link">Compound</a> instance if the name already exists or 
-          passes a new <a 
+          href="pyMetabolism.metabolism.Compartment-class.html" 
+          class="link">Compartment</a> instance if the name already exists 
+          or passes a new <a 
           href="pyMetabolism.metabolism.Compound-class.html" 
           class="link">Compound</a> <code>class instance</code> to be 
           initialised.</dd>
@@ -485,28 +354,25 @@ object --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">identifier</span>,
-        <span class="sig-arg">synonyms</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">formula</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">in_chi</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">in_chey_key</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">smiles</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">charge</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">mass</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">name</span>,
+        <span class="sig-arg">constant</span>,
+        <span class="sig-arg">spatial_dimensions</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">size</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">units</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">*args</span>,
         <span class="sig-arg">**kwargs</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__init__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compartment.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
   <p>Either does nothing if the <a 
-  href="pyMetabolism.metabolism.Compound-class.html" 
-  class="link">Compound</a> instance already exists or intialises a new <a 
-  href="pyMetabolism.metabolism.Compound-class.html" 
-  class="link">Compound</a> instance.</p>
+  href="pyMetabolism.metabolism.Compartment-class.html" 
+  class="link">Compartment</a> instance already exists or intialises a new 
+  <a href="pyMetabolism.metabolism.Compartment-class.html" 
+  class="link">Compartment</a> instance.</p>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
@@ -525,86 +391,15 @@ object --+
     <br /><em class="fname">(Informal representation operator)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__str__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compartment.__str__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>str(x)</p>
+  <p>docstring for __str__</p>
   <dl class="fields">
-    <dt>Returns: <code>str</code></dt>
     <dt>Overrides:
         object.__str__
     </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="__contains__"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__contains__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">element</span>)</span>
-    <br /><em class="fname">(In operator)</em>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__contains__">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Checks for atomic element in compound.</p>
-  <dl class="fields">
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>NotImplementedError</strong></code></li>
-    </ul></dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="__hash__"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__hash__</span>(<span class="sig-arg">self</span>)</span>
-    <br /><em class="fname">(Hashing function)</em>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.__hash__">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>hash(x)</p>
-  <dl class="fields">
-    <dt>Returns: <code>int</code></dt>
-    <dt>Overrides:
-        object.__hash__
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="get_id"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_id</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Compound.get_id">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Returns: <code>str</code></dt>
-        <dd>Returns identifier of compound.</dd>
   </dl>
 </td></tr></table>
 </div>

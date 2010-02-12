@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+
 """
 Basic classes modelling compounds, reactions, and metabolism.
 
@@ -7,10 +11,11 @@ Basic classes modelling compounds, reactions, and metabolism.
 @contact: moritz(at)foo.org
 @copyright: Jacobs University Bremen. All rights reserved.
 @since: 2009-09-11
-@todo: set up logging
-
 """
 
+
+import logging
+from pyMetabolism.metabolism_logging import NullHandler
 
 class Compound(object):
     """
@@ -81,6 +86,10 @@ class Compound(object):
             return None
         super(Compound, self).__init__(*args, **kwargs)
         self.identifier = identifier
+        self.logger = logging.getLogger("pyMetabolism.Compound.%s"\
+            % self.identifier)
+        self.handler = NullHandler
+        self.logger.addHandler(self.handler)
         self.synonyms = synonyms
         self.formula = formula
         self.in_chi = in_chi
@@ -171,6 +180,7 @@ class Reaction(object):
     
     @todo: Fix stoichiometry issues ...
     """
+
     _memory = dict()
     
     def __new__(cls, identifier, substrates, products, stoichiometry, compartments,
@@ -199,6 +209,10 @@ class Reaction(object):
             return None
         super(Reaction, self).__init__(*args, **kwargs)
         self.identifier = identifier
+        self.logger = logging.getLogger("pyMetabolism.Reaction.%s"\
+            % self.identifier)
+        self.handler = NullHandler
+        self.logger.addHandler(self.handler)
         self.substrates = tuple(substrates)
         self.products = tuple(products)
         self.stoichiometry = tuple([abs(coeff) for coeff in stoichiometry])
@@ -253,14 +267,14 @@ class Reaction(object):
                 check = False
                 break
             else:
-                sum_subs += float(stoichiometry_dict[compound]) * compound.mass
+                sum_subs += float(self.stoichiometry_dict[compound]) * compound.mass
         if check:
             for compound in self.products:
                 if not compound.mass:
                     check = False
                     break
                 else:
-                    sum_prods += float(stoichiometry_dict[compound]) *\
+                    sum_prods += float(self.stoichiometry_dict[compound]) *\
                         compound.mass
         if check:
             assert sum_subs == sum_prods, "There is a mass imbalance in"\
@@ -274,14 +288,14 @@ class Reaction(object):
                 check = False
                 break
             else:
-                sum_subs += stoichiometry_dict[compound] * compound.charge
+                sum_subs += self.stoichiometry_dict[compound] * compound.charge
         if check:
             for compound in self.products:
                 if not compound.charge:
                     check = False
                     break
                 else:
-                    sum_prods += stoichiometry_dict[compound] * compound.charge
+                    sum_prods += self.stoichiometry_dict[compound] * compound.charge
         if check:
             assert (sum_subs + sum_prods) == 0, "There is a charge imbalance in"\
                 " reaction '%s'" % self.identifier
@@ -370,7 +384,7 @@ class Reaction(object):
                 return self.stoichiometry_dict[compound]
         else:
             msg = "'%s' is not participating in reaction '%s'" % (compound,
-                reaction.identifier)
+                self.identifier)
             raise KeyError(msg)
     
     def index(self, compound):
@@ -383,7 +397,7 @@ class Reaction(object):
             return list(self.substrates + self.products).index(compound)
         else:
             msg = "'%s' is not participating in reaction '%s'" % (compound,
-                reaction.identifier)
+                Reaction.identifier)
             raise KeyError(msg)
     
     def is_substrate(self, compound):
@@ -397,15 +411,15 @@ class Reaction(object):
 class Compartment(object):
     """
     A class modeling a chemical compound. Primary identifier of L{Compound}s is a
-    simple string C{identifier} although many synonymous identifiers may be set up.
+    simple string C{name} although many synonymous identifiers may be set up.
     
     @cvar _memory: A dictionary that stores instances of L{Compartment} as
                             values to their C{identifier} key.
     @type _memory: C{dict}
     
-    @ivar identifier: The main name of the compartment will be used for comparisons and
+    @ivar name: The main name of the compartment will be used for comparisons and
                       representation.
-    @type identifier: C{str}
+    @type name: C{str}
     
     @ivar constant: @todo description
     
@@ -414,7 +428,8 @@ class Compartment(object):
     
     _memory = dict()
     
-    def __new__(cls, identifier, constant, name=None, spatial_dimensions=None, size=None, units=None, *args, **kwargs):
+    def __new__(cls, name, constant, spatial_dimensions=None,\
+        size=None, units=None, *args, **kwargs):
         """
         @return: Either returns an old L{Compartment} instance if the name already exists
         or passes a new L{Compound} C{class instance} to be initialised.
@@ -422,23 +437,31 @@ class Compartment(object):
 
         @attention: This method is never called directly.
         """
-        identifier = str(identifier)
-        if identifier in cls._memory:
-            return cls._memory[identifier]
+        name = str(name)
+        if name in cls._memory:
+            return cls._memory[name]
         else:
             instance = super(Compartment, cls).__new__(cls, *args, **kwargs)
             return instance
     
-    def __init__(self, identifier, constant, name=None, spatial_dimensions=None, size=None, units=None, *args, **kwargs):
+    def __init__(self, name, constant, spatial_dimensions=None,\
+        size=None, units=None, *args, **kwargs):
         """
         Either does nothing if the L{Compartment} instance already exists or
         intialises a new L{Compartment} instance.
         """
-        if identifier in self.__class__._memory:
+        if name in self.__class__._memory:
             return None
         super(Compartment, self).__init__(*args, **kwargs)
-        self.identifier = identifier
+        self.name = name
+        self.logger = logging.getLogger("pyMetabolism.Compartment.%s"\
+            % self.name)
+        self.handler = NullHandler
+        self.logger.addHandler(self.handler)
         self.constant = constant
+        self.spatial_dimensions = spatial_dimensions
+        self.size = size
+        self.units = units
         self.__class__._memory[self.identifier] = self
         
     def __str__(self):
@@ -469,6 +492,7 @@ class Metabolism(object):
                           by their identifier (key).
     @type reactions_dict: C{dict}
     """
+
     _memory = dict()
     _counter = 0
     
@@ -501,6 +525,10 @@ class Metabolism(object):
             self.name = name
         else:
             self.name = "Metabolism-%d" % self.__class__._counter
+        self.logger = logging.getLogger("pyMetabolism.Metabolism.%s"\
+            % self.name)
+        self.handler = NullHandler
+        self.logger.addHandler(self.handler)
         if reactions:
             self.reactions = list(reactions)
         self.compounds = set()
@@ -549,10 +577,11 @@ class Metabolism(object):
         @return: Returns a reaction either by string identifier or index.
         @rtype: L{Reaction}
 
-        @raise C{IndexError}: If C{rxn} is an integer out of bounds.
-        @raise C{KeyError}: If C{rxn} is a string and not present in the
+        @raise IndexError: If C{rxn} is an integer out of bounds.
+        @raise KeyError: If C{rxn} is a string and not present in the
             C{reactions_dict}.
-        @raise C{TypeError}: 
+        @raise TypeError: If the given of parameter C{rxn} is unsuitable for
+            identifying an item.
         """
         if isinstance(rxn, int):
             return self.reactions[rxn]

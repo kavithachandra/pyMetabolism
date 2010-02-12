@@ -7,8 +7,6 @@ Created by Nikolaus Sonnenschein on 2009-09-10.
 Copyright (c) 2009 . All rights reserved.
 """
 
-import sys
-import os
 import unittest
 from pyMetabolism.metabolism import Metabolism, Compound, Reaction, Compartment
 
