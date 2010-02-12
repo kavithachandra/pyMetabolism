@@ -3,7 +3,8 @@
 
 
 """
-Basic classes modelling compounds, reactions, and metabolism.
+A class that aims to be able to extract all information
+one can from the stoichiometric matrix of a list of reactions.
 
 @author: Nikolaus Sonnenschein
 @author: Moritz Beber
