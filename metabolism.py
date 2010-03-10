@@ -168,6 +168,11 @@ class Compound(object):
             self.mass = None
         self.__class__._memory[self.identifier] = self
         
+    def __str__(self):
+        """
+        @rtype: C{str}
+        """
+        return self.identifier
         
     def __contains__(self, element):
         """
@@ -240,6 +245,12 @@ class CompartCompound(Compound):
         """
         return self.identifier  + '(' + self.compartment.name + ')'
 
+
+    def __str__(self):
+        """
+        @rtype: C{str}
+        """
+        return self.identifier + self.compartment.suffix
 
 
 class Reaction(object):
