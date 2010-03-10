@@ -77,7 +77,7 @@ class Compartment(object):
 
     def __str__(self):
         """docstring for __str__"""
-        return self.identifier
+        return self.name
 
 
 class Compound(object):
@@ -172,7 +172,7 @@ class Compound(object):
         """
         @rtype: C{str}
         """
-        return self.identifier + self.compartment.suffix
+        return self.identifier
         
     def __contains__(self, element):
         """
@@ -238,6 +238,12 @@ class CompartCompound(Compound):
         self.handler = NullHandler
         self.compartment = compartment
         self.__class__._memory[(self.identifier, self.compartment.name)] = self
+
+    def __str__(self):
+        """
+        @rtype: C{str}
+        """
+        return self.identifier + self.compartment.suffix
 
 
 class Reaction(object):
