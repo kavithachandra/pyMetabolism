@@ -44,7 +44,8 @@ import logging
 class NullHandler(logging.Handler):
     """
     Stub handler that does not emit any messages. Used in library development.
-    Any application should add its own handler to the library logger.
+    Any application should add its own handler to the library logger or root
+    logger.
     """
     def emit(self, record):
         pass

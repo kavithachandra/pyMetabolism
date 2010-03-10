@@ -9,7 +9,10 @@ Copyright (c) 2010 Jacobs University of Bremen. All rights reserved.
 
 import sys
 import os
-from pyMetabolism.metabolism import Metabolism, Reaction, Compound, Compartment
+from pyMetabolism.metabolism import Metabolism, Reaction, Compound, Compartment,\
+    CompartCompound
+
+
 try:
     import libsbml
 except ImportError, msg:
@@ -42,7 +45,8 @@ class SBMLParser(object):
         
         @todo: Check for meta information and parse if available
         """
-        return Compound(sbml_compound.getId()), Compartment(sbml_compound.getCompartment(), sbml_compound.getConstant())
+        return CompartCompound(sbml_compound.getId(), \
+            Compartment(sbml_compound.getCompartment(), sbml_compound.getConstant()))
     
     def _parse_sbml_reaction(self, sbml_reaction):
         """Able to parse entries from getListOfReactions"""
@@ -52,19 +56,17 @@ class SBMLParser(object):
         compartments = list()
         substrates = list()
         for elem in list_of_reactants:
-            species_tmp, compartment_tmp = self._parse_sbml_reactant(elem)
-            compartments.append(compartment_tmp)
+            species_tmp = self._parse_sbml_reactant(elem)
             substrates.append(species_tmp)
         products = list()
         for elem in list_of_products:
-            species_tmp, compartment_tmp = self._parse_sbml_reactant(elem)
-            compartments.append(compartment_tmp)
+            species_tmp = self._parse_sbml_reactant(elem)
             products.append(species_tmp)
         stoichiometry = tuple([-elem.getStoichiometry() for elem in list_of_reactants] + [elem.getStoichiometry() for elem in list_of_products])
         print identifier
         print stoichiometry, [elem.identifier for elem in compartments]
         print len(stoichiometry), len(compartments)
-        return Reaction(identifier, substrates, products, stoichiometry, compartments, reversible=sbml_reaction.getReversible())
+        return Reaction(identifier, substrates, products, stoichiometry, reversible=sbml_reaction.getReversible())
     
     def get_reactions(self):
         """Returns a list of reactions parsed from the SBML model"""
