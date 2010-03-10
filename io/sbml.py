@@ -9,6 +9,7 @@ Copyright (c) 2010 Jacobs University of Bremen. All rights reserved.
 
 import sys
 import os
+import re
 from pyMetabolism.metabolism import Metabolism, Reaction, Compound, Compartment,\
     CompartCompound
 
@@ -44,8 +45,9 @@ class SBMLParser(object):
         """Able to parse entries from getListOfSpecies
         
         @todo: Check for meta information and parse if available
+        @todo: Fix suffix and prefix handling
         """
-        return CompartCompound(sbml_compound.getId(), \
+        return CompartCompound(sbml_compound.getId().split('_')[1], \
             Compartment(sbml_compound.getCompartment(), sbml_compound.getConstant()))
     
     def _parse_sbml_reaction(self, sbml_reaction):
@@ -63,9 +65,9 @@ class SBMLParser(object):
             species_tmp = self._parse_sbml_reactant(elem)
             products.append(species_tmp)
         stoichiometry = tuple([-elem.getStoichiometry() for elem in list_of_reactants] + [elem.getStoichiometry() for elem in list_of_products])
-        print identifier
-        print stoichiometry, [elem.identifier for elem in compartments]
-        print len(stoichiometry), len(compartments)
+        # print identifier
+        # print stoichiometry, [elem.identifier for elem in compartments]
+        # print len(stoichiometry), len(compartments)
         return Reaction(identifier, substrates, products, stoichiometry, reversible=sbml_reaction.getReversible())
     
     def get_reactions(self):
@@ -93,5 +95,9 @@ if __name__ == '__main__':
     print 'Reactions:\n'
     for elem in parser.get_reactions():
         print elem
-    print parser.get_metabolic_system()
+    system = parser.get_metabolic_system()
+    tmp = system.get_compounds()
+    print tmp[0]
+    for elem in dir(tmp[0]):
+        print elem,  getattr(tmp[0], elem)
     

@@ -55,7 +55,7 @@ class Metabolism2glpk(object):
         fba_object = ifba.Metabolism(lp)
         col_bounds = dict()
         for r in self.metabolism:
-            if r.reversibleQ():
+            if r.reversible:
                 print r
                 col_bounds[r.get_id()] = (-1000, 1000)
             else:

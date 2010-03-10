@@ -73,11 +73,11 @@ class Compartment(object):
         self.spatial_dimensions = spatial_dimensions
         self.size = size
         self.units = units
-        self.__class__._memory[self.identifier] = self
+        self.__class__._memory[self.name] = self
 
     def __str__(self):
         """docstring for __str__"""
-        return self.identifier
+        return self.name
 
 
 class Compound(object):
@@ -168,11 +168,6 @@ class Compound(object):
             self.mass = None
         self.__class__._memory[self.identifier] = self
         
-    def __str__(self):
-        """
-        @rtype: C{str}
-        """
-        return self.identifier + self.compartment.suffix
         
     def __contains__(self, element):
         """
@@ -238,6 +233,13 @@ class CompartCompound(Compound):
         self.handler = NullHandler
         self.compartment = compartment
         self.__class__._memory[(self.identifier, self.compartment.name)] = self
+        
+    def __str__(self):
+        """
+        @rtype: C{str}
+        """
+        return self.identifier  + '(' + self.compartment.name + ')'
+
 
 
 class Reaction(object):
