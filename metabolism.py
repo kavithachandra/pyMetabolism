@@ -246,11 +246,11 @@ class CompartCompound(Compound):
         return self.identifier  + '(' + self.compartment.name + ')'
 
 
-    def __str__(self):
-        """
-        @rtype: C{str}
-        """
-        return self.identifier + self.compartment.suffix
+    # def __str__(self):
+    #     """
+    #     @rtype: C{str}
+    #     """
+    #     return self.identifier + self.compartment.suffix
 
 
 class Reaction(object):
