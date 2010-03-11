@@ -41,6 +41,7 @@ class SBMLParser(object):
 
     @todo: implement convenience stuff
     @todo: Fix suffix and prefix handling
+    @todo: Use logging
     """
     def __init__(self, path, rprefix='', rsuffix='', cprefix='', csuffix=''):
         super(SBMLParser, self).__init__()
@@ -68,15 +69,10 @@ class SBMLParser(object):
         """
         comp_id = re.sub(self.csuffix, '', re.sub(self.cprefix, '', sbml_compound.getId()))
         return CompartCompound(comp_id, Compartment(sbml_compound.getCompartment(), sbml_compound.getConstant()))
-        # 
-        # 
-        # return CompartCompound(sbml_compound.getId().split('_')[1], \
-        #     Compartment(sbml_compound.getCompartment(), sbml_compound.getConstant()))
     
     def _parse_sbml_reaction(self, sbml_reaction):
         """Able to parse entries from getListOfReactions"""
         identifier = re.sub(self.rsuffix, '', re.sub(self.rprefix, '', sbml_reaction.getId()))
-        print identifier
         list_of_reactants = sbml_reaction.getListOfReactants()
         list_of_products = sbml_reaction.getListOfProducts()
         compartments = list()
@@ -89,9 +85,6 @@ class SBMLParser(object):
             species_tmp = self._parse_sbml_reactant(elem)
             products.append(species_tmp)
         stoichiometry = tuple([-elem.getStoichiometry() for elem in list_of_reactants] + [elem.getStoichiometry() for elem in list_of_products])
-        # print identifier
-        # print stoichiometry, [elem.identifier for elem in compartments]
-        # print len(stoichiometry), len(compartments)
         return Reaction(identifier, substrates, products, stoichiometry, reversible=sbml_reaction.getReversible())
     
     def get_reactions(self):
