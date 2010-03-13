@@ -16,3 +16,26 @@ with transcription data (PDA).
 @todo: fba interface, pda module
 
 """
+
+
+import subprocess
+import sys
+
+
+class OptionsManager(object):
+    """
+    This class unifies some global options, like certain name pre- and suffixes,
+    number of cpus to use for certain parallel tasks, etc.
+    """
+    def __init__(self):
+        self.n_cpus = 1
+        self.metb_prefix = "M_"
+        self.rxn_prefix = "R_"
+        self.rev_rxn_suffix = "_Rev"
+        self._find_cpus()
+        self.logger_main = "pyMetabolism"
+
+    def _find_cpus(self):
+        pass
+
+# eof

@@ -95,9 +95,13 @@ if __name__ == '__main__':
     print 'Reactions:\n'
     for elem in parser.get_reactions():
         print elem
+#    Compound('for')
     system = parser.get_metabolic_system()
     tmp = system.get_compounds()
     print tmp[0]
     for elem in dir(tmp[0]):
         print elem,  getattr(tmp[0], elem)
-    
+    for key in Compartment._memory:
+        print "compartment", key
+        x = CompartCompound('for', Compartment(key, Compartment._memory[key].constant))
+        print x.compartment, id(x)

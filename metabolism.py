@@ -15,6 +15,7 @@ Basic classes modelling compounds, reactions, and metabolism.
 
 
 import logging
+from pyMetabolism import OptionsManager
 from pyMetabolism.metabolism_logging import NullHandler
 
 
@@ -64,8 +65,8 @@ class Compartment(object):
             return None
         super(Compartment, self).__init__(*args, **kwargs)
         self.name = name
-        self.logger = logging.getLogger("pyMetabolism.Compartment.%s"\
-            % self.name)
+        self.logger = logging.getLogger("%s.%s.%s"\
+            % (OptionsManager.logger_main, self.__class__.__name__, self.name))
         self.handler = NullHandler
         self.logger.addHandler(self.handler)
         self.constant = constant
@@ -149,8 +150,8 @@ class Compound(object):
             return None
         super(Compound, self).__init__(*args, **kwargs)
         self.identifier = identifier
-        self.logger = logging.getLogger("pyMetabolism.Compound.%s"\
-            % self.identifier)
+        self.logger = logging.getLogger("%s.%s.%s"\
+            % (OptionsManager.logger_main, self.__class__.__name__, self.identifier))
         self.handler = NullHandler
         self.logger.addHandler(self.handler)
         self.synonyms = synonyms
@@ -205,7 +206,7 @@ class Compound(object):
 class CompartCompound(Compound):
     """
     """
-    _memory = dict()
+    _extra_memory = dict()
 
     def __new__(cls, identifier, compartment,  *args, **kwargs):
         """
@@ -218,8 +219,8 @@ class CompartCompound(Compound):
         identifier = str(identifier)
         if not isinstance(compartment, Compartment):
             raise RuntimeError
-        if (identifier, compartment.name) in cls._memory:
-            return cls._memory[(identifier, compartment.name)]
+        if (identifier, compartment.name) in cls._extra_memory:
+            return cls._extra_memory[(identifier, compartment.name)]
         else:
             instance = super(CompartCompound, cls).__new__(cls, identifier,
                 *args, **kwargs)
@@ -230,14 +231,14 @@ class CompartCompound(Compound):
         Either does nothing if the L{Compound} instance already exists or
         intialises a new L{Compound} instance.
         """
-        if (identifier, compartment.name) in self.__class__._memory:
+        if (identifier, compartment.name) in self.__class__._extra_memory:
             return None
         super(CompartCompound, self).__init__(identifier, *args, **kwargs)
-        self.logger = logging.getLogger("pyMetabolism.CompartCompound.%s"\
-            % self.identifier)
+        self.logger = logging.getLogger("%s.%s.%s"\
+            % (OptionsManager.logger_main, self.__class__.__name__, self.identifier))
         self.handler = NullHandler
         self.compartment = compartment
-        self.__class__._memory[(self.identifier, self.compartment.name)] = self
+        self.__class__._extra_memory[(self.identifier, self.compartment.name)] = self
         
     def __str__(self):
         """
@@ -323,8 +324,8 @@ class Reaction(object):
             return None
         super(Reaction, self).__init__(*args, **kwargs)
         self.identifier = identifier
-        self.logger = logging.getLogger("pyMetabolism.Reaction.%s"\
-            % self.identifier)
+        self.logger = logging.getLogger("%s.%s.%s"\
+            % (OptionsManager.logger_main, self.__class__.__name__, self.identifier))
         self.handler = NullHandler
         self.logger.addHandler(self.handler)
         self.substrates = tuple(substrates)
@@ -577,8 +578,8 @@ class Metabolism(object):
             self.name = name
         else:
             self.name = "Metabolism-%d" % self.__class__._counter
-        self.logger = logging.getLogger("pyMetabolism.Metabolism.%s"\
-            % self.name)
+        self.logger = logging.getLogger("%s.%s.%s"\
+            % (OptionsManager.logger_main, self.__class__.__name__, self.name))
         self.handler = NullHandler
         self.logger.addHandler(self.handler)
         if reactions:
