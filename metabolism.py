@@ -187,14 +187,50 @@ class Compound(object):
         self._smiles = smiles
         try:
             self._charge = int(charge)
-        except ValueError:
+        except (ValueError, TypeError):
             self._charge = None
         try:
             self._mass = float(mass)
-        except ValueError:
+        except (ValueError, TypeError):
             self._mass = None
         self.__class__._memory[self.identifier] = self
-        
+
+    @new_property
+    def options():
+        return {"fset": None}
+
+    @new_property
+    def identifier():
+        return {"fset": None}
+
+    @new_property
+    def logger():
+        pass
+
+    @new_property
+    def formula():
+        pass
+
+    @new_property
+    def in_chi():
+        pass
+
+    @new_property
+    def in_chey_key():
+        pass
+
+    @new_property
+    def smiles():
+        pass
+
+    @new_property
+    def charge():
+        pass
+
+    @new_property
+    def mass():
+        pass
+
     def __str__(self):
         """
         @rtype: C{str}
@@ -248,15 +284,15 @@ class CompartCompound(object):
         Either does nothing if the L{Compound} instance already exists or
         intialises a new L{Compound} instance.
         """
-        if (identifier, compartment.name) in self.__class__._extra_memory:
+        if (identifier, compartment.name) in self.__class__._memory:
             return None
         super(CompartCompound, self).__init__(*args, **kwargs)
         self._options = OptionsManager()
         self._logger = logging.getLogger("%s.%s.%s"\
-            % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
+            % (self.options.main_logger_name, self.__class__.__name__, identifier))
         self._compound = Compound(identifier)
         self._compartment = compartment
-        self.__class__._extra_memory[(self.identifier, self.compartment.name)] = self
+        self.__class__._memory[(identifier, self.compartment.name)] = self
 
     @new_property
     def options():
@@ -288,10 +324,8 @@ class CompartCompound(object):
     #     return self.identifier + self.compartment.suffix
 
     def __getattr__(self, name):
-        try:
-            return super(Compound, self.compound).__getattribute__(self.compound, name)
-        except AttributeError:
-            return super(Compartment, self.compartment).__getattribute__(self.compartment, name)
+        #return super(Compound, self.compound).__getattribute__(self.compound, name)
+        return getattr(self.compound, name)
 
 
 
@@ -376,7 +410,7 @@ class Reaction(object):
         self._synonyms = synonyms
         try:
             self.rate_constant = float(rate_constant)
-        except ValueError:
+        except (ValueError, TypeError):
             self.rate_constant = None
         self._consistency_check()
         self.__class__._memory[self.identifier] = self

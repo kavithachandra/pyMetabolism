@@ -117,7 +117,7 @@ if __name__ == '__main__':
     for elem in parser.get_reactions():
         print elem
     system = parser.get_metabolic_system()
-    tmp = system.get_compounds()
+    tmp = list(system.compounds)
     print tmp[0]
     for elem in dir(tmp[0]):
         print elem,  getattr(tmp[0], elem)
