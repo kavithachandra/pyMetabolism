@@ -15,8 +15,7 @@ Basic classes modelling compounds, reactions, and metabolism.
 
 
 import logging
-from pyMetabolism import OptionsManager
-from pyMetabolism.metabolism_logging import NullHandler
+from pyMetabolism import OptionsManager, new_property
 
 
 class Compartment(object):
@@ -52,8 +51,7 @@ class Compartment(object):
         if name in cls._memory:
             return cls._memory[name]
         else:
-            instance = super(Compartment, cls).__new__(cls, *args, **kwargs)
-            return instance
+            return super(Compartment, cls).__new__(cls, *args, **kwargs)
 
     def __init__(self, name, constant, suffix="", spatial_dimensions=None,\
         size=None, units=None, *args, **kwargs):
@@ -64,18 +62,49 @@ class Compartment(object):
         if name in self.__class__._memory:
             return None
         super(Compartment, self).__init__(*args, **kwargs)
-        self.name = name
-        self.logger = logging.getLogger("%s.%s.%s"\
-            % (OptionsManager.logger_main, self.__class__.__name__, self.name))
-        self.handler = NullHandler
-        self.logger.addHandler(self.handler)
-        self.constant = constant
-        self.suffix = str(suffix)
-        self.spatial_dimensions = spatial_dimensions
-        self.size = size
-        self.units = units
+        self._options = OptionsManager()
+        self._name = name
+        self._logger = logging.getLogger("%s.%s.%s"\
+            % (self.options.main_logger_name, self.__class__.__name__, self.name))
+        self._constant = constant
+        self._suffix = str(suffix)
+        self._spatial_dimensions = spatial_dimensions
+        self._size = size
+        self._units = units
         self.__class__._memory[self.name] = self
 
+    @new_property
+    def options():
+        return {"fset": None}
+
+    @new_property
+    def name():
+        return {"fset": None}
+
+    @new_property
+    def logger():
+        pass
+
+    @new_property
+    def constant():
+        return {"fset": None}
+
+    @new_property
+    def suffix():
+        pass
+
+    @new_property
+    def spatial_dimensions():
+        pass
+
+    @new_property
+    def size():
+        pass
+
+    @new_property
+    def units():
+        pass
+    
     def __str__(self):
         """docstring for __str__"""
         return self.name
@@ -122,7 +151,7 @@ class Compound(object):
     
     _memory = dict()
     
-    def __new__(cls, identifier, synonyms=None,
+    def __new__(cls, identifier,
         formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
         mass=None, *args, **kwargs):
         """
@@ -136,10 +165,9 @@ class Compound(object):
         if identifier in cls._memory:
             return cls._memory[identifier]
         else:
-            instance = super(Compound, cls).__new__(cls, *args, **kwargs)
-            return instance
+            return super(Compound, cls).__new__(cls, *args, **kwargs)
     
-    def __init__(self, identifier, synonyms=None,
+    def __init__(self, identifier,
         formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
         mass=None, *args, **kwargs):
         """
@@ -149,24 +177,22 @@ class Compound(object):
         if identifier in self.__class__._memory:
             return None
         super(Compound, self).__init__(*args, **kwargs)
-        self.identifier = identifier
-        self.logger = logging.getLogger("%s.%s.%s"\
-            % (OptionsManager.logger_main, self.__class__.__name__, self.identifier))
-        self.handler = NullHandler
-        self.logger.addHandler(self.handler)
-        self.synonyms = synonyms
-        self.formula = formula
-        self.in_chi = in_chi
-        self.in_chey_key = in_chey_key
-        self.smiles = smiles
-        if charge:
-            self.charge = int(charge)
-        else:
-            self.charge = None
-        if mass:
-            self.mass = float(mass)
-        else:
-            self.mass = None
+        self._options = OptionsManager()
+        self._identifier = identifier
+        self._logger = logging.getLogger("%s.%s.%s"\
+            % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
+        self._formula = formula
+        self._in_chi = in_chi
+        self._in_chey_key = in_chey_key
+        self._smiles = smiles
+        try:
+            self._charge = int(charge)
+        except ValueError:
+            self._charge = None
+        try:
+            self._mass = float(mass)
+        except ValueError:
+            self._mass = None
         self.__class__._memory[self.identifier] = self
         
     def __str__(self):
@@ -194,19 +220,12 @@ class Compound(object):
         @rtype: C{int}
         """
         return cmp(id(self), id(other))
-    
-    def get_id(self):
-        """
-        @return: Returns identifier of compound.
-        @rtype: C{str}        
-        """
-        return self.identifier
 
 
-class CompartCompound(Compound):
+class CompartCompound(object):
     """
     """
-    _extra_memory = dict()
+    _memory = dict()
 
     def __new__(cls, identifier, compartment,  *args, **kwargs):
         """
@@ -218,13 +237,11 @@ class CompartCompound(Compound):
         """
         identifier = str(identifier)
         if not isinstance(compartment, Compartment):
-            raise RuntimeError
-        if (identifier, compartment.name) in cls._extra_memory:
-            return cls._extra_memory[(identifier, compartment.name)]
+            raise ValueError
+        if (identifier, compartment.name) in cls._memory:
+            return cls._memory[(identifier, compartment.name)]
         else:
-            instance = super(CompartCompound, cls).__new__(cls, identifier,
-                *args, **kwargs)
-            return instance
+            return super(CompartCompound, cls).__new__(cls, *args, **kwargs)
 
     def __init__(self, identifier, compartment, *args, **kwargs):
         """
@@ -233,13 +250,30 @@ class CompartCompound(Compound):
         """
         if (identifier, compartment.name) in self.__class__._extra_memory:
             return None
-        super(CompartCompound, self).__init__(identifier, *args, **kwargs)
-        self.logger = logging.getLogger("%s.%s.%s"\
-            % (OptionsManager.logger_main, self.__class__.__name__, self.identifier))
-        self.handler = NullHandler
-        self.compartment = compartment
+        super(CompartCompound, self).__init__(*args, **kwargs)
+        self._options = OptionsManager()
+        self._logger = logging.getLogger("%s.%s.%s"\
+            % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
+        self._compound = Compound(identifier)
+        self._compartment = compartment
         self.__class__._extra_memory[(self.identifier, self.compartment.name)] = self
-        
+
+    @new_property
+    def options():
+        return {"fset": None}
+
+    @new_property
+    def logger():
+        pass
+
+    @new_property
+    def compound():
+        return {"fset": None}
+
+    @new_property
+    def compartment():
+        return {"fset": None}
+
     def __str__(self):
         """
         @rtype: C{str}
@@ -252,6 +286,13 @@ class CompartCompound(Compound):
     #     @rtype: C{str}
     #     """
     #     return self.identifier + self.compartment.suffix
+
+    def __getattr__(self, name):
+        try:
+            return super(Compound, self.compound).__getattribute__(self.compound, name)
+        except AttributeError:
+            return super(Compartment, self.compartment).__getattribute__(self.compartment, name)
+
 
 
 class Reaction(object):
@@ -311,8 +352,7 @@ class Reaction(object):
         if identifier in cls._memory:
             return cls._memory[identifier]
         else:
-            instance = super(Reaction, cls).__new__(cls, *args, **kwargs)
-            return instance
+            return super(Reaction, cls).__new__(cls, *args, **kwargs)
     
     def __init__(self, identifier, substrates, products, stoichiometry,
         reversible=False, synonyms=None, rate_constant=None, *args, **kwargs):
@@ -323,27 +363,63 @@ class Reaction(object):
         if identifier in self.__class__._memory:
             return None
         super(Reaction, self).__init__(*args, **kwargs)
-        self.identifier = identifier
-        self.logger = logging.getLogger("%s.%s.%s"\
-            % (OptionsManager.logger_main, self.__class__.__name__, self.identifier))
-        self.handler = NullHandler
-        self.logger.addHandler(self.handler)
-        self.substrates = tuple(substrates)
-        self.products = tuple(products)
-        self.stoichiometry = tuple([abs(coeff) for coeff in stoichiometry])
-        self.stoichiometry_dict = dict(zip(list(self.substrates)
+        self._options = OptionsManager()
+        self._identifier = identifier
+        self._logger = logging.getLogger("%s.%s.%s"\
+            % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
+        self._substrates = tuple(substrates)
+        self._products = tuple(products)
+        self._stoichiometry = tuple([abs(coeff) for coeff in stoichiometry])
+        self._stoichiometry_dict = dict(zip(list(self.substrates)
             + list(self.products), self.stoichiometry))
-        self.reversible = bool(reversible)
-        if synonyms:
-            self.synonyms = synonyms
-        else:
-            self.synonyms = None
-        if rate_constant:
+        self._reversible = bool(reversible)
+        self._synonyms = synonyms
+        try:
             self.rate_constant = float(rate_constant)
-        else:
+        except ValueError:
             self.rate_constant = None
         self._consistency_check()
         self.__class__._memory[self.identifier] = self
+
+    @new_property
+    def options():
+        return {"fset": None}
+
+    @new_property
+    def identifier():
+        return {"fset": None}
+
+    @new_property
+    def logger():
+        pass
+
+    @new_property
+    def substrates():
+        return {"fset": None}
+
+    @new_property
+    def products():
+        return {"fset": None}
+
+    @new_property
+    def stoichiometry():
+        return {"fset": None}
+
+    @new_property
+    def stoichiometry_dict():
+        return {"fset": None}
+
+    @new_property
+    def reversible():
+        return {"fset": None}
+
+    @new_property
+    def synonyms():
+        pass
+
+    @new_property
+    def rate_constant():
+        pass
     
     def _consistency_check(self):
         """
@@ -465,13 +541,6 @@ class Reaction(object):
         """
         return cmp(id(self), id(other))
         
-    def get_id(self):
-        """
-        @return: Identifier or reaction
-        @rtype: C{str}
-        """
-        return self.identifier
-        
     def get_compounds(self):
         """
         @return: Return a list of all L{Compound}s participating in this reaction.
@@ -562,9 +631,8 @@ class Metabolism(object):
         if name in cls._memory:
             return cls._memory[name]
         else:
-            instance = super(Metabolism, cls).__new__(cls, *args, **kwargs)
             cls._counter += 1
-            return instance
+            return super(Metabolism, cls).__new__(cls, *args, **kwargs)
     
     def __init__(self, reactions=None, name=None, *args, **kwargs):
         """
@@ -574,24 +642,50 @@ class Metabolism(object):
         if name in self.__class__._memory:
             return None
         super(Metabolism, self).__init__(*args, **kwargs)
+        self._options = OptionsManager()
         if name:
-            self.name = name
+            self._name = name
         else:
-            self.name = "Metabolism-%d" % self.__class__._counter
-        self.logger = logging.getLogger("%s.%s.%s"\
-            % (OptionsManager.logger_main, self.__class__.__name__, self.name))
-        self.handler = NullHandler
-        self.logger.addHandler(self.handler)
-        if reactions:
-            self.reactions = list(reactions)
-        self.compounds = set()
+            self._name = "Metabolism-%d" % self.__class__._counter
+        self._logger = logging.getLogger("%s.%s.%s"\
+            % (self.options.main_logger_name, self.__class__.__name__, self.name))
+        self._reactions = list(reactions)
+        self._compounds = set()
         for rxn in self.reactions:
             self.compounds.update(rxn.get_compounds()) 
-        self.reactions_dict = dict([(rxn.identifier, rxn) for rxn in
+        self._reactions_dict = dict([(rxn.identifier, rxn) for rxn in
             self.reactions])
-        self.currency_metabolites = None
+        self._currency_metabolites = None
         self.__class__._memory[self.name] = self
-    
+
+    @new_property
+    def options():
+        return {"fset": None}
+
+    @new_property
+    def name():
+        return {"fset": None}
+
+    @new_property
+    def logger():
+        pass
+
+    @new_property
+    def reactions():
+        return {"fset": None}
+
+    @new_property
+    def compounds():
+        return {"fset": None}
+
+    @new_property
+    def reactions_dict():
+        return {"fset": None}
+
+    @new_property
+    def currency_metabolites():
+        pass
+
     def __str__(self):
         """
         @return: Provides some statistics about the system e.g. no. of reactions.
@@ -651,20 +745,3 @@ class Metabolism(object):
         @rtype: C{int}
         """
         return cmp(id(self), id(other))
-    
-    def get_compounds(self):
-        """
-        @return: Return a list of all L{Compound}s.
-        @rtype: C{list}
-        """
-        return list(self.compounds)
-        
-    def get_reactions(self):
-        """
-        @return: Return a list of all L{Reaction}s.
-        @rtype: C{list}
-        """
-        return list(self.reactions)
-
-if __name__ == '__main__':
-    pass

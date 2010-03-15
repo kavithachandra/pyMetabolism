@@ -19,6 +19,24 @@ with transcription data (PDA).
 
 import os
 import subprocess
+import logging
+from pyMetabolism.metabolism_logging import NullHandler
+
+
+def new_property(func):
+    """
+    A decorator function for easy property creation.
+    @author: runsun pan
+    @copyright: MIT License
+    @contact: http://code.activestate.com/recipes/576742/
+    """
+    ops = func() or dict()
+    name = ops.get("prefix",'_') + func.__name__ # property name
+    fget = ops.get("fget", lambda self: getattr(self, name))
+    fset = ops.get("fset", lambda self, value: setattr(self, name, value))
+#    fdel = ops.get("fdel", lambda self: delattr(self, name))
+#    return property(fget=fget, fset=fset, fdel=fdel, doc=ops.get('doc',''))
+    return property(fget, fset)
 
 
 class OptionsManager(object):
@@ -32,15 +50,18 @@ class OptionsManager(object):
 
     def __new__(cls, *args, **kwargs):
         if not cls._singleton:
-            cls._singleton = super(OptionsManager, cls).__new__(*args, **kwargs)
+            cls._singleton = super(OptionsManager, cls).__new__(cls, *args, **kwargs)
         return cls._singleton
 
-    def __init__(self):
-        self.metb_prefix = "M_"
-        self.rxn_prefix = "R_"
-        self.rev_rxn_suffix = "_Rev"
-        self.logger_main = "pyMetabolism"
-        self.n_cpus = self._find_num_cpus()
+    def __init__(self, *args, **kwargs):
+        super(OptionsManager, self).__init__(*args, **kwargs)
+        self._metb_prefix = "M_"
+        self._rxn_prefix = "R_"
+        self._rev_rxn_suffix = "_Rev"
+        self._main_logger_name = "pyMetabolism"
+        self._logger = logging.getLogger(self.main_logger_name)
+        self.logger.addHandler(NullHandler)
+        self._n_cpus = self._find_num_cpus()
 
     def _find_num_cpus(self):
         """
@@ -99,4 +120,26 @@ class OptionsManager(object):
                     return num_cpus
         return 1
 
-# eof
+    @new_property
+    def metb_prefix():
+        pass
+
+    @new_property
+    def rxn_prefix():
+        pass
+
+    @new_property
+    def rev_rxn_suffix():
+        pass
+
+    @new_property
+    def logger():
+        pass
+
+    @new_property
+    def main_logger_name():
+        pass
+
+    @new_property
+    def n_cpus():
+        pass

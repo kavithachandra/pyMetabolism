@@ -247,7 +247,3 @@ class ReactionCentricNetwork(networkx.MultiDiGraph):
                 connect_pair(rxn1, rxn2, rxn1.compartments_dict[compound])
             if not rxn2_sub and rxn1_sub:
                 connect_pair(rxn1, rxn2, rxn1.compartments_dict[compound])
-
-
-if __name__ == '__main__':
-    pass
