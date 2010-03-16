@@ -36,7 +36,7 @@ def new_property(func):
     fset = ops.get("fset", lambda self, value: setattr(self, name, value))
 #    fdel = ops.get("fdel", lambda self: delattr(self, name))
 #    return property(fget=fget, fset=fset, fdel=fdel, doc=ops.get('doc',''))
-    return property(fget, fset)
+    return property(fget=fget, fset=fset, doc=ops.get("doc", "get/set method"))
 
 
 class OptionsManager(object):
@@ -48,20 +48,47 @@ class OptionsManager(object):
     """
     _singleton = None
 
-    def __new__(cls, * args, ** kwargs):
+    def __new__(cls, *args, **kwargs):
         if not cls._singleton:
-            cls._singleton = super(OptionsManager, cls).__new__(cls, * args, ** kwargs)
+            return super(OptionsManager, cls).__new__(cls, *args, **kwargs)
         return cls._singleton
 
-    def __init__(self, * args, ** kwargs):
-        super(OptionsManager, self).__init__(*args, ** kwargs)
+    def __init__(self, *args, **kwargs):
+        if self.__class__._singleton:
+            return None
+        super(OptionsManager, self).__init__(*args, **kwargs)
         self._metb_prefix = "M_"
         self._rxn_prefix = "R_"
         self._rev_rxn_suffix = "_Rev"
         self._main_logger_name = "pyMetabolism"
         self._logger = logging.getLogger(self.main_logger_name)
-        self.logger.addHandler(NullHandler)
+        self._logger.addHandler(NullHandler)
         self._n_cpus = self._find_num_cpus()
+        self.__class__._singleton = self
+
+    @new_property
+    def metb_prefix():
+        pass
+
+    @new_property
+    def rxn_prefix():
+        pass
+
+    @new_property
+    def rev_rxn_suffix():
+        pass
+
+    @new_property
+    def logger():
+        pass
+
+    @new_property
+    def main_logger_name():
+        pass
+
+    @new_property
+    def n_cpus():
+        pass
 
     def _find_num_cpus(self):
         """
@@ -119,27 +146,3 @@ class OptionsManager(object):
                 if num_cpus > 0:
                     return num_cpus
         return 1
-
-    @new_property
-    def metb_prefix():
-        pass
-
-    @new_property
-    def rxn_prefix():
-        pass
-
-    @new_property
-    def rev_rxn_suffix():
-        pass
-
-    @new_property
-    def logger():
-        pass
-
-    @new_property
-    def main_logger_name():
-        pass
-
-    @new_property
-    def n_cpus():
-        pass

@@ -40,7 +40,7 @@ class Compartment(object):
     _memory = dict()
 
     def __new__(cls, name, constant, suffix="", spatial_dimensions=None, \
-                size=None, units=None, * args, ** kwargs):
+                size=None, units=None, *args, **kwargs):
         """
         @return: Either returns an old L{Compartment} instance if the name already exists
         or passes a new L{Compound} C{class instance} to be initialised.
@@ -52,21 +52,21 @@ class Compartment(object):
         if name in cls._memory:
             return cls._memory[name]
         else:
-            return super(Compartment, cls).__new__(cls, * args, ** kwargs)
+            return super(Compartment, cls).__new__(cls, *args, **kwargs)
 
     def __init__(self, name, constant, suffix="", spatial_dimensions=None, \
-                 size=None, units=None, * args, ** kwargs):
+                 size=None, units=None, *args, **kwargs):
         """
         Either does nothing if the L{Compartment} instance already exists or
         intialises a new L{Compartment} instance.
         """
         if name in self.__class__._memory:
             return None
-        super(Compartment, self).__init__(*args, ** kwargs)
+        super(Compartment, self).__init__(*args, **kwargs)
         self._options = OptionsManager()
         self._name = name
         self._logger = logging.getLogger("%s.%s.%s"\
-                                         % (self.options.main_logger_name, self.__class__.__name__, self.name))
+             % (self.options.main_logger_name, self.__class__.__name__, self.name))
         self._constant = constant
         self._suffix = str(suffix)
         self._spatial_dimensions = spatial_dimensions
@@ -76,11 +76,11 @@ class Compartment(object):
 
     @new_property
     def options():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def name():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def logger():
@@ -88,7 +88,7 @@ class Compartment(object):
 
     @new_property
     def constant():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def suffix():
@@ -154,7 +154,7 @@ class Compound(object):
 
     def __new__(cls, identifier,
                 formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
-                mass=None, * args, ** kwargs):
+                mass=None, *args, **kwargs):
         """
         @return: Either returns an old L{Compound} instance if the name already exists
         or passes a new L{Compound} C{class instance} to be initialised.
@@ -166,22 +166,23 @@ class Compound(object):
         if identifier in cls._memory:
             return cls._memory[identifier]
         else:
-            return super(Compound, cls).__new__(cls, * args, ** kwargs)
+            return super(Compound, cls).__new__(cls, *args, **kwargs)
 
     def __init__(self, identifier,
                  formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
-                 mass=None, * args, ** kwargs):
+                 mass=None, *args, **kwargs):
         """
         Either does nothing if the L{Compound} instance already exists or
         intialises a new L{Compound} instance.
         """
         if identifier in self.__class__._memory:
             return None
-        super(Compound, self).__init__(*args, ** kwargs)
+        super(Compound, self).__init__(*args, **kwargs)
         self._options = OptionsManager()
         self._identifier = identifier
         self._logger = logging.getLogger("%s.%s.%s"\
-                                         % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
+             % (self.options.main_logger_name, self.__class__.__name__,\
+             self.identifier))
         self._formula = formula
         self._in_chi = in_chi
         self._in_chey_key = in_chey_key
@@ -198,11 +199,11 @@ class Compound(object):
 
     @new_property
     def options():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def identifier():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def logger():
@@ -264,7 +265,7 @@ class CompartCompound(object):
     """
     _memory = dict()
 
-    def __new__(cls, compound, compartment,* args, ** kwargs):
+    def __new__(cls, compound, compartment,*args, **kwargs):
         """
         @return: Either returns an old L{Compound} instance if the name already exists
         or passes a new L{Compound} C{class instance} to be initialised.
@@ -273,22 +274,24 @@ class CompartCompound(object):
         @attention: This method is never called directly.
         """
         if not isinstance(compound, Compound):
-            raise TypeError
+            raise TypeError("Argument '%s' is an instance of %s, not Compound!"\
+                % (str(compound), str(type(compound))))
         if not isinstance(compartment, Compartment):
-            raise TypeError
+            raise TypeError("Argument '%s' is an instance of %s, not Compartment!"\
+                % (str(compartment), str(type(compartment))))
         if (compound.identifier, compartment.name) in cls._memory:
             return cls._memory[(compound.identifier, compartment.name)]
         else:
-            return super(CompartCompound, cls).__new__(cls, * args, ** kwargs)
+            return super(CompartCompound, cls).__new__(cls, *args, **kwargs)
 
-    def __init__(self, compound, compartment, * args, ** kwargs):
+    def __init__(self, compound, compartment, *args, **kwargs):
         """
         Either does nothing if the L{Compound} instance already exists or
         intialises a new L{Compound} instance.
         """
         if (compound.identifier, compartment.name) in self.__class__._memory:
             return None
-        super(CompartCompound, self).__init__(*args, ** kwargs)
+        super(CompartCompound, self).__init__(*args, **kwargs)
         self._options = OptionsManager()
         self._logger = logging.getLogger("%s.%s.%s"\
             % (self.options.main_logger_name, self.__class__.__name__,\
@@ -299,7 +302,7 @@ class CompartCompound(object):
 
     @new_property
     def options():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def logger():
@@ -307,11 +310,11 @@ class CompartCompound(object):
 
     @new_property
     def compound():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def compartment():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     def __str__(self):
         """
@@ -327,7 +330,6 @@ class CompartCompound(object):
     #     return self.identifier + self.compartment.suffix
 
     def __getattr__(self, name):
-        #return super(Compound, self.compound).__getattribute__(self.compound, name)
         return type(self.compound).__getattribute__(self.compound, name)
 
 
@@ -377,7 +379,7 @@ class Reaction(object):
     _memory = dict()
 
     def __new__(cls, identifier, substrates, products, stoichiometry,
-                reversible=False, synonyms=None, rate_constant=None, * args, ** kwargs):
+                reversible=False, synonyms=None, rate_constant=None, *args, **kwargs):
         """
         @return: Either returns an old L{Reaction} instance if the name already exists
         or passes a new L{Reaction} C{class instance} to be initialised.
@@ -389,21 +391,21 @@ class Reaction(object):
         if identifier in cls._memory:
             return cls._memory[identifier]
         else:
-            return super(Reaction, cls).__new__(cls, * args, ** kwargs)
+            return super(Reaction, cls).__new__(cls, *args, **kwargs)
 
     def __init__(self, identifier, substrates, products, stoichiometry,
-                 reversible=False, synonyms=None, rate_constant=None, * args, ** kwargs):
+                 reversible=False, synonyms=None, rate_constant=None, *args, **kwargs):
         """
         Either does nothing if the L{Reaction} instance already exists or
         intialises a new L{Reaction} instance.
         """
         if identifier in self.__class__._memory:
             return None
-        super(Reaction, self).__init__(*args, ** kwargs)
+        super(Reaction, self).__init__(*args, **kwargs)
         self._options = OptionsManager()
         self._identifier = identifier
         self._logger = logging.getLogger("%s.%s.%s"\
-                                         % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
+             % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
         self._substrates = tuple(substrates)
         self._products = tuple(products)
         self._stoichiometry = tuple([abs(coeff) for coeff in stoichiometry])
@@ -412,19 +414,19 @@ class Reaction(object):
         self._reversible = bool(reversible)
         self._synonyms = synonyms
         try:
-            self.rate_constant = float(rate_constant)
+            self._rate_constant = float(rate_constant)
         except (ValueError, TypeError):
-            self.rate_constant = None
+            self._rate_constant = None
         self._consistency_check()
         self.__class__._memory[self.identifier] = self
 
     @new_property
     def options():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def identifier():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def logger():
@@ -432,23 +434,23 @@ class Reaction(object):
 
     @new_property
     def substrates():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def products():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def stoichiometry():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def stoichiometry_dict():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def reversible():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def synonyms():
@@ -601,9 +603,8 @@ class Reaction(object):
             elif compound in self.products:
                 return self.stoichiometry_dict[compound]
         else:
-            msg = "'%s' is not participating in reaction '%s'" % (compound,
-                                                                  self.identifier)
-            raise KeyError(msg)
+            raise KeyError("'%s' is not participating in reaction '%s'"\
+                % (compound, self.identifier))
 
     def index(self, compound):
         """
@@ -614,9 +615,8 @@ class Reaction(object):
                 compound = Compound(compound)
             return list(self.substrates + self.products).index(compound)
         else:
-            msg = "'%s' is not participating in reaction '%s'" % (compound,
-                                                                  Reaction.identifier)
-            raise KeyError(msg)
+            raise KeyError("'%s' is not participating in reaction '%s'"\
+                % (compound, Reaction.identifier))
 
     def is_substrate(self, compound):
         """
@@ -655,7 +655,7 @@ class Metabolism(object):
     _memory = dict()
     _counter = 0
 
-    def __new__(cls, reactions=None, name='', * args, ** kwargs):
+    def __new__(cls, reactions=None, name='', *args, **kwargs):
         """
         @return: Either returns an old L{Metabolism} instance if the name already exists
         or passes a new L{Metabolism} C{class instance} to be initialised.
@@ -669,39 +669,39 @@ class Metabolism(object):
             return cls._memory[name]
         else:
             cls._counter += 1
-            return super(Metabolism, cls).__new__(cls, * args, ** kwargs)
+            return super(Metabolism, cls).__new__(cls, *args, **kwargs)
 
-    def __init__(self, reactions=None, name=None, * args, ** kwargs):
+    def __init__(self, reactions=None, name=None, *args, **kwargs):
         """
         Either does nothing if the L{Metabolism} instance already exists or
         intialises a new L{Metabolism} instance.
         """
         if name in self.__class__._memory:
             return None
-        super(Metabolism, self).__init__(*args, ** kwargs)
+        super(Metabolism, self).__init__(*args, **kwargs)
         self._options = OptionsManager()
         if name:
             self._name = name
         else:
             self._name = "Metabolism-%d" % self.__class__._counter
         self._logger = logging.getLogger("%s.%s.%s"\
-                                         % (self.options.main_logger_name, self.__class__.__name__, self.name))
+             % (self.options.main_logger_name, self.__class__.__name__, self.name))
         self._reactions = list(reactions)
         self._compounds = set()
         for rxn in self.reactions:
             self.compounds.update(rxn.get_compounds())
         self._reactions_dict = dict([(rxn.identifier, rxn) for rxn in
-                                    self.reactions])
+            self.reactions])
         self._currency_metabolites = None
         self.__class__._memory[self.name] = self
 
     @new_property
     def options():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def name():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def logger():
@@ -709,15 +709,15 @@ class Metabolism(object):
 
     @new_property
     def reactions():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def compounds():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def reactions_dict():
-        return {"fset": None}
+        return {"fset": None, "doc": "get method"}
 
     @new_property
     def currency_metabolites():
@@ -728,7 +728,10 @@ class Metabolism(object):
         @return: Provides some statistics about the system e.g. no. of reactions.
         @rtype: C{str}
         """
-        info = "System name: '%s'\nNumber of reactions: %i\nNumber of compounds: %i" % (self.name, len(self), len(self.compounds))
+        info = """System name: '%s'
+            Number of reactions: %i
+            Number of compounds: %i"""\
+            % (self.name, len(self), len(self.compounds))
         return info
 
     def __len__(self):
@@ -774,8 +777,8 @@ class Metabolism(object):
         elif isinstance(rxn, Reaction):
             return rxn
         else:
-            raise TypeError("%s cannot be used to identify a reaction!" %
-                            str(type(rxn)))
+            raise TypeError("'%s' cannot be used to identify a reaction!"\
+                % str(type(rxn)))
 
     def __cmp__(self, other):
         """
