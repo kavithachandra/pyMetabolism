@@ -18,35 +18,38 @@ one can from the stoichiometric matrix of a list of reactions.
 
 
 import logging
+from numpy import hstack
+from numpy import shape
+from numpy import vstack
+from numpy import zeros
 from pyMetabolism.metabolism_logging import NullHandler
-from numpy import zeros, vstack, hstack, shape
 
 
 class StoichiometricMatrix(object):
     """A class representing a stoichiometric matrix.
-    
+
     Columns represent reactions
     Rows represent compounds
     Coefficients ...
     """
-    
+
     _counter = 0
-    
-    def __init__(self, *args, **kwargs):
+
+    def __init__(self, * args, ** kwargs):
         self.__class__._counter += 1
-        super(StoichiometricMatrix, self).__init__(*args, **kwargs)
+        super(StoichiometricMatrix, self).__init__(*args, ** kwargs)
         self.logger = logging.getLogger("pyMetabolism.StoichiometricMatrix.%d"\
-            % self.__class__._counter)
+                                        % self.__class__._counter)
         self.handler = NullHandler
         self.logger.addHandler(self.handler)
         self.matrix = None
         self.compound_map = dict()
         self.reaction_map = dict()
-        
+
     def __str__(self):
         """docstring for __str__"""
         return self.matrix.__str__()
-        
+
     def get_num_rows(self):
         """
         @return: Returns the number of rows
@@ -60,7 +63,7 @@ class StoichiometricMatrix(object):
         @rtype: C{int}
         """
         return shape(self.matrix)[1]
-                        
+
     def add_stoichiometry_from(self, metabolism):
         """"""
         j = len(self.reaction_map)
@@ -74,17 +77,17 @@ class StoichiometricMatrix(object):
                 self.reaction_map[reaction] = j
                 j += 1
                 self.matrix = hstack((self.matrix, zeros((self.matrix.shape[0],
-                    1))))
+                                     1))))
                 for compound in reaction:
                     if compound not in self.compound_map:
                         self.compound_map[compound] = i
                         i += 1
                         self.matrix = vstack((self.matrix, zeros((1,
-                            self.matrix.shape[1]))))
+                                             self.matrix.shape[1]))))
                     self.matrix[self.compound_map[compound]]\
-                        [self.reaction_map[reaction]] =\
+                        [self.reaction_map[reaction]] = \
                         reaction.get_stoich_coeff(compound)
-    
+
     def _init_matrix(self, reaction):
         num = len(reaction)
         self.matrix = zeros((num, 1))

@@ -15,7 +15,8 @@ Basic classes modelling compounds, reactions, and metabolism.
 
 
 import logging
-from pyMetabolism import OptionsManager, new_property
+from pyMetabolism import OptionsManager
+from pyMetabolism import new_property
 
 
 class Compartment(object):
@@ -38,8 +39,8 @@ class Compartment(object):
 
     _memory = dict()
 
-    def __new__(cls, name, constant, suffix="", spatial_dimensions=None,\
-        size=None, units=None, *args, **kwargs):
+    def __new__(cls, name, constant, suffix="", spatial_dimensions=None, \
+                size=None, units=None, * args, ** kwargs):
         """
         @return: Either returns an old L{Compartment} instance if the name already exists
         or passes a new L{Compound} C{class instance} to be initialised.
@@ -51,21 +52,21 @@ class Compartment(object):
         if name in cls._memory:
             return cls._memory[name]
         else:
-            return super(Compartment, cls).__new__(cls, *args, **kwargs)
+            return super(Compartment, cls).__new__(cls, * args, ** kwargs)
 
-    def __init__(self, name, constant, suffix="", spatial_dimensions=None,\
-        size=None, units=None, *args, **kwargs):
+    def __init__(self, name, constant, suffix="", spatial_dimensions=None, \
+                 size=None, units=None, * args, ** kwargs):
         """
         Either does nothing if the L{Compartment} instance already exists or
         intialises a new L{Compartment} instance.
         """
         if name in self.__class__._memory:
             return None
-        super(Compartment, self).__init__(*args, **kwargs)
+        super(Compartment, self).__init__(*args, ** kwargs)
         self._options = OptionsManager()
         self._name = name
         self._logger = logging.getLogger("%s.%s.%s"\
-            % (self.options.main_logger_name, self.__class__.__name__, self.name))
+                                         % (self.options.main_logger_name, self.__class__.__name__, self.name))
         self._constant = constant
         self._suffix = str(suffix)
         self._spatial_dimensions = spatial_dimensions
@@ -104,7 +105,7 @@ class Compartment(object):
     @new_property
     def units():
         pass
-    
+
     def __str__(self):
         """docstring for __str__"""
         return self.name
@@ -114,46 +115,46 @@ class Compound(object):
     """
     A class modeling a chemical compound. Primary identifier of L{Compound}s is a
     simple string C{identifier} although many synonymous identifiers may be set up.
-    
+
     @cvar _memory: A dictionary that stores instances of L{Compound} as
                             values to their C{identifier} key.
     @type _memory: C{dict}
-    
+
     @ivar identifier: The main name of the compound will be used for comparisons and
                       representation.
     @type identifier: C{str}
-    
+
     @ivar synonyms: Alternative names for the compound.
     @type synonyms: C{list}
-    
+
     @ivar formula: Elemental formula of the compound.
     @type formula: C{str}
-    
+
     @ivar in_chi:
     @type in_chi: C{str}
-    
+
     @ivar in_chey_key:
     @type in_chey_key: C{str}
-    
+
     @ivar smiles:
     @type smiles: C{str}
-    
+
     @ivar charge: Electric charge of the compound.
     @type charge: C{int}
-    
+
     @ivar mass: Mass of the compound.
     @type mass: C{float}
     @note: Currently, no unit system for mass is implemented it is left up to the
            user.
-    
+
     @todo: clarify compartment use, describe synonymous strings better
     """
-    
+
     _memory = dict()
-    
+
     def __new__(cls, identifier,
-        formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
-        mass=None, *args, **kwargs):
+                formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
+                mass=None, * args, ** kwargs):
         """
         @return: Either returns an old L{Compound} instance if the name already exists
         or passes a new L{Compound} C{class instance} to be initialised.
@@ -165,22 +166,22 @@ class Compound(object):
         if identifier in cls._memory:
             return cls._memory[identifier]
         else:
-            return super(Compound, cls).__new__(cls, *args, **kwargs)
-    
+            return super(Compound, cls).__new__(cls, * args, ** kwargs)
+
     def __init__(self, identifier,
-        formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
-        mass=None, *args, **kwargs):
+                 formula=None, in_chi=None, in_chey_key=None, smiles=None, charge=None,
+                 mass=None, * args, ** kwargs):
         """
         Either does nothing if the L{Compound} instance already exists or
         intialises a new L{Compound} instance.
         """
         if identifier in self.__class__._memory:
             return None
-        super(Compound, self).__init__(*args, **kwargs)
+        super(Compound, self).__init__(*args, ** kwargs)
         self._options = OptionsManager()
         self._identifier = identifier
         self._logger = logging.getLogger("%s.%s.%s"\
-            % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
+                                         % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
         self._formula = formula
         self._in_chi = in_chi
         self._in_chey_key = in_chey_key
@@ -236,7 +237,7 @@ class Compound(object):
         @rtype: C{str}
         """
         return self.identifier
-        
+
     def __contains__(self, element):
         """
         Checks for atomic element in compound.
@@ -244,13 +245,13 @@ class Compound(object):
         @raise NotImplementedError:
         """
         raise NotImplementedError
-    
+
     def __hash__(self):
         """
         @rtype: C{int}
         """
         return hash(self.identifier)
-    
+
     def __cmp__(self, other):
         """
         @rtype: C{int}
@@ -263,7 +264,7 @@ class CompartCompound(object):
     """
     _memory = dict()
 
-    def __new__(cls, identifier, compartment,  *args, **kwargs):
+    def __new__(cls, compound, compartment,* args, ** kwargs):
         """
         @return: Either returns an old L{Compound} instance if the name already exists
         or passes a new L{Compound} C{class instance} to be initialised.
@@ -271,28 +272,30 @@ class CompartCompound(object):
 
         @attention: This method is never called directly.
         """
-        identifier = str(identifier)
+        if not isinstance(compound, Compound):
+            raise TypeError
         if not isinstance(compartment, Compartment):
-            raise ValueError
-        if (identifier, compartment.name) in cls._memory:
-            return cls._memory[(identifier, compartment.name)]
+            raise TypeError
+        if (compound.identifier, compartment.name) in cls._memory:
+            return cls._memory[(compound.identifier, compartment.name)]
         else:
-            return super(CompartCompound, cls).__new__(cls, *args, **kwargs)
+            return super(CompartCompound, cls).__new__(cls, * args, ** kwargs)
 
-    def __init__(self, identifier, compartment, *args, **kwargs):
+    def __init__(self, compound, compartment, * args, ** kwargs):
         """
         Either does nothing if the L{Compound} instance already exists or
         intialises a new L{Compound} instance.
         """
-        if (identifier, compartment.name) in self.__class__._memory:
+        if (compound.identifier, compartment.name) in self.__class__._memory:
             return None
-        super(CompartCompound, self).__init__(*args, **kwargs)
+        super(CompartCompound, self).__init__(*args, ** kwargs)
         self._options = OptionsManager()
         self._logger = logging.getLogger("%s.%s.%s"\
-            % (self.options.main_logger_name, self.__class__.__name__, identifier))
-        self._compound = Compound(identifier)
+            % (self.options.main_logger_name, self.__class__.__name__,\
+            compound.identifier))
+        self._compound = compound
         self._compartment = compartment
-        self.__class__._memory[(identifier, self.compartment.name)] = self
+        self.__class__._memory[(compound.identifier, compartment.name)] = self
 
     @new_property
     def options():
@@ -325,7 +328,7 @@ class CompartCompound(object):
 
     def __getattr__(self, name):
         #return super(Compound, self.compound).__getattribute__(self.compound, name)
-        return getattr(self.compound, name)
+        return type(self.compound).__getattribute__(self.compound, name)
 
 
 
@@ -367,14 +370,14 @@ class Reaction(object):
 
     @ivar reversible: Specify whether the reaction is considered reversible.
     @type reversible: C{bool}
-    
+
     @todo: Fix stoichiometry issues ...
     """
 
     _memory = dict()
-    
+
     def __new__(cls, identifier, substrates, products, stoichiometry,
-        reversible=False, synonyms=None, rate_constant=None, *args, **kwargs):
+                reversible=False, synonyms=None, rate_constant=None, * args, ** kwargs):
         """
         @return: Either returns an old L{Reaction} instance if the name already exists
         or passes a new L{Reaction} C{class instance} to be initialised.
@@ -386,26 +389,26 @@ class Reaction(object):
         if identifier in cls._memory:
             return cls._memory[identifier]
         else:
-            return super(Reaction, cls).__new__(cls, *args, **kwargs)
-    
+            return super(Reaction, cls).__new__(cls, * args, ** kwargs)
+
     def __init__(self, identifier, substrates, products, stoichiometry,
-        reversible=False, synonyms=None, rate_constant=None, *args, **kwargs):
+                 reversible=False, synonyms=None, rate_constant=None, * args, ** kwargs):
         """
         Either does nothing if the L{Reaction} instance already exists or
         intialises a new L{Reaction} instance.
         """
         if identifier in self.__class__._memory:
             return None
-        super(Reaction, self).__init__(*args, **kwargs)
+        super(Reaction, self).__init__(*args, ** kwargs)
         self._options = OptionsManager()
         self._identifier = identifier
         self._logger = logging.getLogger("%s.%s.%s"\
-            % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
+                                         % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
         self._substrates = tuple(substrates)
         self._products = tuple(products)
         self._stoichiometry = tuple([abs(coeff) for coeff in stoichiometry])
         self._stoichiometry_dict = dict(zip(list(self.substrates)
-            + list(self.products), self.stoichiometry))
+                                        + list(self.products), self.stoichiometry))
         self._reversible = bool(reversible)
         self._synonyms = synonyms
         try:
@@ -454,7 +457,7 @@ class Reaction(object):
     @new_property
     def rate_constant():
         pass
-    
+
     def _consistency_check(self):
         """
         Asserts some basic consistency of the L{Reaction} instance.
@@ -469,7 +472,7 @@ class Reaction(object):
 
         @todo: Elemental balancing.
         """
-        assert (len(self.products) + len(self.substrates)) ==\
+        assert (len(self.products) + len(self.substrates)) == \
             len(self.stoichiometry), "The number of stoichimetric factors does"\
             " not match the number of compounds."
         # elemental balancing
@@ -496,7 +499,7 @@ class Reaction(object):
                     check = False
                     break
                 else:
-                    sum_prods += float(self.stoichiometry_dict[compound]) *\
+                    sum_prods += float(self.stoichiometry_dict[compound]) * \
                         compound.mass
         if check:
             assert sum_subs == sum_prods, "There is a mass imbalance in"\
@@ -521,10 +524,10 @@ class Reaction(object):
         if check:
             assert (sum_subs + sum_prods) == 0, "There is a charge imbalance in"\
                 " reaction '%s'" % self.identifier
-    
+
     def __iter__(self):
         return (compound for compound in self.substrates + self.products)
-    
+
     def __str__(self):
         """
         @return: A C{str} representation of the reaction, e.g., 2 A + 4 B -> 1 C or
@@ -547,7 +550,7 @@ class Reaction(object):
             reaction_str.append('->')
         reaction_str.extend(util(self.products))
         return ' '.join(reaction_str)
-    
+
     def __contains__(self, compound):
         """
         Checks for the presence of compound in the reaction.
@@ -562,26 +565,26 @@ class Reaction(object):
             return compound in self.get_compounds()
         else:
             return False
-    
+
     def __len__(self):
         """
         @rtype: C{int}
         """
         return len(self.substrates) + len(self.products)
-    
+
     def __cmp__(self, other):
         """
         @rtype: C{int}
         """
         return cmp(id(self), id(other))
-        
+
     def get_compounds(self):
         """
         @return: Return a list of all L{Compound}s participating in this reaction.
         @rtype: C{list}
         """
         return list(self.substrates + self.products)
-    
+
     def get_stoich_coeff(self, compound):
         """
         @param compound: The compound whose stoichiometric factor is queried.
@@ -599,12 +602,12 @@ class Reaction(object):
                 return self.stoichiometry_dict[compound]
         else:
             msg = "'%s' is not participating in reaction '%s'" % (compound,
-                self.identifier)
+                                                                  self.identifier)
             raise KeyError(msg)
-    
+
     def index(self, compound):
         """
-        
+
         """
         if compound in self:
             if isinstance(compound, str):
@@ -612,12 +615,12 @@ class Reaction(object):
             return list(self.substrates + self.products).index(compound)
         else:
             msg = "'%s' is not participating in reaction '%s'" % (compound,
-                Reaction.identifier)
+                                                                  Reaction.identifier)
             raise KeyError(msg)
-    
+
     def is_substrate(self, compound):
         """
-        
+
         """
         if isinstance(compound, str):
             compound = Compound(compound)
@@ -651,8 +654,8 @@ class Metabolism(object):
 
     _memory = dict()
     _counter = 0
-    
-    def __new__(cls, reactions=None, name='', *args, **kwargs):
+
+    def __new__(cls, reactions=None, name='', * args, ** kwargs):
         """
         @return: Either returns an old L{Metabolism} instance if the name already exists
         or passes a new L{Metabolism} C{class instance} to be initialised.
@@ -666,29 +669,29 @@ class Metabolism(object):
             return cls._memory[name]
         else:
             cls._counter += 1
-            return super(Metabolism, cls).__new__(cls, *args, **kwargs)
-    
-    def __init__(self, reactions=None, name=None, *args, **kwargs):
+            return super(Metabolism, cls).__new__(cls, * args, ** kwargs)
+
+    def __init__(self, reactions=None, name=None, * args, ** kwargs):
         """
         Either does nothing if the L{Metabolism} instance already exists or
         intialises a new L{Metabolism} instance.
         """
         if name in self.__class__._memory:
             return None
-        super(Metabolism, self).__init__(*args, **kwargs)
+        super(Metabolism, self).__init__(*args, ** kwargs)
         self._options = OptionsManager()
         if name:
             self._name = name
         else:
             self._name = "Metabolism-%d" % self.__class__._counter
         self._logger = logging.getLogger("%s.%s.%s"\
-            % (self.options.main_logger_name, self.__class__.__name__, self.name))
+                                         % (self.options.main_logger_name, self.__class__.__name__, self.name))
         self._reactions = list(reactions)
         self._compounds = set()
         for rxn in self.reactions:
-            self.compounds.update(rxn.get_compounds()) 
+            self.compounds.update(rxn.get_compounds())
         self._reactions_dict = dict([(rxn.identifier, rxn) for rxn in
-            self.reactions])
+                                    self.reactions])
         self._currency_metabolites = None
         self.__class__._memory[self.name] = self
 
@@ -726,15 +729,15 @@ class Metabolism(object):
         @rtype: C{str}
         """
         info = "System name: '%s'\nNumber of reactions: %i\nNumber of compounds: %i" % (self.name, len(self), len(self.compounds))
-        return info 
-    
+        return info
+
     def __len__(self):
         """
         @return: Returns the number of reactions.
         @rtype: C{int}
         """
         return len(self.reactions)
-    
+
     def __contains__(self, reaction):
         """
         Checks for the presence of a reaction in the metabolism.
@@ -749,7 +752,7 @@ class Metabolism(object):
             return reaction in self.get_reactions()
         else:
             return False
-    
+
     def __getitem__(self, rxn):
         """
         @param rxn: The reaction to be returned.
@@ -771,9 +774,9 @@ class Metabolism(object):
         elif isinstance(rxn, Reaction):
             return rxn
         else:
-            raise TypeError("%s cannot be used to identify a reaction!" % 
-                str(type(rxn)))
-    
+            raise TypeError("%s cannot be used to identify a reaction!" %
+                            str(type(rxn)))
+
     def __cmp__(self, other):
         """
         @rtype: C{int}

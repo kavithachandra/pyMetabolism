@@ -17,10 +17,10 @@ with transcription data (PDA).
 
 """
 
-import os
-import subprocess
 import logging
+import os
 from pyMetabolism.metabolism_logging import NullHandler
+import subprocess
 
 
 def new_property(func):
@@ -31,7 +31,7 @@ def new_property(func):
     @contact: http://code.activestate.com/recipes/576742/
     """
     ops = func() or dict()
-    name = ops.get("prefix",'_') + func.__name__ # property name
+    name = ops.get("prefix", '_') + func.__name__ # property name
     fget = ops.get("fget", lambda self: getattr(self, name))
     fset = ops.get("fset", lambda self, value: setattr(self, name, value))
 #    fdel = ops.get("fdel", lambda self: delattr(self, name))
@@ -48,13 +48,13 @@ class OptionsManager(object):
     """
     _singleton = None
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, * args, ** kwargs):
         if not cls._singleton:
-            cls._singleton = super(OptionsManager, cls).__new__(cls, *args, **kwargs)
+            cls._singleton = super(OptionsManager, cls).__new__(cls, * args, ** kwargs)
         return cls._singleton
 
-    def __init__(self, *args, **kwargs):
-        super(OptionsManager, self).__init__(*args, **kwargs)
+    def __init__(self, * args, ** kwargs):
+        super(OptionsManager, self).__init__(*args, ** kwargs)
         self._metb_prefix = "M_"
         self._rxn_prefix = "R_"
         self._rev_rxn_suffix = "_Rev"
@@ -86,7 +86,7 @@ class OptionsManager(object):
         # Linux, Unix failsafe
         cmd = ["grep", "-c", "'model name'", "'/proc/cpuinfo'"]
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+                             stderr=subprocess.PIPE)
         (stdout, stderr) = p.communicate()
         if p.returncode == 0:
             try:
@@ -99,7 +99,7 @@ class OptionsManager(object):
         # MacOS X
         cmd = ["sysctl", "-n", "hw.ncpu"]
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+                             stderr=subprocess.PIPE)
         (stdout, stderr) = p.communicate()
         if p.returncode == 0:
             try:
