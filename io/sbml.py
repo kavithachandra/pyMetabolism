@@ -144,3 +144,9 @@ if __name__ == '__main__':
     system = parser.get_metabolic_system(name='ModelWithStrippedSuffices')
     for r in system:
         print r.identifier, '->', r
+
+    from pyMetabolism.stoichiometry import StoichiometricMatrix
+    from pyMetabolism.stoichiometry_algorithms import verify_consistency
+    matrix = StoichiometricMatrix()
+    matrix.add_stoichiometry_from(system)
+    verify_consistency(matrix)

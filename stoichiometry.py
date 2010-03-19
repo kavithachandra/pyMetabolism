@@ -72,23 +72,25 @@ class StoichiometricMatrix(object):
     def signum():
         return {"fset": None}
 
+    @new_property
+    def num_metabolites():
+        """
+        @return: Returns the number of rows
+        @rtype: C{int}
+        """
+        return {"fset": None, "fget": lambda self: self._matrix.shape[0], "doc": "get method"}
+
+    @new_property
+    def num_reactions():
+        """
+        @return: Returns the number of rows
+        @rtype: C{int}
+        """
+        return {"fset": None, "fget": lambda self: self._matrix.shape[1], "doc": "get method"}
+
     def __str__(self):
         """docstring for __str__"""
         return self._matrix.__str__()
-
-    def get_num_rows(self):
-        """
-        @return: Returns the number of rows
-        @rtype: C{int}
-        """
-        return shape(self._matrix)[0]
-
-    def get_num_cols(self):
-        """
-        @return: Returns the number of rows
-        @rtype: C{int}
-        """
-        return shape(self._matrix)[1]
 
     def add_stoichiometry_from(self, metabolism):
         """
