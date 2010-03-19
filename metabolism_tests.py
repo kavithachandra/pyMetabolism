@@ -8,9 +8,9 @@ Copyright (c) 2009 . All rights reserved.
 """
 
 import unittest
-from pyMetabolism.metabolism import Metabolism, Compound, Reaction, Compartment
+from pyMetabolism.metabolism import Metabolism, Compound, Reaction, Compartment, CompartCompound
 
-class MetabolismTests(unittest.TestCase):
+class Item5MetabolismTests(unittest.TestCase):
     def setUp(self):
         self.r1 = Reaction('ATPhyrdolysis', (Compound('atp'), Compound('h2o')), (Compound('adp'), Compound('pi')), (-1,-1,1,1))
         self.r2 = Reaction('GTPhyrdolysis', (Compound('gtp'), Compound('h2o')), (Compound('gdp'), Compound('pi')), (-1,-1,1,1))
@@ -57,7 +57,7 @@ class MetabolismTests(unittest.TestCase):
 
 
 
-class ReactionTests(unittest.TestCase):
+class Item4ReactionTests(unittest.TestCase):
     def setUp(self):
         self.reaction = Reaction('ATPhyrdolysis', (Compound('atp'), Compound('h2o')), (Compound('adp'), Compound('pi')), (1,1,1,1))
     
@@ -77,8 +77,31 @@ class ReactionTests(unittest.TestCase):
         self.assertTrue(Compound('atp') in self.reaction)
 
 
+class Item2CompartmentTests(unittest.TestCase):
+    def setUp(self):
+        args = {"suffix": "_c", "spatial_dimensions": 3, "size": 1., "units": "ml"}
+        self.comp = Compartment("Cytosol", True, args)
+
+    def test_options(self):
+        def utility():
+            self.comp.options = None
+        self.assertRaises(AttributeError, utility())
+
+
+class Item3CompartCompoundTests(unittest.TestCase):
+    pass
+
+
+class Item1CompoundTests(unittest.TestCase):
+    pass
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(MetabolismTests)
-    unittest.TextTestRunner(verbosity=4).run(suite)
-    suite = unittest.TestLoader().loadTestsFromTestCase(ReactionTests)
+    tests = list()
+    tests.append(unittest.TestLoader().loadTestsFromTestCase(Item1CompoundTests))
+    tests.append(unittest.TestLoader().loadTestsFromTestCase(Item2CompartmentTests))
+    tests.append(unittest.TestLoader().loadTestsFromTestCase(Item3CompartCompoundTests))
+    tests.append(unittest.TestLoader().loadTestsFromTestCase(Item4ReactionTests))
+    tests.append(unittest.TestLoader().loadTestsFromTestCase(Item5MetabolismTests))
+    suite = unittest.TestSuite(tests)
     unittest.TextTestRunner(verbosity=4).run(suite)

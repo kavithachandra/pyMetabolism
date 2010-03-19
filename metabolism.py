@@ -66,13 +66,13 @@ class Compartment(object):
         self._options = OptionsManager()
         self._name = name
         self._logger = logging.getLogger("%s.%s.%s"\
-             % (self.options.main_logger_name, self.__class__.__name__, self.name))
+             % (self._options.main_logger_name, self.__class__.__name__, self._name))
         self._constant = constant
         self._suffix = str(suffix)
         self._spatial_dimensions = spatial_dimensions
         self._size = size
         self._units = units
-        self.__class__._memory[self.name] = self
+        self.__class__._memory[self._name] = self
 
     @new_property
     def options():
@@ -108,7 +108,7 @@ class Compartment(object):
 
     def __str__(self):
         """docstring for __str__"""
-        return self.name
+        return self._name
 
 
 class Compound(object):
@@ -181,8 +181,8 @@ class Compound(object):
         self._options = OptionsManager()
         self._identifier = identifier
         self._logger = logging.getLogger("%s.%s.%s"\
-             % (self.options.main_logger_name, self.__class__.__name__,\
-             self.identifier))
+             % (self._options.main_logger_name, self.__class__.__name__,\
+             self._identifier))
         self._formula = formula
         self._in_chi = in_chi
         self._in_chey_key = in_chey_key
@@ -195,7 +195,7 @@ class Compound(object):
             self._mass = float(mass)
         except (ValueError, TypeError):
             self._mass = None
-        self.__class__._memory[self.identifier] = self
+        self.__class__._memory[self._identifier] = self
 
     @new_property
     def options():
@@ -237,7 +237,7 @@ class Compound(object):
         """
         @rtype: C{str}
         """
-        return self.identifier
+        return self._identifier
 
     def __contains__(self, element):
         """
@@ -251,7 +251,7 @@ class Compound(object):
         """
         @rtype: C{int}
         """
-        return hash(self.identifier)
+        return hash(self._identifier)
 
     def __cmp__(self, other):
         """
@@ -294,7 +294,7 @@ class CompartCompound(object):
         super(CompartCompound, self).__init__(*args, **kwargs)
         self._options = OptionsManager()
         self._logger = logging.getLogger("%s.%s.%s"\
-            % (self.options.main_logger_name, self.__class__.__name__,\
+            % (self._options.main_logger_name, self.__class__.__name__,\
             compound.identifier))
         self._compound = compound
         self._compartment = compartment
@@ -320,17 +320,17 @@ class CompartCompound(object):
         """
         @rtype: C{str}
         """
-        return self.identifier  + '(' + self.compartment.name + ')'
+        return self._identifier  + '(' + self._compartment.name + ')'
 
 
     # def __str__(self):
     #     """
     #     @rtype: C{str}
     #     """
-    #     return self.identifier + self.compartment.suffix
+    #     return self._identifier + self._compartment.suffix
 
     def __getattr__(self, name):
-        return type(self.compound).__getattribute__(self.compound, name)
+        return type(self._compound).__getattribute__(self._compound, name)
 
 
 
@@ -405,12 +405,12 @@ class Reaction(object):
         self._options = OptionsManager()
         self._identifier = identifier
         self._logger = logging.getLogger("%s.%s.%s"\
-             % (self.options.main_logger_name, self.__class__.__name__, self.identifier))
+             % (self._options.main_logger_name, self.__class__.__name__, self._identifier))
         self._substrates = tuple(substrates)
         self._products = tuple(products)
         self._stoichiometry = tuple([abs(coeff) for coeff in stoichiometry])
-        self._stoichiometry_dict = dict(zip(list(self.substrates)
-                                        + list(self.products), self.stoichiometry))
+        self._stoichiometry_dict = dict(zip(list(self._substrates)
+                                        + list(self._products), self._stoichiometry))
         self._reversible = bool(reversible)
         self._synonyms = synonyms
         try:
@@ -418,7 +418,7 @@ class Reaction(object):
         except (ValueError, TypeError):
             self._rate_constant = None
         self._consistency_check()
-        self.__class__._memory[self.identifier] = self
+        self.__class__._memory[self._identifier] = self
 
     @new_property
     def options():
@@ -460,6 +460,34 @@ class Reaction(object):
     def rate_constant():
         pass
 
+    @new_property
+    def compounds():
+        """
+        @return: Return a list of all L{Compound}s participating in this reaction.
+        @rtype: C{list}
+        """
+#        return list(self._substrates + self._products)
+        return {"fset": None, "fget": lambda self: list(self._substrates + self._products)}
+
+    def stoich_coeff(self, compound):
+        """
+        @param compound: The compound whose stoichiometric factor is queried.
+        @type compound: L{Compound} or C{str}
+        @return: Return the stoichiometric coefficient of a compound.
+        @rtype: C{int}
+        @raise KeyError: If C{compound} is not contained in the reaction.
+        """
+        if compound in self:
+            if isinstance(compound, str):
+                compound = Compound(compound)
+            if compound in self._substrates:
+                return -self._stoichiometry_dict[compound]
+            elif compound in self._products:
+                return self._stoichiometry_dict[compound]
+        else:
+            raise KeyError("'%s' is not participating in reaction '%s'"\
+                % (compound, self._identifier))
+
     def _consistency_check(self):
         """
         Asserts some basic consistency of the L{Reaction} instance.
@@ -474,12 +502,12 @@ class Reaction(object):
 
         @todo: Elemental balancing.
         """
-        assert (len(self.products) + len(self.substrates)) == \
-            len(self.stoichiometry), "The number of stoichimetric factors does"\
+        assert (len(self._products) + len(self._substrates)) == \
+            len(self._stoichiometry), "The number of stoichimetric factors does"\
             " not match the number of compounds."
         # elemental balancing
         check = True
-        for compound in (self.substrates + self.products):
+        for compound in (self._substrates + self._products):
             if not compound.formula:
                 check = False
                 break
@@ -489,46 +517,46 @@ class Reaction(object):
         check = True
         sum_subs = 0.
         sum_prods = 0.
-        for compound in self.substrates:
+        for compound in self._substrates:
             if not compound.mass:
                 check = False
                 break
             else:
-                sum_subs += float(self.stoichiometry_dict[compound]) * compound.mass
+                sum_subs += float(self._stoichiometry_dict[compound]) * compound.mass
         if check:
-            for compound in self.products:
+            for compound in self._products:
                 if not compound.mass:
                     check = False
                     break
                 else:
-                    sum_prods += float(self.stoichiometry_dict[compound]) * \
+                    sum_prods += float(self._stoichiometry_dict[compound]) * \
                         compound.mass
         if check:
             assert sum_subs == sum_prods, "There is a mass imbalance in"\
-                " reaction '%s'" % self.identifier
+                " reaction '%s'" % self._identifier
         # charge balancing
         check = True
         sum_subs = 0
         sum_prods = 0
-        for compound in self.substrates:
+        for compound in self._substrates:
             if not compound.charge:
                 check = False
                 break
             else:
-                sum_subs += self.stoichiometry_dict[compound] * compound.charge
+                sum_subs += self._stoichiometry_dict[compound] * compound.charge
         if check:
-            for compound in self.products:
+            for compound in self._products:
                 if not compound.charge:
                     check = False
                     break
                 else:
-                    sum_prods += self.stoichiometry_dict[compound] * compound.charge
+                    sum_prods += self._stoichiometry_dict[compound] * compound.charge
         if check:
             assert (sum_subs + sum_prods) == 0, "There is a charge imbalance in"\
-                " reaction '%s'" % self.identifier
+                " reaction '%s'" % self._identifier
 
     def __iter__(self):
-        return (compound for compound in self.substrates + self.products)
+        return (compound for compound in self._substrates + self._products)
 
     def __str__(self):
         """
@@ -539,18 +567,18 @@ class Reaction(object):
         def util(compound_list):
             reaction_str = list()
             for compound in compound_list:
-                reaction_str.append(str(abs(self.stoichiometry_dict[compound])))
+                reaction_str.append(str(abs(self._stoichiometry_dict[compound])))
                 reaction_str.append(compound.__str__())
                 if not (compound == compound_list[-1]):
                     reaction_str.append('+')
             return reaction_str
         reaction_str = list()
-        reaction_str.extend(util(self.substrates))
-        if self.reversible:
+        reaction_str.extend(util(self._substrates))
+        if self._reversible:
             reaction_str.append('<=>')
         else:
             reaction_str.append('->')
-        reaction_str.extend(util(self.products))
+        reaction_str.extend(util(self._products))
         return ' '.join(reaction_str)
 
     def __contains__(self, compound):
@@ -562,9 +590,13 @@ class Reaction(object):
         @rtype: C{bool}
         """
         if isinstance(compound, str):
-            return compound in [c.get_id() for c in self.get_compounds()]
-        if isinstance(compound, Compound):
-            return compound in self.get_compounds()
+            for c in self.compounds:
+                if compound == c.identifier:
+                    return True
+        if isinstance(compound, Compound) or isinstance(compound, CompartCompound):
+            for c in self.compounds:
+                if compound.identifier == c.identifier:
+                    return True
         else:
             return False
 
@@ -572,39 +604,13 @@ class Reaction(object):
         """
         @rtype: C{int}
         """
-        return len(self.substrates) + len(self.products)
+        return len(self._substrates) + len(self._products)
 
     def __cmp__(self, other):
         """
         @rtype: C{int}
         """
         return cmp(id(self), id(other))
-
-    def get_compounds(self):
-        """
-        @return: Return a list of all L{Compound}s participating in this reaction.
-        @rtype: C{list}
-        """
-        return list(self.substrates + self.products)
-
-    def get_stoich_coeff(self, compound):
-        """
-        @param compound: The compound whose stoichiometric factor is queried.
-        @type compound: L{Compound} or C{str}
-        @return: Return the stoichiometric coefficient of a compound.
-        @rtype: C{int}
-        @raise KeyError: If C{compound} is not contained in the reaction.
-        """
-        if compound in self:
-            if isinstance(compound, str):
-                compound = Compound(compound)
-            if compound in self.substrates:
-                return -self.stoichiometry_dict[compound]
-            elif compound in self.products:
-                return self.stoichiometry_dict[compound]
-        else:
-            raise KeyError("'%s' is not participating in reaction '%s'"\
-                % (compound, self.identifier))
 
     def index(self, compound):
         """
@@ -613,7 +619,7 @@ class Reaction(object):
         if compound in self:
             if isinstance(compound, str):
                 compound = Compound(compound)
-            return list(self.substrates + self.products).index(compound)
+            return list(self._substrates + self._products).index(compound)
         else:
             raise KeyError("'%s' is not participating in reaction '%s'"\
                 % (compound, Reaction.identifier))
@@ -624,7 +630,7 @@ class Reaction(object):
         """
         if isinstance(compound, str):
             compound = Compound(compound)
-        return compound in self.substrates
+        return compound in self._substrates
 
 
 class Metabolism(object):
@@ -685,15 +691,15 @@ class Metabolism(object):
         else:
             self._name = "Metabolism-%d" % self.__class__._counter
         self._logger = logging.getLogger("%s.%s.%s"\
-             % (self.options.main_logger_name, self.__class__.__name__, self.name))
+             % (self._options.main_logger_name, self.__class__.__name__, self._name))
         self._reactions = list(reactions)
         self._compounds = set()
-        for rxn in self.reactions:
-            self.compounds.update(rxn.get_compounds())
+        for rxn in self._reactions:
+            self._compounds.update(rxn.compounds)
         self._reactions_dict = dict([(rxn.identifier, rxn) for rxn in
-            self.reactions])
+            self._reactions])
         self._currency_metabolites = None
-        self.__class__._memory[self.name] = self
+        self.__class__._memory[self._name] = self
 
     @new_property
     def options():
@@ -731,7 +737,7 @@ class Metabolism(object):
         info = """System name: '%s'
             Number of reactions: %i
             Number of compounds: %i"""\
-            % (self.name, len(self), len(self.compounds))
+            % (self._name, len(self), len(self._compounds))
         return info
 
     def __len__(self):
@@ -739,7 +745,7 @@ class Metabolism(object):
         @return: Returns the number of reactions.
         @rtype: C{int}
         """
-        return len(self.reactions)
+        return len(self._reactions)
 
     def __contains__(self, reaction):
         """
@@ -750,9 +756,9 @@ class Metabolism(object):
         @rtype: C{bool}
         """
         if isinstance(reaction, str):
-            return reaction in [r.get_id() for r in self.get_reactions()]
+            return reaction in [rxn.identifier for rxn in self._reactions]
         if isinstance(reaction, Reaction):
-            return reaction in self.get_reactions()
+            return reaction in self._reactions
         else:
             return False
 
@@ -771,9 +777,9 @@ class Metabolism(object):
             identifying an item.
         """
         if isinstance(rxn, int):
-            return self.reactions[rxn]
+            return self._reactions[rxn]
         elif isinstance(rxn, str):
-            return self.reactions_dict[rxn]
+            return self._reactions_dict[rxn]
         elif isinstance(rxn, Reaction):
             return rxn
         else:
