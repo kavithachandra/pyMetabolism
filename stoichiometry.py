@@ -18,95 +18,125 @@ one can from the stoichiometric matrix of a list of reactions.
 
 
 import logging
-from pyMetabolism.metabolism_logging import NullHandler
-from numpy import zeros, vstack, hstack, shape
+from numpy import hstack
+from numpy import shape
+from numpy import vstack
+from numpy import zeros
+from pyMetabolism import OptionsManager
+from pyMetabolism import new_property
 
 
 class StoichiometricMatrix(object):
     """A class representing a stoichiometric matrix.
-    
+
     Columns represent reactions
     Rows represent compounds
     Coefficients ...
     """
-    
+
     _counter = 0
-    
+
     def __init__(self, *args, **kwargs):
         self.__class__._counter += 1
         super(StoichiometricMatrix, self).__init__(*args, **kwargs)
-        self.logger = logging.getLogger("pyMetabolism.StoichiometricMatrix.%d"\
-            % self.__class__._counter)
-        self.handler = NullHandler
-        self.logger.addHandler(self.handler)
-        self.matrix = None
-        self.compound_map = dict()
-        self.reaction_map = dict()
-        
+        self._options = OptionsManager()
+        self._logger = logging.getLogger("%s.%s.%d"\
+            % (self._options.main_logger_name, self.__class__,\
+            self.__class__._counter))
+        self._matrix = None
+        self._compound_map = dict()
+        self._reaction_map = dict()
+        self._signum = None
+
+    @new_property
+    def options():
+        return {"fset": None, "doc": "get method"}
+
+    @new_property
+    def logger():
+        pass
+
+    @new_property
+    def matrix():
+        return {"fset": None, "doc": "get method"}
+
+    @new_property
+    def compound_map():
+        return {"fset": None, "doc": "get method"}
+
+    @new_property
+    def reaction_map():
+        return {"fset": None, "doc": "get method"}
+
+    @new_property
+    def signum():
+        return {"fset": None}
+
     def __str__(self):
         """docstring for __str__"""
-        return self.matrix.__str__()
-        
+        return self._matrix.__str__()
+
     def get_num_rows(self):
         """
         @return: Returns the number of rows
         @rtype: C{int}
         """
-        return shape(self.matrix)[0]
+        return shape(self._matrix)[0]
 
     def get_num_cols(self):
         """
         @return: Returns the number of rows
         @rtype: C{int}
         """
-        return shape(self.matrix)[1]
-                        
+        return shape(self._matrix)[1]
+
     def add_stoichiometry_from(self, metabolism):
-        """"""
-        j = len(self.reaction_map)
-        i = len(self.compound_map)
+        """
+        """
+        j = len(self._reaction_map)
+        i = len(self._compound_map)
         for reaction in metabolism.reactions:
-            if reaction not in self.reaction_map:
-                if self.matrix == None:
+            if reaction not in self._reaction_map:
+                if self._matrix == None:
                     i = self._init_matrix(reaction)
                     j = 1
                     continue
-                self.reaction_map[reaction] = j
+                self._reaction_map[reaction] = j
                 j += 1
-                self.matrix = hstack((self.matrix, zeros((self.matrix.shape[0],
-                    1))))
+                self._matrix = hstack((self._matrix, zeros((self._matrix.shape[0],
+                                     1))))
                 for compound in reaction:
-                    if compound not in self.compound_map:
-                        self.compound_map[compound] = i
+                    if compound not in self._compound_map:
+                        self._compound_map[compound] = i
                         i += 1
-                        self.matrix = vstack((self.matrix, zeros((1,
-                            self.matrix.shape[1]))))
-                    self.matrix[self.compound_map[compound]]\
-                        [self.reaction_map[reaction]] =\
-                        reaction.get_stoich_coeff(compound)
-    
+                        self._matrix = vstack((self._matrix, zeros((1,
+                                             self._matrix.shape[1]))))
+                    self._matrix[self._compound_map[compound]]\
+                        [self._reaction_map[reaction]] = \
+                        reaction.stoich_coeff(compound)
+
     def _init_matrix(self, reaction):
         num = len(reaction)
-        self.matrix = zeros((num, 1))
+        self._matrix = zeros((num, 1))
         for i, compound in enumerate(reaction):
-            self.compound_map[compound] = i
-            self.matrix[i][0] = reaction.get_stoich_coeff(compound)
-        self.reaction_map[reaction] = 0
+            self._compound_map[compound] = i
+            self._matrix[i][0] = reaction.stoich_coeff(compound)
+        self._reaction_map[reaction] = 0
         return num
 
 if __name__ == '__main__':
-    from pyMetabolism.io.sbml import SBMLParser
-    from numpy import *
-    # set_printoptions(threshold='nan')
-    smallModel = './test_data/Ec_core_flux1.xml'
-    bigModel = './test_data/iAF1260.xml'
-    # parser = SBMLParser(bigModel)
-    parser = SBMLParser(smallModel)
-    metbol = parser.get_metabolic_system()
-    print metbol[0].get_id()
-    print metbol[0]
-    s = StoichiometricMatrix()
-    s.add_stoichiometry_from(metbol)
-    print s.matrix[0:7]
-    print shape(s)
-    print [(c, s.compound_map[c]) for c in metbol[0].get_compounds()]
+    import pyMetabolism.metabolism as metb
+    cmp = metb.Compartment("Cytosol", True)
+    rxn1 = metb.Reaction("MAP", (metb.CompartCompound(metb.Compound("atp"), cmp),),\
+        (metb.CompartCompound(metb.Compound("adp"), cmp), metb.CompartCompound(metb.Compound("p"), cmp)),\
+        (1, 1, 1))
+    rxn2 = metb.Reaction("FPK", (metb.CompartCompound(metb.Compound("fructose"), cmp), metb.CompartCompound(metb.Compound("atp"), cmp)),\
+        (metb.CompartCompound(metb.Compound("g6p"), cmp), metb.CompartCompound(metb.Compound("adp"), cmp)),\
+        (1, 1, 1, 1))
+    system = metb.Metabolism([rxn1, rxn2])
+    print system
+    matrix = StoichiometricMatrix()
+    matrix.add_stoichiometry_from(system)
+    print matrix
+
+    
