@@ -411,6 +411,7 @@ class Reaction(object):
         self._stoichiometry = tuple([abs(coeff) for coeff in stoichiometry])
         self._stoichiometry_dict = dict(zip(list(self.substrates)
                                         + list(self.products), self.stoichiometry))
+        print self.stoichiometry_dict
         self._reversible = bool(reversible)
         self._synonyms = synonyms
         try:
@@ -750,9 +751,9 @@ class Metabolism(object):
         @rtype: C{bool}
         """
         if isinstance(reaction, str):
-            return reaction in [r.get_id() for r in self.get_reactions()]
+            return reaction in [r.identifier for r in self.reactions]
         if isinstance(reaction, Reaction):
-            return reaction in self.get_reactions()
+            return reaction in self.reactions
         else:
             return False
 

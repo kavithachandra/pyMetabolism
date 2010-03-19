@@ -42,6 +42,7 @@ class SBMLParser(object):
     @todo: implement convenience stuff
     @todo: Fix suffix and prefix handling
     @todo: Use logging
+    @todo: Check for boundary conditions
     """
     def __init__(self, path, rprefix='', rsuffix='', cprefix='', csuffix=''):
         super(SBMLParser, self).__init__()
@@ -68,7 +69,7 @@ class SBMLParser(object):
         @todo: Check for meta information and parse if available
         """
         comp_id = re.sub(self.csuffix, '', re.sub(self.cprefix, '', sbml_compound.getId()))
-        return CompartCompound(comp_id, Compartment(sbml_compound.getCompartment(), sbml_compound.getConstant()))
+        return CompartCompound(Compound(comp_id), Compartment(sbml_compound.getCompartment(), sbml_compound.getConstant()))
     
     def _parse_sbml_reaction(self, sbml_reaction):
         """Able to parse entries from getListOfReactions"""
@@ -123,7 +124,7 @@ if __name__ == '__main__':
         print elem,  getattr(tmp[0], elem)
     for key in Compartment._memory:
         print "compartment", key
-        x = CompartCompound('for', Compartment(key, Compartment._memory[key].constant))
+        x = CompartCompound(Compound('for'), Compartment(key, Compartment._memory[key].constant))
         print x.compartment, id(x)
     # print 'Compounds:\n'
     # for elem in parser.get_compounds():

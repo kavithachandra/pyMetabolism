@@ -99,17 +99,20 @@ class StoichiometricMatrix(object):
 
 if __name__ == '__main__':
     from pyMetabolism.io.sbml import SBMLParser
+    from pyMetabolism.metabolism import Compound, CompartCompound, Compartment
     from numpy import *
+    import re
     # set_printoptions(threshold='nan')
     smallModel = './test_data/Ec_core_flux1.xml'
     bigModel = './test_data/iAF1260.xml'
     # parser = SBMLParser(bigModel)
-    parser = SBMLParser(smallModel)
-    metbol = parser.get_metabolic_system()
-    print metbol[0].get_id()
+    parser = SBMLParser(smallModel, rprefix='R_', rsuffix='', cprefix='M_', csuffix=re.compile('_.$'))
+    metbol = parser.get_metabolic_system(parser)
+    print metbol[0].identifier
     print metbol[0]
+    print "M_actp_c(Cytosol) is in reacs: ", CompartCompound(Compound('M_actp_c'), Compartment("Cytosol"))
     s = StoichiometricMatrix()
     s.add_stoichiometry_from(metbol)
-    print s.matrix[0:7]
-    print shape(s)
-    print [(c, s.compound_map[c]) for c in metbol[0].get_compounds()]
+    # print s.matrix[0:7]
+    # print shape(s)
+    # print [(c, s.compound_map[c]) for c in metbol[0].get_compounds()]
