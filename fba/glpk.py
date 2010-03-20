@@ -70,9 +70,10 @@ class Metabolism2glpk(object):
     
 
 if __name__ == '__main__':
+    import re
     smallModel = '../test_data/Ec_core_flux1.xml'
     bigModel = '../test_data/iAF1260.xml'
-    parser = SBMLParser(smallModel)
+    parser = SBMLParser(smallModel, rprefix='R_', rsuffix='', cprefix='M_', csuffix=re.compile('_.$'))
     metbol = parser.get_metabolic_system()
     print metbol[0]
     s = StoichiometricMatrix()
