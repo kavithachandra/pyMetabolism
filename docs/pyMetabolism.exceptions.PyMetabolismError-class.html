@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pyMetabolism.metabolism_tests.MetabolicSystemTests</title>
+  <title>pyMetabolism.exceptions.PyMetabolismError</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -38,8 +38,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pyMetabolism-module.html">Package&nbsp;pyMetabolism</a> ::
-        <a href="pyMetabolism.metabolism_tests-module.html">Module&nbsp;metabolism_tests</a> ::
-        Class&nbsp;MetabolicSystemTests
+        <a href="pyMetabolism.exceptions-module.html">Module&nbsp;exceptions</a> ::
+        Class&nbsp;PyMetabolismError
       </span>
     </td>
     <td>
@@ -49,48 +49,27 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pyMetabolism.metabolism_tests.MetabolicSystemTests-class.html"
+            >]&nbsp;|&nbsp;<a href="pyMetabolism.exceptions.PyMetabolismError-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class MetabolicSystemTests</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#MetabolicSystemTests">source&nbsp;code</a></span></p>
+<h1 class="epydoc">Class PyMetabolismError</h1><p class="nomargin-top"><span class="codelink"><a href="pyMetabolism.exceptions-pysrc.html#PyMetabolismError">source&nbsp;code</a></span></p>
 <pre class="base-tree">
-       object --+    
-                |    
-unittest.TestCase --+
-                    |
-                   <strong class="uidshort">MetabolicSystemTests</strong>
+              object --+            
+                       |            
+exceptions.BaseException --+        
+                           |        
+        exceptions.Exception --+    
+                               |    
+        exceptions.StandardError --+
+                                   |
+                                  <strong class="uidshort">PyMetabolismError</strong>
 </pre>
 
 <hr />
-<!-- ==================== NESTED CLASSES ==================== -->
-<a name="section-NestedClasses"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Nested Classes</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-NestedClasses"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>unittest.TestCase</code></b>:
-      <code><a href="exceptions.AssertionError-class.html">failureException</a></code>
-      </p>
-    </td>
-  </tr>
-</table>
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -114,10 +93,13 @@ unittest.TestCase --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism_tests.MetabolicSystemTests-class.html#setUp" class="summary-sig-name">setUp</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Hook method for setting up the test fixture before exercising it.</td>
+          <td><span class="summary-sig"><a href="pyMetabolism.exceptions.PyMetabolismError-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">msg</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      x.__init__(...) initializes x; see x.__class__.__doc__ for signature</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#MetabolicSystemTests.setUp">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.exceptions-pysrc.html#PyMetabolismError.__init__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -131,44 +113,10 @@ unittest.TestCase --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="test__str__"></a><span class="summary-sig-name">test__str__</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Tests if the __str__ methods provides the correct statistics</td>
+          <td><span class="summary-sig"><a href="pyMetabolism.exceptions.PyMetabolismError-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#MetabolicSystemTests.test__str__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="test__getitem__"></a><span class="summary-sig-name">test__getitem__</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Test if metabolic_system[y] provides the correct x</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#MetabolicSystemTests.test__getitem__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="test__contains__"></a><span class="summary-sig-name">test__contains__</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Tests if __contains__ works correctly</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#MetabolicSystemTests.test__contains__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.exceptions-pysrc.html#PyMetabolismError.__str__">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -178,53 +126,24 @@ unittest.TestCase --+
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>unittest.TestCase</code></b>:
-      <code>__call__</code>,
-      <code>__eq__</code>,
-      <code>__hash__</code>,
-      <code>__init__</code>,
-      <code>__ne__</code>,
-      <code>__repr__</code>,
-      <code>__str__</code>,
-      <code>assertAlmostEqual</code>,
-      <code>assertAlmostEquals</code>,
-      <code>assertEqual</code>,
-      <code>assertEquals</code>,
-      <code>assertFalse</code>,
-      <code>assertNotAlmostEqual</code>,
-      <code>assertNotAlmostEquals</code>,
-      <code>assertNotEqual</code>,
-      <code>assertNotEquals</code>,
-      <code>assertRaises</code>,
-      <code>assertTrue</code>,
-      <code>assert_</code>,
-      <code>countTestCases</code>,
-      <code>debug</code>,
-      <code>defaultTestResult</code>,
-      <code>fail</code>,
-      <code>failIf</code>,
-      <code>failIfAlmostEqual</code>,
-      <code>failIfEqual</code>,
-      <code>failUnless</code>,
-      <code>failUnlessAlmostEqual</code>,
-      <code>failUnlessEqual</code>,
-      <code>failUnlessRaises</code>,
-      <code>id</code>,
-      <code>run</code>,
-      <code>shortDescription</code>,
-      <code>tearDown</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.StandardError</code></b>:
+      <code>__new__</code>
       </p>
-    <div class="private">    <p class="indent-wrapped-lines"><b>Inherited from <code>unittest.TestCase</code></b> (private):
-      <code>_exc_info</code>
-      </p></div>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
       <code>__delattr__</code>,
-      <code>__format__</code>,
       <code>__getattribute__</code>,
-      <code>__new__</code>,
+      <code>__getitem__</code>,
+      <code>__getslice__</code>,
       <code>__reduce__</code>,
-      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
       <code>__setattr__</code>,
+      <code>__setstate__</code>,
+      <code>__unicode__</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__format__</code>,
+      <code>__hash__</code>,
+      <code>__reduce_ex__</code>,
       <code>__sizeof__</code>,
       <code>__subclasshook__</code>
       </p>
@@ -250,6 +169,10 @@ unittest.TestCase --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
+      <code>args</code>,
+      <code>message</code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
       </p>
@@ -274,24 +197,53 @@ unittest.TestCase --+
   </td>
 </tr>
 </table>
-<a name="setUp"></a>
+<a name="__init__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">setUp</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">msg</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism_tests-pysrc.html#MetabolicSystemTests.setUp">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="pyMetabolism.exceptions-pysrc.html#PyMetabolismError.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>Hook method for setting up the test fixture before exercising it.</p>
+  <p>x.__init__(...) initializes x; see x.__class__.__doc__ for 
+  signature</p>
   <dl class="fields">
     <dt>Overrides:
-        unittest.TestCase.setUp
+        object.__init__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.exceptions-pysrc.html#PyMetabolismError.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>str(x)</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
@@ -324,7 +276,7 @@ unittest.TestCase --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Feb  3 11:44:36 2010
+    Generated by Epydoc 3.0.1 on Mon Apr 12 00:10:20 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

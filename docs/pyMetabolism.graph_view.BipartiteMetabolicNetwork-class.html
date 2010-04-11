@@ -102,8 +102,8 @@ networkx.classes.digraph.DiGraph --+
           <td><span class="summary-sig"><a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">reactions</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">weighted</span>=<span class="summary-sig-default">True</span>,
-        <span class="summary-sig-arg">node_info</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">split</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">edge_info</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Initialize a graph with edges, name, graph attributes.</td>
@@ -116,17 +116,33 @@ networkx.classes.digraph.DiGraph --+
       
     </td>
   </tr>
-<tr class="private">
+<tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_populate_graph_on_init"></a><span class="summary-sig-name">_populate_graph_on_init</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">reactions</span>,
-        <span class="summary-sig-arg">node_info</span>)</span></td>
+          <td><span class="summary-sig"><a name="add_compound"></a><span class="summary-sig-name">add_compound</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">compound</span>)</span></td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork._populate_graph_on_init">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.add_compound">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="remove_compound"></a><span class="summary-sig-name">remove_compound</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">compound</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.remove_compound">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -141,13 +157,47 @@ networkx.classes.digraph.DiGraph --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#add_reaction" class="summary-sig-name">add_reaction</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">rxn</span>,
-        <span class="summary-sig-arg">node_info</span>=<span class="summary-sig-default">False</span>)</span><br />
+        <span class="summary-sig-arg">rxn</span>)</span><br />
       Add edges to the bipartite representation of <a 
       href="pyMetabolism.metabolism.Metabolism-class.html" 
       class="link">Metabolism</a> as necessary to represent a reaction.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.add_reaction">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="remove_reaction"></a><span class="summary-sig-name">remove_reaction</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">rxn</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.remove_reaction">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="update_reactions"></a><span class="summary-sig-name">update_reactions</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Update the substrate, product, stoichiometry information of reactions
+      according to changes that were done in the graph.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.update_reactions">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -279,6 +329,46 @@ networkx.classes.digraph.DiGraph --+
     </table>
   </td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#name" class="summary-name">name</a><br />
+      get/set method
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#network" class="summary-name">network</a><br />
+      get method
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#reactions" class="summary-name">reactions</a><br />
+      get method
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#compounds" class="summary-name">compounds</a><br />
+      get method
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.graph_view.BipartiteMetabolicNetwork-class.html#split" class="summary-name">split</a><br />
+      get method
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -315,8 +405,8 @@ networkx.classes.digraph.DiGraph --+
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">reactions</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
-        <span class="sig-arg">weighted</span>=<span class="sig-default">True</span>,
-        <span class="sig-arg">node_info</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">split</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">edge_info</span>=<span class="sig-default">False</span>,
         <span class="sig-arg">*args</span>,
         <span class="sig-arg">**kwargs</span>)</span>
     <br /><em class="fname">(Constructor)</em>
@@ -365,24 +455,10 @@ Arbitrary graph attribute pairs (key=value) may be assigned
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>reactions</code></strong> (<code>list</code>) - A list of <a href="pyMetabolism.metabolism.Reaction-class.html" 
           class="link">Reaction</a>s from which the graph can be populated.</li>
+        <li><strong class="pname"><code>split</code></strong> - Whether to have separate nodes for forward and backward direction
+          of reversible reactions.</li>
+        <li><strong class="pname"><code>edge_info</code></strong> - Whether edges should carry</li>
         <li><strong class="pname"><code>name</code></strong> (<code>str</code>) - A simple string to identify the graph if desired.</li>
-        <li><strong class="pname"><code>weighted</code></strong> (<code>bool</code>) - By default the stoichiometric factors are used as edge weights, 
-          this can be turned off.</li>
-        <li><strong class="pname"><code>node_info</code></strong> (<code>bool</code>) - If true, information will be added to the graph's nodes. For 
-          compound nodes the following information will be tried in order:
-          <ol start="1">
-            <li>
-              <a href="pyMetabolism.metabolism.Compound-class.html#charge" 
-              class="link">Compound.charge</a>
-            </li>
-            <li>
-              <a href="pyMetabolism.metabolism.Compound-class.html#mass" 
-              class="link">Compound.mass</a>
-            </li>
-          </ol>
-          <p>For reaction nodes <a 
-          href="pyMetabolism.metabolism.Reaction-class.html#rate_constant" 
-          class="link">Reaction.rate_constant</a> will be used.</p></li>
     </ul></dd>
     <dt>Overrides:
         object.__init__
@@ -398,8 +474,7 @@ Arbitrary graph attribute pairs (key=value) may be assigned
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">add_reaction</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">rxn</span>,
-        <span class="sig-arg">node_info</span>=<span class="sig-default">False</span>)</span>
+        <span class="sig-arg">rxn</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="pyMetabolism.graph_view-pysrc.html#BipartiteMetabolicNetwork.add_reaction">source&nbsp;code</a></span>&nbsp;
@@ -414,29 +489,102 @@ Arbitrary graph attribute pairs (key=value) may be assigned
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>rxn</code></strong> (<a href="pyMetabolism.metabolism.Reaction-class.html" 
           class="link">Reaction</a>) - Instance to be added.</li>
-        <li><strong class="pname"><code>node_info</code></strong> (<code>bool</code>) - If true, information will be added to the graph's nodes. For 
-          compound nodes the following information will be tried in order 
-          and are availabe as charge and mass attribute respectively.
-          <ol start="1">
-            <li>
-              <a href="pyMetabolism.metabolism.Compound-class.html#charge" 
-              class="link">Compound.charge</a>
-            </li>
-            <li>
-              <a href="pyMetabolism.metabolism.Compound-class.html#mass" 
-              class="link">Compound.mass</a>
-            </li>
-          </ol>
-          <p>For reaction nodes <a 
-          href="pyMetabolism.metabolism.Reaction-class.html#rate_constant" 
-          class="link">Reaction.rate_constant</a> will be used.</p></li>
     </ul></dd>
   </dl>
-<div class="fields">      <p><strong>Note:</strong>
-        <code>node_info</code> is purely aimed at graph output to a format 
-        that supports node attributes.
-      </p>
-</div></td></tr></table>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="name"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">name</h3>
+  <p>get/set method</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="network"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">network</h3>
+  <p>get method</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="reactions"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">reactions</h3>
+  <p>get method</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="compounds"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">compounds</h3>
+  <p>get method</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="split"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">split</h3>
+  <p>get method</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
 </div>
 <br />
 <!-- ==================== NAVIGATION BAR ==================== -->
@@ -465,7 +613,7 @@ Arbitrary graph attribute pairs (key=value) may be assigned
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Feb 12 19:06:19 2010
+    Generated by Epydoc 3.0.1 on Mon Apr 12 00:10:20 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -85,7 +85,7 @@ def random_metabolic_network(compounds, reactions, reversible, p, seed=None):
     @rtype: L{BipartiteMetabolicNetwork
         <pyMetabolism.graph_view.BipartiteMetabolicNetwork>}
 
-    @raise: ValueError: If either compounds or reactions are not integers.
+    @raise ValueError: If either compounds or reactions are not integers.
     """
     if seed:
         random.seed(seed)
@@ -96,16 +96,19 @@ def random_metabolic_network(compounds, reactions, reversible, p, seed=None):
     for i in xrange(compounds):
         graph.add_compound(Compound("%s%d" % (options.compound_prefix, i)))
     for i in xrange(reactions):
-        graph.add_reaction(Reaction("%s%d" % (options.reaction_prefix, i), (), (), ()))
+        graph.add_reaction(Reaction("%s%d" % (options.reaction_prefix, i), (),\
+            (), ()))
     for src in graph.compounds:
         for tar in graph.reactions:
             if random.random() < p:
-                logger.debug("Adding edge %s-%s.", src.identifier, tar.identifier)
+                logger.debug("Adding edge %s-%s.", src.identifier,\
+                    tar.identifier)
                 graph.add_edge(src, tar, factor=1)
             # a conditional case here (elif not if) because we cannot determine
             # substrates and products from bidirectional edges
             elif random.random() < p:
-                logger.debug("Adding edge %s-%s.", tar.identifier, src.identifier)
+                logger.debug("Adding edge %s-%s.", tar.identifier,\
+                    src.identifier)
                 graph.add_edge(tar, src, factor=1)
     prune_network(graph)
     reactions = list(graph.reactions)

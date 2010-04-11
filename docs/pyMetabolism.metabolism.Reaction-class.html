@@ -103,7 +103,6 @@ object --+
         <span class="summary-sig-arg">substrates</span>,
         <span class="summary-sig-arg">products</span>,
         <span class="summary-sig-arg">stoichiometry</span>,
-        <span class="summary-sig-arg">compartments</span>,
         <span class="summary-sig-arg">reversible</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">synonyms</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">rate_constant</span>=<span class="summary-sig-default">None</span>,
@@ -116,6 +115,25 @@ object --+
       class="link">Reaction</a> instance.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>int</code></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Reaction-class.html#stoich_coeff" class="summary-sig-name">stoich_coeff</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">compound</span>)</span><br />
+      Returns:
+      Return the stoichiometric coefficient of a compound.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.stoich_coeff">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -230,68 +248,11 @@ object --+
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>str</code></span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Reaction-class.html#get_id" class="summary-sig-name">get_id</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Returns:
-      Identifier or reaction</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.get_id">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>list</code></span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Reaction-class.html#get_compounds" class="summary-sig-name">get_compounds</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Returns:
-      Return a list of all <a 
-      href="pyMetabolism.metabolism.Compound-class.html" 
-      class="link">Compound</a>s participating in this reaction.</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.get_compounds">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>int</code></span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Reaction-class.html#get_stoich_coeff" class="summary-sig-name">get_stoich_coeff</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">compound</span>)</span><br />
-      Returns:
-      Return the stoichiometric coefficient of a compound.</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.get_stoich_coeff">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="index"></a><span class="summary-sig-name">index</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Reaction-class.html#index" class="summary-sig-name">index</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">compound</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.index">source&nbsp;code</a></span>
@@ -308,7 +269,7 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="is_substrate"></a><span class="summary-sig-name">is_substrate</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Reaction-class.html#is_substrate" class="summary-sig-name">is_substrate</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">compound</span>)</span></td>
           <td align="right" valign="top">
             <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.is_substrate">source&nbsp;code</a></span>
@@ -365,7 +326,6 @@ object --+
         <span class="summary-sig-arg">substrates</span>,
         <span class="summary-sig-arg">products</span>,
         <span class="summary-sig-arg">stoichiometry</span>,
-        <span class="summary-sig-arg">compartments</span>,
         <span class="summary-sig-arg">reversible</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">synonyms</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">rate_constant</span>=<span class="summary-sig-default">None</span>,
@@ -438,7 +398,7 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>str</code></span>
     </td><td class="summary">
-        <a name="identifier"></a><span class="summary-name">identifier</span><br />
+        <a href="pyMetabolism.metabolism.Reaction-class.html#identifier" class="summary-name">identifier</a><br />
       The main name of the reaction will be used for comparisons and 
       representation.
     </td>
@@ -447,32 +407,25 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>tuple</code></span>
     </td><td class="summary">
-        <a name="products"></a><span class="summary-name">products</span><br />
+        <a href="pyMetabolism.metabolism.Reaction-class.html#substrates" class="summary-name">substrates</a><br />
       <a href="pyMetabolism.metabolism.Compound-class.html" 
-      class="link">Compound</a>s being produced by this reaction.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>float</code></span>
-    </td><td class="summary">
-        <a name="rate_constant"></a><span class="summary-name">rate_constant</span><br />
-      Define the value of the rate constant for this reaction.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>bool</code></span>
-    </td><td class="summary">
-        <a name="reversible"></a><span class="summary-name">reversible</span><br />
-      Specify whether the reaction is considered reversible.
+      class="link">Compound</a>s being consumed by this reaction.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>tuple</code></span>
     </td><td class="summary">
-        <a name="stoichiometry"></a><span class="summary-name">stoichiometry</span><br />
+        <a href="pyMetabolism.metabolism.Reaction-class.html#products" class="summary-name">products</a><br />
+      <a href="pyMetabolism.metabolism.Compound-class.html" 
+      class="link">Compound</a>s being produced by this reaction.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>tuple</code></span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Reaction-class.html#stoichiometry" class="summary-name">stoichiometry</a><br />
       Tuple containing the positive integer stoichiometric factors of all 
       substrates and products in the order supplied to 
       <code>substrates</code> and <code>products</code>.
@@ -482,26 +435,33 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>dict</code></span>
     </td><td class="summary">
-        <a name="stoichiometry_dict"></a><span class="summary-name">stoichiometry_dict</span><br />
+        <a href="pyMetabolism.metabolism.Reaction-class.html#stoichiometry_dict" class="summary-name">stoichiometry_dict</a><br />
       Dictionary providing easy access to stoichiometric factors (values) 
       of all compounds (keys) in the reaction.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>tuple</code></span>
+      <span class="summary-type"><code>bool</code></span>
     </td><td class="summary">
-        <a name="substrates"></a><span class="summary-name">substrates</span><br />
-      <a href="pyMetabolism.metabolism.Compound-class.html" 
-      class="link">Compound</a>s being consumed by this reaction.
+        <a href="pyMetabolism.metabolism.Reaction-class.html#reversible" class="summary-name">reversible</a><br />
+      Specify whether the reaction is considered reversible.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>list</code></span>
     </td><td class="summary">
-        <a name="synonyms"></a><span class="summary-name">synonyms</span><br />
+        <a href="pyMetabolism.metabolism.Reaction-class.html#synonyms" class="summary-name">synonyms</a><br />
       Synonymous names for this reaction.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>float</code></span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Reaction-class.html#rate_constant" class="summary-name">rate_constant</a><br />
+      Define the value of the rate constant for this reaction.
     </td>
   </tr>
 </table>
@@ -522,6 +482,22 @@ object --+
     </table>
   </td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Reaction-class.html#logger" class="summary-name">logger</a><br />
+      get/set method
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Reaction-class.html#compounds" class="summary-name">compounds</a><br />
+      get/set method
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -560,7 +536,6 @@ object --+
         <span class="sig-arg">substrates</span>,
         <span class="sig-arg">products</span>,
         <span class="sig-arg">stoichiometry</span>,
-        <span class="sig-arg">compartments</span>,
         <span class="sig-arg">reversible</span>=<span class="sig-default">False</span>,
         <span class="sig-arg">synonyms</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">rate_constant</span>=<span class="sig-default">None</span>,
@@ -605,7 +580,6 @@ object --+
         <span class="sig-arg">substrates</span>,
         <span class="sig-arg">products</span>,
         <span class="sig-arg">stoichiometry</span>,
-        <span class="sig-arg">compartments</span>,
         <span class="sig-arg">reversible</span>=<span class="sig-default">False</span>,
         <span class="sig-arg">synonyms</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">rate_constant</span>=<span class="sig-default">None</span>,
@@ -627,6 +601,37 @@ object --+
     <dt>Overrides:
         object.__init__
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="stoich_coeff"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">stoich_coeff</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">compound</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.stoich_coeff">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>compound</code></strong> (<a href="pyMetabolism.metabolism.Compound-class.html" 
+          class="link">Compound</a> or <code>str</code>) - The compound whose stoichiometric factor is queried.</li>
+    </ul></dd>
+    <dt>Returns: <code>int</code></dt>
+        <dd>Return the stoichiometric coefficient of a compound.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>KeyError</strong></code> - If <code>compound</code> is not contained in the reaction.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -721,80 +726,250 @@ object --+
     </ul></dd>
     <dt>Returns: <code>bool</code></dt>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>To Do:</strong>
+        proper searching
+      </p>
+</div></td></tr></table>
 </div>
-<a name="get_id"></a>
+<a name="index"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_id</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.get_id">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Returns: <code>str</code></dt>
-        <dd>Identifier or reaction</dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="get_compounds"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_compounds</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.get_compounds">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Returns: <code>list</code></dt>
-        <dd>Return a list of all <a 
-          href="pyMetabolism.metabolism.Compound-class.html" 
-          class="link">Compound</a>s participating in this reaction.</dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="get_stoich_coeff"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_stoich_coeff</span>(<span class="sig-arg">self</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">index</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">compound</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.get_stoich_coeff">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.index">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
   
   <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>compound</code></strong> (<a href="pyMetabolism.metabolism.Compound-class.html" 
-          class="link">Compound</a> or <code>str</code>) - The compound whose stoichiometric factor is queried.</li>
-    </ul></dd>
-    <dt>Returns: <code>int</code></dt>
-        <dd>Return the stoichiometric coefficient of a compound.</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>KeyError</strong></code> - If <code>compound</code> is not contained in the reaction.</li>
-    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>To Do:</strong>
+        proper searching
+      </p>
+</div></td></tr></table>
+</div>
+<a name="is_substrate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_substrate</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">compound</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Reaction.is_substrate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+  </dl>
+<div class="fields">      <p><strong>To Do:</strong>
+        proper searching
+      </p>
+</div></td></tr></table>
+</div>
+<br />
+<!-- ==================== INSTANCE VARIABLE DETAILS ==================== -->
+<a name="section-InstanceVariableDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Variable Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceVariableDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="identifier"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">identifier</h3>
+  The main name of the reaction will be used for comparisons and 
+  representation.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="substrates"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">substrates</h3>
+  <a href="pyMetabolism.metabolism.Compound-class.html" 
+  class="link">Compound</a>s being consumed by this reaction.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="products"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">products</h3>
+  <a href="pyMetabolism.metabolism.Compound-class.html" 
+  class="link">Compound</a>s being produced by this reaction.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="stoichiometry"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">stoichiometry</h3>
+  Tuple containing the positive integer stoichiometric factors of all 
+  substrates and products in the order supplied to <code>substrates</code> 
+  and <code>products</code>.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="stoichiometry_dict"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">stoichiometry_dict</h3>
+  Dictionary providing easy access to stoichiometric factors (values) of 
+  all compounds (keys) in the reaction.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="reversible"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">reversible</h3>
+  Specify whether the reaction is considered reversible.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="synonyms"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">synonyms</h3>
+  Synonymous names for this reaction.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="rate_constant"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">rate_constant</h3>
+  Define the value of the rate constant for this reaction.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="logger"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">logger</h3>
+  <p>get/set method</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="compounds"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">compounds</h3>
+  <p>get/set method</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -825,7 +1000,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Feb 12 19:06:19 2010
+    Generated by Epydoc 3.0.1 on Mon Apr 12 00:10:21 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

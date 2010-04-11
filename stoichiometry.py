@@ -18,13 +18,11 @@ one can from the stoichiometric matrix of a list of reactions.
 
 
 import logging
-from numpy import hstack
-from numpy import shape
-from numpy import vstack
-from numpy import zeros
+from numpy import hstack, shape, vstack, zeros
 from pyMetabolism import OptionsManager
 from pyMetabolism import new_property
-from pyMetabolism.metabolism import Metabolism, Compartment, Reaction, CompartCompound, Compound, DirectionalReaction
+from pyMetabolism.metabolism import Metabolism, Compartment, Reaction,\
+    CompartCompound, Compound, DirectionalReaction
 
 
 class StoichiometricMatrix(object):
@@ -104,7 +102,8 @@ class StoichiometricMatrix(object):
     def make_new_from_system(self, metabolism):
         """
         """
-        self._matrix = zeros((len(metabolism.compounds), len(metabolism.reactions)))
+        self._matrix = zeros((len(metabolism.compounds),\
+            len(metabolism.reactions)))
         for (i, comp) in enumerate(metabolism.compounds):
             self._compound_map[comp] = i
         for (i, rxn) in enumerate(metabolism.reactions):
@@ -159,10 +158,13 @@ if __name__ == '__main__':
     import pyMetabolism.metabolism as metb
     cmp = metb.Compartment("Cytosol", True)
     rxn1 = metb.Reaction("MAP", (metb.CompartCompound(metb.Compound("atp"), cmp),),\
-        (metb.CompartCompound(metb.Compound("adp"), cmp), metb.CompartCompound(metb.Compound("p"), cmp)),\
+        (metb.CompartCompound(metb.Compound("adp"), cmp),\
+        metb.CompartCompound(metb.Compound("p"), cmp)),\
         (1, 1, 1))
-    rxn2 = metb.Reaction("FPK", (metb.CompartCompound(metb.Compound("fructose"), cmp), metb.CompartCompound(metb.Compound("atp"), cmp)),\
-        (metb.CompartCompound(metb.Compound("g6p"), cmp), metb.CompartCompound(metb.Compound("adp"), cmp)),\
+    rxn2 = metb.Reaction("FPK", (metb.CompartCompound(metb.Compound("fructose"),\
+        cmp), metb.CompartCompound(metb.Compound("atp"), cmp)),\
+        (metb.CompartCompound(metb.Compound("g6p"), cmp),\
+        metb.CompartCompound(metb.Compound("adp"), cmp)),\
         (1, 1, 1, 1))
     system = metb.Metabolism([rxn1, rxn2])
     print system
@@ -179,7 +181,8 @@ if __name__ == '__main__':
 #    smallModel = './test_data/Ec_core_flux1.xml'
 #    bigModel = './test_data/iAF1260.xml'
 #    # parser = SBMLParser(bigModel)
-#    parser = SBMLParser(bigModel, rprefix='R_', rsuffix='', cprefix='M_', csuffix=re.compile('_.$'))
+#    parser = SBMLParser(bigModel, rprefix='R_', rsuffix='', cprefix='M_',\
+#        csuffix=re.compile('_.$'))
 #    metbol = parser.get_metabolic_system(parser)
 #    print metbol[0].identifier
 #    print metbol[0]

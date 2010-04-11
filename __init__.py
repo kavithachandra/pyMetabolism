@@ -28,7 +28,7 @@ def new_property(func):
     A decorator function for easy property creation.
     @author: runsun pan
     @copyright: MIT License
-    @contact: http://code.activestate.com/recipes/576742/
+    @see: http://code.activestate.com/recipes/576742/
     """
     ops = func() or dict()
     name = ops.get("prefix", '_') + func.__name__ # property name
@@ -102,7 +102,7 @@ class OptionsManager(object):
         Python.
         @author: Vitalii Vanovschi
         @copyright: (c) 2005-2010. All rights reserved.
-        @contact: http://www.parallelpython.com
+        @see: http://www.parallelpython.com
         """
         num_cpus = None
         # for Linux, Unix and MacOS

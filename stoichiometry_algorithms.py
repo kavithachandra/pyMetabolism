@@ -66,7 +66,7 @@ def detect_unconserved_metabolites(stoich_matrix, masses):
     bool_vals = range(stoich_matrix.num_compounds)
     problem = openopt.MILP(f=objective, Aeq=A_eq, beq=b_eq, lb=lb, ub=ub,\
         intVars=bool_vals)
-    result = problem.solve("glpk", iprint=-2, goal="max")
+    result = problem.solve(options.solver, iprint=-2, goal="max")
     options.logger.debug(result.xf)
     return (result.isFeasible, result.xf)
 

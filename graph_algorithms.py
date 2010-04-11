@@ -17,6 +17,7 @@ Generation of a stoichiometric matrix is also possible.
 """
 
 
+import sys
 #import networkx
 import openopt
 import logging
@@ -30,7 +31,8 @@ from pyMetabolism.graph_generation import random_metabolic_network
 from pyMetabolism.stoichiometry import StoichiometricMatrix
 from pyMetabolism.stoichiometry_algorithms import verify_consistency
 from pyMetabolism.miscellaneous import lcm, fxrange
-from pyMetabolism.exceptions import PyMetabolismError
+from pyMetabolism.metabolism_exceptions import PyMetabolismError
+from pyMetabolism.miscellaneous import OutputEater
 
 def normed_in_out_degrees(graph, nodes):
     """
@@ -76,8 +78,8 @@ def plot_bipartite_network_degree_distribution((metb_in_deg, metb_out_deg,\
     matplotlib.pyplot.savefig(filename)
     matplotlib.pyplot.show()
 
-def plot_bipartite_network_log_degree_distribution((metb_in_deg, metb_out_deg,\
-    rxn_in_deg, rxn_out_deg), filename, title):
+def plot_bipartite_network_log_degree_distribution((metb_in_deg,\
+    metb_out_deg, rxn_in_deg, rxn_out_deg), filename, title):
     """
     """
     line1 = matplotlib.pyplot.loglog(metb_in_deg, marker='.', color='red',\
@@ -192,7 +194,14 @@ def make_consistent_stoichiometry(graph, factors):
     total = float(len(graph.reactions))
     for (i, rxn) in enumerate(graph.reactions):
         balance_reaction(rxn)
-        options.logger.info("%.2f %% complete.", float(i) / total * 100.)
+        options.logger.info("%.2f %% complete.", float(i + 1) / total * 100.)
+
+def random_fba(graph):
+    matrix = StoichiometricMatrix()
+    matrix.make_new_from_network(graph)
+    options.logger.info(matrix)
+    options.logger.info(str(verify_consistency(matrix)))
+    options.logger.info(matrix)
 
 
 if __name__ == "__main__":
@@ -201,13 +210,13 @@ if __name__ == "__main__":
     handler = logging.StreamHandler()
     handler.setLevel(logging.INFO)
     options.logger.addHandler(handler)
+    sys.stdout = OutputEater()
+    options.solver = "lpSolve"
     model = random_metabolic_network(200, 300, 100, 0.2)
 #    (metb_in, metb_out) = normed_in_out_degrees(model, model.compounds)
 #    (rxn_in, rxn_out) = normed_in_out_degrees(model, model.reactions)
-#    plot_bipartite_network_degree_distribution((metb_in, metb_out, rxn_in, rxn_out),
-#        "degree_distribution.png", "directed random bipartite model")
+#    plot_bipartite_network_degree_distribution((metb_in, metb_out, rxn_in,\
+#        rxn_out), "degree_distribution.png", "directed random bipartite model")
     make_consistent_stoichiometry(model, range(1,7))
-    matrix = StoichiometricMatrix()
-    matrix.make_new_from_network(model)
-    options.logger.info(matrix)
-    options.logger.info(str(verify_consistency(matrix)))
+    random_fba(model)
+    

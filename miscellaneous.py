@@ -14,6 +14,11 @@ Some common functions.
 """
 
 
+class OutputEater(object):
+     def write(self, string):
+         pass
+
+
 def gcd(a, b):
     """
     Greatest commond divisor
@@ -31,7 +36,7 @@ def lcm(a, b):
 def fxrange(*args):
     """
     @author: dwhall256
-    @contact: http://code.activestate.com/recipes/66472-frange-a-range-function-with-float-increments/
+    @see: http://code.activestate.com/recipes/66472-frange-a-range-function-with-float-increments/
     """
     start = 0.0
     step = 1.0
