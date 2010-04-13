@@ -39,7 +39,8 @@ def prune_network(graph):
 
 
     """
-    for rxn in graph.reactions:
+    reacs = list(graph.reactions)
+    for rxn in reacs:
         in_deg = graph.in_degree(rxn)
         out_deg = graph.out_degree(rxn)
         if in_deg == 0:
@@ -90,7 +91,7 @@ def random_metabolic_network(compounds, reactions, reversible, p, seed=None):
     if seed:
         random.seed(seed)
     options = OptionsManager()
-    logger = logging.getLogger("%s.random_metabolic_graph"\
+    logger = logging.getLogger("%s.random_metabolic_network"\
         % (options.main_logger_name))
     graph = BipartiteMetabolicNetwork(name="random model")
     for i in xrange(compounds):
@@ -111,12 +112,12 @@ def random_metabolic_network(compounds, reactions, reversible, p, seed=None):
                     src.identifier)
                 graph.add_edge(tar, src, factor=1)
     prune_network(graph)
-    reactions = list(graph.reactions)
+    reacs = list(graph.reactions)
     reversibles = list()
     for i in xrange(reversible):
-        rxn = random.choice(reactions)
+        rxn = random.choice(reacs)
         reversibles.append(rxn)
-        reactions.remove(rxn)
+        reacs.remove(rxn)
     for rxn in reversibles:
         rev = Reaction(rxn.identifier + options.rev_reaction_suffix, (), (), ())
         graph.add_reaction(rev)
@@ -126,8 +127,88 @@ def random_metabolic_network(compounds, reactions, reversible, p, seed=None):
             graph.add_edge(cmpd, rev, factor=1)
     return graph
 
-def scale_free_metabolic_network(compounds, reactions):
+def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
     """
-    Uses a Barabasi-Alberts-like preferential attachment algorithm.
+    Uses a Barabasi-Alberts-like preferential attachment algorithm. Adopted from
+    the networkx implementation.
     """
-    pass
+    options = OptionsManager()
+    logger = logging.getLogger("%s.scale_free_metabolic_network"\
+        % (options.main_logger_name))
+    graph = BipartiteMetabolicNetwork(name="scale-free model")
+    # target nodes for reactions
+    rxn_targets = []
+    for i in xrange(m):
+        comp = Compound("%s%d" % (options.compound_prefix, i))
+        graph.add_compound(comp)
+        rxn_targets.append(comp)
+    # target nodes for compounds
+    comp_targets = []
+    for i in xrange(m):
+        rxn = Reaction("%s%d" % (options.reaction_prefix, i), (), (), ())
+        graph.add_reaction(rxn)
+        comp_targets.append(rxn)
+    # biased lists for preferential attachment
+    repeated_cmpds = []
+    repeated_rxns = []
+    # current vertices being added
+    current_rxn = n
+    current_comp = m
+    while (current_comp < compounds or current_rxn < reactions):
+        if current_comp < compounds:
+            source = Compound("%s%d" % (options.compound_prefix, current_comp))
+            graph.add_compound(source)
+            for rxn in comp_targets:
+                if random.random() < 0.5:
+                    graph.add_edge(source, rxn, factor=1.)
+                else:
+                    graph.add_edge(rxn, source, factor=1.)
+            repeated_rxns.extend(comp_targets)
+            repeated_cmpds.extend([source] * n)
+            comp_targets = set()
+            while len(comp_targets) < n:
+                rxn = random.choice(repeated_rxns)
+                comp_targets.add(rxn)
+            current_comp += 1
+        if current_rxn < reactions:
+            source = Reaction("%s%d" % (options.reaction_prefix, current_rxn),\
+                (), (), ())
+            graph.add_reaction(source)
+            for comp in rxn_targets:
+                if random.random() < 0.5:
+                    graph.add_edge(source, comp, factor=1.)
+                else:
+                    graph.add_edge(comp, source, factor=1.)
+            repeated_cmpds.extend(rxn_targets)
+            repeated_rxns.extend([source] * m)
+            rxn_targets = set()
+            while len(rxn_targets) < m:
+                comp = random.choice(repeated_cmpds)
+                rxn_targets.add(comp)
+            current_rxn += 1
+    prune_network(graph)
+    reacs = list(graph.reactions)
+    reversibles = list()
+    for i in xrange(reversible):
+        rxn = random.choice(reacs)
+        reversibles.append(rxn)
+        reacs.remove(rxn)
+    for rxn in reversibles:
+        rev = Reaction(rxn.identifier + options.rev_reaction_suffix, (), (), ())
+        graph.add_reaction(rev)
+        for cmpd in graph.predecessors(rxn):
+            graph.add_edge(rev, cmpd, factor=1)
+        for cmpd in graph.successors(rxn):
+            graph.add_edge(cmpd, rev, factor=1)
+    return graph
+
+if __name__ == "__main__":
+    from pyMetabolism.graph_algorithms import normed_in_out_degrees, plot_bipartite_network_log_degree_distribution, plot_bipartite_network_degree_distribution
+    model = scale_free_metabolic_network(200, 300, 100, 3, 2)
+#    model = random_metabolic_network(200, 300, 100, 0.2)
+    (metb_in, metb_out) = normed_in_out_degrees(model, model.compounds)
+    (rxn_in, rxn_out) = normed_in_out_degrees(model, model.reactions)
+    plot_bipartite_network_log_degree_distribution((metb_in, metb_out, rxn_in,\
+        rxn_out), "scale_free_degree_distribution.png", "directed scale-free bipartite model")
+#    plot_bipartite_network_degree_distribution((metb_in, metb_out, rxn_in,\
+#        rxn_out), "random_degree_distribution.png", "directed random bipartite model")

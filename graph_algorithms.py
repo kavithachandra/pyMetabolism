@@ -13,11 +13,11 @@ Generation of a stoichiometric matrix is also possible.
 @attention: Graph instances and L{Metabolism<pyMetabolism.metabolism.Metabolism>}
             instances are not interlinked:
             Adding or removing reactions from one does not affect the other.
-@todo: complete docs, many things
+@todo: complete docs, many things, add requirements to algorithms
 """
 
 
-import sys
+import copy
 #import networkx
 import openopt
 import logging
@@ -27,7 +27,7 @@ import matplotlib.pyplot
 
 
 from pyMetabolism import OptionsManager
-from pyMetabolism.graph_generation import random_metabolic_network
+from pyMetabolism.graph_generation import random_metabolic_network, scale_free_metabolic_network
 from pyMetabolism.stoichiometry import StoichiometricMatrix
 from pyMetabolism.stoichiometry_algorithms import verify_consistency
 from pyMetabolism.miscellaneous import lcm, fxrange
@@ -137,26 +137,40 @@ def make_consistent_stoichiometry(graph, factors):
         stoichiometric factors.
     """
     options = OptionsManager()
-#    step = 1. / float(reduce(lcm, factors) * len(graph.compounds))
-    step = reduce(lcm, factors) * len(graph.compounds)
+    step = 1. / float(reduce(lcm, factors) * len(graph.compounds))
+#    step = reduce(lcm, factors) * len(graph.compounds)
     # generate mass vector for compounds
     mass_vector = dict()
-#    masses = list(fxrange(step, 1., step))
-    masses = range(1, step)
+    masses = list(fxrange(step, 1., step))
+#    masses = range(1, step)
     for comp in graph.compounds:
         mass = random.choice(masses)
         mass_vector[comp] = mass
         masses.remove(mass)
     options.logger.debug(str(mass_vector))
-    upper = max(factors)
 
-    def balance_reaction(reaction):
+    def balance_reaction(reaction, upper):
         """
         balance individual reaction
         """
         in_deg = graph.in_degree(reaction)
         out_deg = graph.out_degree(reaction)
-        objective = numpy.ones(in_deg + out_deg)
+        # test different objective functions
+        # only zeros leads to fast solutions (no objective function) that are
+        # close to the upper boundary
+        # all equal leads to slower solutions that are mostly one with a few
+        # variations to balance the reactions
+        # an objective function with entries of 1 / factor leads to very long
+        # solution times but much more varying entries
+        # best approach so far: no objective function, but use a starting point
+        # by randomly picking coefficients from 'factors'
+        objective = numpy.zeros(in_deg + out_deg)
+#        objective = numpy.ones(in_deg + out_deg)
+#        for (i, val) in enumerate(objective):
+#            objective[i] = val / float(random.choice(factors))
+        start = numpy.ones(in_deg + out_deg)
+        for i in xrange(len(start)):
+            objective[i] = float(random.choice(factors))
         A_eq = numpy.empty(in_deg + out_deg)
         # substrate mass_vector
         msg = "%s:\n" % reaction.identifier
@@ -174,34 +188,129 @@ def make_consistent_stoichiometry(graph, factors):
         ub = numpy.empty(in_deg + out_deg)
         for i in xrange(in_deg + out_deg):
             ub[i] = upper
-        problem = openopt.LP(f=objective, Aeq=A_eq, beq=b_eq, lb=lb, ub=ub,\
-            intVars=range(in_deg + out_deg))
+        problem = openopt.MILP(f=objective, x0=start, Aeq=A_eq, beq=b_eq, lb=lb,\
+            ub=ub, intVars=range(in_deg + out_deg))
         result = problem.solve(options.solver, iprint=-5)
         if not result.isFeasible:
             raise PyMetabolismError("Reaction %s cannot be balanced with the"\
-                " given mass vector." % reaction)
-        msg = "%s:\n" % reaction.identifier
+                " given mass vector." % reaction.identifier)
         for (i, comp) in enumerate(graph.predecessors(reaction)):
             graph[comp][reaction]["factor"] =  result.xf[i]
-            msg += " %s +" % result.xf[i]
-        msg += " ->"
         for (i, comp) in enumerate(graph.successors(reaction)):
             graph[reaction][comp]["factor"] =  result.xf[in_deg + i]
-            msg += " %s +" % result.xf[in_deg + i]
-        options.logger.debug(msg)
         options.logger.info(result.xf)
 
     total = float(len(graph.reactions))
+    maxi = max(factors)
+#    maxi = 3.
     for (i, rxn) in enumerate(graph.reactions):
-        balance_reaction(rxn)
+        try:
+            balance_reaction(rxn, maxi)
+        except PyMetabolismError:
+            balance_reaction(rxn, numpy.inf)
         options.logger.info("%.2f %% complete.", float(i + 1) / total * 100.)
 
+def grow_consistent_stoichiometry(graph, factors):
+    """
+
+    """
+    options = OptionsManager()
+    logger = logging.getLogger("%s.grow_consistent_stoichiometry"\
+        % options.main_logger_name)
+
+    def discover_reactions(comp):
+        for rxn in graph.successors(comp):
+            if rxn not in complete:
+                discovered.add(rxn)
+        for rxn in graph.predecessors(comp):
+            if rxn not in complete:
+                discovered.add(rxn)
+
+    cmpds = list(graph.compounds)
+    # assign a starting point compound and discovered adjacent reactions
+    source = random.choice(cmpds)
+    discovered = set()
+    complete = set()
+    discover_reactions(source)
+    # almost empty mass vector that will be filled in a bfs type traversal of the
+    # network
+    mass_vector = dict(zip(cmpds, numpy.zeros(len(cmpds))))
+    mass_vector[source] = 1.
+
+    def balance_reaction(rxn, factor):
+        pass
+
+    total = float(len(graph.reactions))
+    prog = total
+    while len(discovered) > 0:
+        rxn = discovered.pop()
+        try:
+            balance_reaction(rxn, 0.)
+        except PyMetabolismError:
+            balance_reaction(rxn, numpy.inf)
+        finally:
+            complete.add(rxn)
+            prog -= 1
+            logger.info("%.2f %% complete.", (total - prog) / total * 100.)
+
+    
+
 def random_fba(graph):
+    options = OptionsManager()
     matrix = StoichiometricMatrix()
     matrix.make_new_from_network(graph)
-    options.logger.info(matrix)
-    options.logger.info(str(verify_consistency(matrix)))
-    options.logger.info(matrix)
+    options.logger.debug(str(verify_consistency(matrix)))
+    num_inputs = matrix.num_compounds // 10
+    num_outputs = num_inputs // 5
+    options.logger.debug("%d uptake compounds.", num_inputs)
+    options.logger.debug("%d biomass compounds.", num_outputs)
+    assert num_outputs > 0
+    inputs = list()
+    outputs = list()
+    cmpds = list(graph.compounds)
+    for comp in graph.compounds:
+        if graph.in_degree(comp) == 0:
+            inputs.append(comp)
+            cmpds.remove(comp)
+        elif graph.out_degree(comp) == 0:
+            outputs.append(comp)
+            cmpds.remove(comp)
+    # if necessary fill up inputs with random compounds
+    # they should not be output compounds
+    count = num_inputs - len(inputs)
+    while (count > 0):
+        comp = random.choice(cmpds)
+        inputs.append(comp)
+        cmpds.remove(comp)
+        count -= 1
+    # similarly, 'outputs' is filled up
+    count = num_outputs - len(outputs)
+    while (count > 0):
+        comp = random.choice(cmpds)
+        outputs.append(comp)
+        cmpds.remove(comp)
+        count -= 1
+    # prepare flux balance analysis linear problem
+    # objective function
+    objective = numpy.zeros(matrix.num_reactions)
+    for comp in outputs:
+        for rxn in graph.predecessors_iter(comp):
+            objective[matrix.reaction_map[rxn]] = 1.
+    # equality constraints
+    A_eq = numpy.array(matrix.matrix, dtype=float, copy=False)
+    b_eq = numpy.zeros(matrix.num_compounds)
+    # boundaries
+    lb = numpy.zeros(matrix.num_reactions)
+    ub = numpy.empty(matrix.num_reactions)
+    for (i, val) in enumerate(ub):
+        ub[i] = numpy.inf
+    for comp in inputs:
+        for rxn in graph.successors_iter(comp):
+            ub[matrix.reaction_map[rxn]] = 10.
+    problem = openopt.LP(f=objective, Aeq=A_eq, beq=b_eq, lb=lb, ub=ub)
+    result = problem.solve(options.solver, iprint=-2, goal="max")
+    options.logger.debug(str(result.xf))
+    return (result.isFeasible, result.xf)
 
 
 if __name__ == "__main__":
@@ -210,13 +319,31 @@ if __name__ == "__main__":
     handler = logging.StreamHandler()
     handler.setLevel(logging.INFO)
     options.logger.addHandler(handler)
-    sys.stdout = OutputEater()
-    options.solver = "lpSolve"
-    model = random_metabolic_network(200, 300, 100, 0.2)
+    factors = list()
+    input = open("integer_coefficients.dat", 'r')
+    content = input.readlines()
+    input.close()
+    for line in content:
+        factors.append(int(line))
+#    sys.stdout = OutputEater()
+#    options.solver = "lp_solve"
+#    out = open("scale_free_fluxes.dat", "w")
+    out = open("random_fluxes.dat", 'w')
+    for i in xrange(1):
+        options.logger.info("model %d", i)
+        model = random_metabolic_network(200, 300, 100, 0.2)
+#        model = scale_free_metabolic_network(200, 300, 100, 3, 2)
 #    (metb_in, metb_out) = normed_in_out_degrees(model, model.compounds)
 #    (rxn_in, rxn_out) = normed_in_out_degrees(model, model.reactions)
 #    plot_bipartite_network_degree_distribution((metb_in, metb_out, rxn_in,\
 #        rxn_out), "degree_distribution.png", "directed random bipartite model")
-    make_consistent_stoichiometry(model, range(1,7))
-    random_fba(model)
+        make_consistent_stoichiometry(model, factors)
+#        grow_consistent_stoichiometry(model, range(1,7))
+        (yes, res) = random_fba(model)
+        if yes:
+            out.write("# model %d\n" % i)
+            for data in res:
+                out.write("%G\n" % data)
+    out.close()
+
     

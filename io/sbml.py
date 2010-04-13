@@ -141,13 +141,18 @@ if __name__ == '__main__':
     # for elem in dir(tmp[0]):
     #     print elem,  getattr(tmp[0], elem)
     
-    parser = SBMLParser(smallModel, rprefix='R_', rsuffix='', cprefix='M_', csuffix=re.compile('_.$'))
+    parser = SBMLParser(bigModel, rprefix='R_', rsuffix='', cprefix='M_', csuffix=re.compile('_.$'))
     system = parser.get_metabolic_system(name='ModelWithStrippedSuffices')
+    out = open("../coefficients.dat", 'w')
     for r in system:
+        for fac in r.stoichiometry:
+            out.write("%G\n" % fac)
         print r.identifier, '->', r
+    out.close()
 
-    from pyMetabolism.stoichiometry import StoichiometricMatrix
-    from pyMetabolism.stoichiometry_algorithms import verify_consistency
-    matrix = StoichiometricMatrix()
-    matrix.add_stoichiometry_from(system)
-    verify_consistency(matrix)
+#    from pyMetabolism.stoichiometry import StoichiometricMatrix
+#    from pyMetabolism.stoichiometry_algorithms import verify_consistency
+#    matrix = StoichiometricMatrix()
+#    matrix.add_stoichiometry_from(system)
+#    verify_consistency(matrix)
+
