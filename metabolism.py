@@ -756,7 +756,7 @@ class Metabolism(object):
         @rtype: C{bool}
         """
         if isinstance(reaction, str):
-            return reaction in [r.identifier for r in self.reactions]
+            return reaction in [rxn.identifier for rxn in self._reactions]
         if isinstance(reaction, Reaction):
             return reaction in self._reactions
         else:
