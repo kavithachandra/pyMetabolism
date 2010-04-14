@@ -104,13 +104,13 @@ def random_metabolic_network(compounds, reactions, reversible, p, seed=None):
             if random.random() < p:
                 logger.debug("Adding edge %s-%s.", src.identifier,\
                     tar.identifier)
-                graph.add_edge(src, tar, factor=1)
+                graph.add_edge(src, tar, factor=0)
             # a conditional case here (elif not if) because we cannot determine
             # substrates and products from bidirectional edges
             elif random.random() < p:
                 logger.debug("Adding edge %s-%s.", tar.identifier,\
                     src.identifier)
-                graph.add_edge(tar, src, factor=1)
+                graph.add_edge(tar, src, factor=0)
     prune_network(graph)
     reacs = list(graph.reactions)
     reversibles = list()
@@ -122,9 +122,9 @@ def random_metabolic_network(compounds, reactions, reversible, p, seed=None):
         rev = Reaction(rxn.identifier + options.rev_reaction_suffix, (), (), ())
         graph.add_reaction(rev)
         for cmpd in graph.predecessors(rxn):
-            graph.add_edge(rev, cmpd, factor=1)
+            graph.add_edge(rev, cmpd, factor=0)
         for cmpd in graph.successors(rxn):
-            graph.add_edge(cmpd, rev, factor=1)
+            graph.add_edge(cmpd, rev, factor=0)
     return graph
 
 def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
@@ -160,9 +160,9 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
             graph.add_compound(source)
             for rxn in comp_targets:
                 if random.random() < 0.5:
-                    graph.add_edge(source, rxn, factor=1.)
+                    graph.add_edge(source, rxn, factor=0)
                 else:
-                    graph.add_edge(rxn, source, factor=1.)
+                    graph.add_edge(rxn, source, factor=0)
             repeated_rxns.extend(comp_targets)
             repeated_cmpds.extend([source] * n)
             comp_targets = set()
@@ -176,9 +176,9 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
             graph.add_reaction(source)
             for comp in rxn_targets:
                 if random.random() < 0.5:
-                    graph.add_edge(source, comp, factor=1.)
+                    graph.add_edge(source, comp, factor=0)
                 else:
-                    graph.add_edge(comp, source, factor=1.)
+                    graph.add_edge(comp, source, factor=0)
             repeated_cmpds.extend(rxn_targets)
             repeated_rxns.extend([source] * m)
             rxn_targets = set()
@@ -197,9 +197,9 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
         rev = Reaction(rxn.identifier + options.rev_reaction_suffix, (), (), ())
         graph.add_reaction(rev)
         for cmpd in graph.predecessors(rxn):
-            graph.add_edge(rev, cmpd, factor=1)
+            graph.add_edge(rev, cmpd, factor=0)
         for cmpd in graph.successors(rxn):
-            graph.add_edge(cmpd, rev, factor=1)
+            graph.add_edge(cmpd, rev, factor=0)
     return graph
 
 if __name__ == "__main__":
