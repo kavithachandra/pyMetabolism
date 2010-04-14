@@ -756,17 +756,9 @@ class Metabolism(object):
         @rtype: C{bool}
         """
         if isinstance(reaction, str):
-<<<<<<< HEAD:metabolism.py
-            return reaction in [r.identifier for r in self.reactions]
-=======
             return reaction in [rxn.identifier for rxn in self._reactions]
->>>>>>> 4b6c969e6eab4ea6650e346cfb727a43138152ec:metabolism.py
         if isinstance(reaction, Reaction):
-<<<<<<< HEAD:metabolism.py
-            return reaction in self.reactions
-=======
             return reaction in self._reactions
->>>>>>> 4b6c969e6eab4ea6650e346cfb727a43138152ec:metabolism.py
         else:
             return False
 
