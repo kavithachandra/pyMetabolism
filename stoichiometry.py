@@ -18,11 +18,8 @@ one can from the stoichiometric matrix of a list of reactions.
 
 
 import logging
-from numpy import hstack, shape, vstack, zeros
-from pyMetabolism import OptionsManager
-from pyMetabolism import new_property
-from pyMetabolism.metabolism import Metabolism, Compartment, Reaction,\
-    CompartCompound, Compound, DirectionalReaction
+from numpy import hstack, vstack, zeros
+from pyMetabolism import OptionsManager, new_property
 
 
 class StoichiometricMatrix(object):

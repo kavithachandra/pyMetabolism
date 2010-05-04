@@ -15,8 +15,7 @@ Basic classes modelling compounds, reactions, and metabolism.
 
 
 import logging
-from pyMetabolism import OptionsManager
-from pyMetabolism import new_property
+from pyMetabolism import OptionsManager, new_property
 from pyMetabolism.metabolism_exceptions import PyMetabolismError
 
 

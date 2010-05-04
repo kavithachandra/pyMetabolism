@@ -118,10 +118,13 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
         self.add_node(rxn)
         if self._split and rxn.reversible:
             subs = list(rxn.substrates)
+            subs.reverse()
             prods = list(rxn.products)
+            prods.reverse()
             coeffs = list(rxn.stoichiometry)
+            coeffs.reverse()
             back = Reaction(rxn.identifier + self._options.rev_reaction_suffix,
-                prods.reverse(), subs.reverse(), coeffs.reverse())
+                prods, subs, coeffs)
             self._reactions.add(back)
             # in case there are no compounds involved we add the reaction node
             # individually
@@ -155,6 +158,30 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
 
 #    def __getattr__(self, name):
 #        return type(self._network).__getattribute__(self._network, name)
+
+    def write_edgelist(self, filename):
+        fh = open(filename, 'w')
+        fh.write("# %s %s\n" % (self.__class__.__name__, self._name))
+        for (src, tar, val) in self.edges_iter(data=True):
+            fh.write("%s %s %f\n" % (src.identifier, tar.identifier, val["factor"]))
+        fh.close()
+
+    def read_edgelist(self, filename):
+        fh = open(filename, 'r')
+        contents = fh.readlines()
+        fh.close()
+        for line in contents:
+            (src, tar, val) = line.split(delimiter=None)
+            if src.startswith(self._options.compound_prefix):
+                self.add_compound(Compound(src))
+            else:
+                self.add_reaction(Reaction(src, (), (), ()))
+            if tar.startswith(self._options.compound_prefix):
+                self.add_compound(Compound(tar))
+            else:
+                self.add_reaction(Reaction(tar, (), (), ()))
+            self.add_edge(src, tar, factor=float(val))
+
 
 class MetaboliteCentricNetwork(networkx.MultiDiGraph):
     """
