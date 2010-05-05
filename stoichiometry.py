@@ -69,7 +69,7 @@ class StoichiometricMatrix(object):
 
     @new_property
     def reactions():
-        return {"fset": None, "fget": lambda self: self._compound_map.keys(),\
+        return {"fset": None, "fget": lambda self: self._reaction_map.keys(),\
             "doc": "get method"}
 
     @new_property
