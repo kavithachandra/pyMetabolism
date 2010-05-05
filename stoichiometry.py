@@ -121,19 +121,19 @@ class StoichiometricMatrix(object):
     def make_new_from_network(self, graph):
         """
         """
-        self._matrix = zeros((len(graph.compounds), len(graph.reactions)))
+        self._matrix = zeros(shape=(len(graph.compounds), len(graph.reactions)))
         for (i, comp) in enumerate(graph.compounds):
             self._compound_map[comp] = i
         for (i, rxn) in enumerate(graph.reactions):
             self._reaction_map[rxn] = i
         for rxn in graph.reactions:
             self._logger.debug("Reaction: %s", rxn.identifier)
-            self._logger.debug("Predecessors:")
+            self._logger.debug("Substrates:")
             for comp in graph.predecessors(rxn):
                 self._logger.debug("%s", comp.identifier)
                 self._matrix[self._compound_map[comp], self._reaction_map[rxn]]\
                     = -graph[comp][rxn]["factor"]
-            self._logger.debug("Successors:")
+            self._logger.debug("Products:")
             for comp in graph.successors(rxn):
                 self._logger.debug("%s", comp.identifier)
                 self._matrix[self._compound_map[comp], self._reaction_map[rxn]]\
@@ -157,40 +157,3 @@ class StoichiometricMatrix(object):
             self._matrix[self._compound_map[compound],\
                 self._reaction_map[reaction]] = \
                 reaction.stoich_coeff(compound)
-
-
-if __name__ == '__main__':
-    import pyMetabolism.metabolism as metb
-    cmp = metb.Compartment("Cytosol", True)
-    rxn1 = metb.Reaction("MAP", (metb.CompartCompound(metb.Compound("atp"), cmp),),\
-        (metb.CompartCompound(metb.Compound("adp"), cmp),\
-        metb.CompartCompound(metb.Compound("p"), cmp)),\
-        (1, 1, 1))
-    rxn2 = metb.Reaction("FPK", (metb.CompartCompound(metb.Compound("fructose"),\
-        cmp), metb.CompartCompound(metb.Compound("atp"), cmp)),\
-        (metb.CompartCompound(metb.Compound("g6p"), cmp),\
-        metb.CompartCompound(metb.Compound("adp"), cmp)),\
-        (1, 1, 1, 1))
-    system = metb.Metabolism([rxn1, rxn2])
-    print system
-    matrix = StoichiometricMatrix()
-    matrix.add_reaction(rxn1)
-    matrix.add_reaction(rxn2)
-#    matrix.add_stoichiometry_from(system)
-    print matrix
-#    from pyMetabolism.io.sbml import SBMLParser
-#    from pyMetabolism.metabolism import Compound, CompartCompound, Compartment
-#    from numpy import *
-#    import re
-#    # set_printoptions(threshold='nan')
-#    smallModel = './test_data/Ec_core_flux1.xml'
-#    bigModel = './test_data/iAF1260.xml'
-#    # parser = SBMLParser(bigModel)
-#    parser = SBMLParser(bigModel, rprefix='R_', rsuffix='', cprefix='M_',\
-#        csuffix=re.compile('_.$'))
-#    metbol = parser.get_metabolic_system(parser)
-#    print metbol[0].identifier
-#    print metbol[0]
-#    s = StoichiometricMatrix()
-#    s.make_new_system_from(metbol)
-#    print s

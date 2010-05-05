@@ -40,7 +40,7 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
     _counter = 0
 
     def __init__(self, reactions=None, name='',
-             split=True, edge_info=False,* args, ** kwargs):
+             split=False, edge_info=False,* args, ** kwargs):
         """
         @param reactions: A list of L{Reaction<pyMetabolism.metabolism.Reaction>}s from
                           which the graph can be populated.
@@ -116,23 +116,23 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
         # in case there are no compounds involved we add the reaction node
         # individually
         self.add_node(rxn)
-        if self._split and rxn.reversible:
-            subs = list(rxn.substrates)
-            subs.reverse()
-            prods = list(rxn.products)
-            prods.reverse()
-            coeffs = list(rxn.stoichiometry)
-            coeffs.reverse()
-            back = Reaction(rxn.identifier + self._options.rev_reaction_suffix,
-                prods, subs, coeffs)
-            self._reactions.add(back)
-            # in case there are no compounds involved we add the reaction node
-            # individually
-            self.add_node(back)
-            for src in prods:
-                self.add_edge(src, back)
-            for tar in subs:
-                self.add_edge(back, tar)
+#        if self._split and rxn.reversible:
+#            subs = list(rxn.substrates)
+#            subs.reverse()
+#            prods = list(rxn.products)
+#            prods.reverse()
+#            coeffs = list(rxn.stoichiometry)
+#            coeffs.reverse()
+#            back = Reaction(rxn.identifier + self._options.rev_reaction_suffix,
+#                prods, subs, coeffs)
+#            self._reactions.add(back)
+#            # in case there are no compounds involved we add the reaction node
+#            # individually
+#            self.add_node(back)
+#            for src in prods:
+#                self.add_edge(src, back)
+#            for tar in subs:
+#                self.add_edge(back, tar)
         for src in rxn.substrates:
             self._compounds.add(src)
             self.add_edge(src, rxn)
@@ -173,14 +173,18 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
         for line in contents:
             (src, tar, val) = line.split(delimiter=None)
             if src.startswith(self._options.compound_prefix):
-                self.add_compound(Compound(src))
+                s = Compound(src)
+                self.add_compound(s)
             else:
-                self.add_reaction(Reaction(src, (), (), ()))
+                s = Reaction(src, (), (), ())
+                self.add_reaction(s)
             if tar.startswith(self._options.compound_prefix):
-                self.add_compound(Compound(tar))
+                t = Compound(tar)
+                self.add_compound(t)
             else:
-                self.add_reaction(Reaction(tar, (), (), ()))
-            self.add_edge(src, tar, factor=float(val))
+                t = Reaction(tar, (), (), ())
+                self.add_reaction(t)
+            self.add_edge(s, t, factor=float(val))
 
 
 class MetaboliteCentricNetwork(networkx.MultiDiGraph):

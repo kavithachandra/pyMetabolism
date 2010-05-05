@@ -171,8 +171,12 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
             graph.add_compound(source)
             for rxn in comp_targets:
                 if random.random() < 0.5:
+                    logger.debug("Adding edge %s-%s.", source.identifier,\
+                        rxn.identifier)
                     graph.add_edge(source, rxn, factor=0)
                 else:
+                    logger.debug("Adding edge %s-%s.", rxn.identifier,\
+                        source.identifier)
                     graph.add_edge(rxn, source, factor=0)
             repeated_rxns.extend(comp_targets)
             repeated_cmpds.extend([source] * n)
@@ -202,16 +206,24 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
                     rm_targets.append(comp)
                     continue
                 if random.random() < 0.5:
+                    logger.debug("Adding edge %s-%s.", source.identifier,\
+                        comp.identifier)
                     graph.add_edge(source, comp, factor=0)
                 else:
+                    logger.debug("Adding edge %s-%s.", comp.identifier,\
+                        source.identifier)
                     graph.add_edge(comp, source, factor=0)
             for comp in rm_targets:
                 rxn_targets.remove(comp)
             for comp in new_targets:
                 rxn_targets.add(comp)
                 if random.random() < 0.5:
+                    logger.debug("Adding edge %s-%s.", source.identifier,\
+                        comp.identifier)
                     graph.add_edge(source, comp, factor=0)
                 else:
+                    logger.debug("Adding edge %s-%s.", comp.identifier,\
+                        source.identifier)
                     graph.add_edge(comp, source, factor=0)
             repeated_cmpds.extend(rxn_targets)
             repeated_rxns.extend([source] * m)
@@ -222,14 +234,3 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
             current_rxn += 1
     prune_network(graph)
     return graph
-
-if __name__ == "__main__":
-    from pyMetabolism.graph_algorithms import normed_in_out_degrees, plot_bipartite_network_log_degree_distribution, plot_bipartite_network_degree_distribution
-    model = scale_free_metabolic_network(200, 300, 100, 3, 2)
-#    model = random_metabolic_network(200, 300, 100, 0.2)
-#    (metb_in, metb_out) = normed_in_out_degrees(model, model.compounds)
-#    (rxn_in, rxn_out) = normed_in_out_degrees(model, model.reactions)
-#    plot_bipartite_network_log_degree_distribution((metb_in, metb_out, rxn_in,\
-#        rxn_out), "scale_free_degree_distribution.png", "directed scale-free bipartite model")
-#    plot_bipartite_network_degree_distribution((metb_in, metb_out, rxn_in,\
-#        rxn_out), "random_degree_distribution.png", "directed random bipartite model")

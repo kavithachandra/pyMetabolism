@@ -609,115 +609,115 @@ class Reaction(object):
         return compound in self._substrates
 
 
-class DirectionalReaction(object):
-    """
-    """
-    _memory = dict()
-
-    def __new__(cls, reaction, direction, *args, **kwargs):
-        """
-        @todo: doc
-        """
-        if not isinstance(reaction, Reaction):
-            raise TypeError("Argument '%s' is an instance of %s, not %s!"\
-                % (str(reaction), type(reaction), repr(Reaction)))
-        if not isinstance(direction, str):
-            raise TypeError("Argument '%s' is an instance of %s, not %s!"\
-                % (str(reaction), type(reaction), repr(str)))
-        if (reaction.identifier, direction) in cls._memory:
-            return cls._memory[(reaction.identifier, direction)]
-        else:
-            return super(DirectionalReaction, cls).__new__(cls, *args, **kwargs)
-
-    def __init__(self, reaction, direction, *args, **kwargs):
-        """
-        @todo: doc
-        """
-        if (reaction.identifier, direction) in self.__class__._memory:
-            return None
-        super(DirectionalReaction, self).__init__(*args, **kwargs)
-        self._options = OptionsManager()
-        self._logger = logging.getLogger("%s.%s.%s"\
-            % (self._options.main_logger_name, self.__class__.__name__,\
-            reaction.identifier))
-        self._reaction = reaction
-        if direction == "forward" or direction == "backward":
-            self._direction = direction
-        else:
-            raise PyMetabolismError("Unknown reaction direction!")
-        self.__class__._memory[(reaction.identifier, self._direction)] = self
-
-    @new_property
-    def logger():
-        pass
-
-    @new_property
-    def direction():
-        return {"fset": None, "fget": lambda self: self._direction,\
-            "doc": "get method"}
-
-    def __str__(self):
-        """
-        @rtype: C{str}
-        """
-        return "%s(%s)" % (self._identifier, self._direction)
-
-    def __str__(self):
-        """
-        @return: A C{str} representation of the reaction, e.g., 2 A + 4 B -> 1 C or
-                 2 A + 4 B <=> 1 C for a reversible reaction.
-        @rtype: C{str}
-        """
-        def util(compound_list):
-            reaction_str = list()
-            for compound in compound_list:
-                reaction_str.append(str(abs(self._stoichiometry_dict[compound])))
-                reaction_str.append(compound.__str__())
-                if not (compound == compound_list[-1]):
-                    reaction_str.append('+')
-            return reaction_str
-        reaction_str = list()
-        if self._direction == "forward":
-            reaction_str.extend(util(self._substrates))
-            reaction_str.append('->')
-            reaction_str.extend(util(self._products))
-        else:
-            reaction_str.extend(util(self._products))
-            reaction_str.append('->')
-            reaction_str.extend(util(self._substrates))
-        return ' '.join(reaction_str)
-
-    def __getattr__(self, name):
-        return type(self._reaction).__getattribute__(self._reaction, name)
-
-    def stoich_coeff(self, compound):
-        """
-        @param compound: The compound whose stoichiometric factor is queried.
-        @type compound: L{Compound} or C{str}
-        @return: Return the stoichiometric coefficient of a compound.
-        @rtype: C{int}
-        @raise KeyError: If C{compound} is not contained in the reaction.
-        @todo: reaction proper __contains__
-        """
-        if self._direction == "forward":
-            if compound in self._substrates:
-                return -self._stoichiometry_dict[compound]
-            elif compound in self._products:
-                return self._stoichiometry_dict[compound]
-            else:
-                raise KeyError("'%s' is not participating in reaction '%s'"\
-                    % (compound, self._identifier))
-        else:
-            if compound in self._substrates:
-                return self._stoichiometry_dict[compound]
-            elif compound in self._products:
-                return -self._stoichiometry_dict[compound]
-            else:
-                raise KeyError("'%s' is not participating in reaction '%s'"\
-                    % (compound, self._identifier))
-
-    def __getattr__(self, name):
-        return type(self._reaction).__getattribute__(self._reaction, name)
+#class DirectionalReaction(object):
+#    """
+#    """
+#    _memory = dict()
+#
+#    def __new__(cls, reaction, direction, *args, **kwargs):
+#        """
+#        @todo: doc
+#        """
+#        if not isinstance(reaction, Reaction):
+#            raise TypeError("Argument '%s' is an instance of %s, not %s!"\
+#                % (str(reaction), type(reaction), repr(Reaction)))
+#        if not isinstance(direction, str):
+#            raise TypeError("Argument '%s' is an instance of %s, not %s!"\
+#                % (str(reaction), type(reaction), repr(str)))
+#        if (reaction.identifier, direction) in cls._memory:
+#            return cls._memory[(reaction.identifier, direction)]
+#        else:
+#            return super(DirectionalReaction, cls).__new__(cls, *args, **kwargs)
+#
+#    def __init__(self, reaction, direction, *args, **kwargs):
+#        """
+#        @todo: doc
+#        """
+#        if (reaction.identifier, direction) in self.__class__._memory:
+#            return None
+#        super(DirectionalReaction, self).__init__(*args, **kwargs)
+#        self._options = OptionsManager()
+#        self._logger = logging.getLogger("%s.%s.%s"\
+#            % (self._options.main_logger_name, self.__class__.__name__,\
+#            reaction.identifier))
+#        self._reaction = reaction
+#        if direction == "forward" or direction == "backward":
+#            self._direction = direction
+#        else:
+#            raise PyMetabolismError("Unknown reaction direction!")
+#        self.__class__._memory[(reaction.identifier, self._direction)] = self
+#
+#    @new_property
+#    def logger():
+#        pass
+#
+#    @new_property
+#    def direction():
+#        return {"fset": None, "fget": lambda self: self._direction,\
+#            "doc": "get method"}
+#
+#    def __str__(self):
+#        """
+#        @rtype: C{str}
+#        """
+#        return "%s(%s)" % (self._identifier, self._direction)
+#
+#    def __str__(self):
+#        """
+#        @return: A C{str} representation of the reaction, e.g., 2 A + 4 B -> 1 C or
+#                 2 A + 4 B <=> 1 C for a reversible reaction.
+#        @rtype: C{str}
+#        """
+#        def util(compound_list):
+#            reaction_str = list()
+#            for compound in compound_list:
+#                reaction_str.append(str(abs(self._stoichiometry_dict[compound])))
+#                reaction_str.append(compound.__str__())
+#                if not (compound == compound_list[-1]):
+#                    reaction_str.append('+')
+#            return reaction_str
+#        reaction_str = list()
+#        if self._direction == "forward":
+#            reaction_str.extend(util(self._substrates))
+#            reaction_str.append('->')
+#            reaction_str.extend(util(self._products))
+#        else:
+#            reaction_str.extend(util(self._products))
+#            reaction_str.append('->')
+#            reaction_str.extend(util(self._substrates))
+#        return ' '.join(reaction_str)
+#
+#    def __getattr__(self, name):
+#        return type(self._reaction).__getattribute__(self._reaction, name)
+#
+#    def stoich_coeff(self, compound):
+#        """
+#        @param compound: The compound whose stoichiometric factor is queried.
+#        @type compound: L{Compound} or C{str}
+#        @return: Return the stoichiometric coefficient of a compound.
+#        @rtype: C{int}
+#        @raise KeyError: If C{compound} is not contained in the reaction.
+#        @todo: reaction proper __contains__
+#        """
+#        if self._direction == "forward":
+#            if compound in self._substrates:
+#                return -self._stoichiometry_dict[compound]
+#            elif compound in self._products:
+#                return self._stoichiometry_dict[compound]
+#            else:
+#                raise KeyError("'%s' is not participating in reaction '%s'"\
+#                    % (compound, self._identifier))
+#        else:
+#            if compound in self._substrates:
+#                return self._stoichiometry_dict[compound]
+#            elif compound in self._products:
+#                return -self._stoichiometry_dict[compound]
+#            else:
+#                raise KeyError("'%s' is not participating in reaction '%s'"\
+#                    % (compound, self._identifier))
+#
+#    def __getattr__(self, name):
+#        return type(self._reaction).__getattribute__(self._reaction, name)
 
 
 class Metabolism(object):
