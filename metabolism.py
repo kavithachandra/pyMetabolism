@@ -584,9 +584,14 @@ class Reaction(object):
     def __cmp__(self, other):
         """
         @rtype: C{int}
+
+        @raise: C{AttributeError}
         """
-        assert isinstance(other, Reaction)
-        return cmp(self.identifier, other.identifier)
+        if isinstance(other, str):
+            if self.__class__._memory.has_key(other):
+                return cmp(self.identifier, other)
+        elif isinstance(other, Reaction):
+            return cmp(self.identifier, other.identifier)
 
     def index(self, compound):
         """

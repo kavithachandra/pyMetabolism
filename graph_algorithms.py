@@ -93,7 +93,7 @@ def balance_reaction_by_mass(graph, factors, reaction, mass_vector, upper,\
         ub[i] = upper
     problem = openopt.MILP(f=objective, x0=start, Aeq=A_eq, beq=b_eq, lb=lb,\
         ub=ub, intVars=range(in_deg + out_deg))
-    result = problem.solve(options.solver, iprint=-5)
+    result = problem.solve(options.solver, iprint=-10)
     if not result.isFeasible:
         raise PyMetabolismError("Reaction '%s' cannot be balanced with the"\
             " given mass vector." % reaction.identifier)
@@ -168,7 +168,7 @@ def balance_reaction_by_factors(graph, factors, reaction, mass_vector, upper, lo
             ub[i + in_deg] = upper
     # problem
     problem = openopt.LP(f=objective, Aeq=A_eq, beq=b_eq, lb=lb, ub=ub)
-    result = problem.solve(options.solver, iprint=-5)
+    result = problem.solve(options.solver, iprint=-10)
     if not result.isFeasible:
         raise PyMetabolismError("Reaction '%s' cannot be balanced with the"\
             " given stoichiometric coefficients and pre-existing masses."\
@@ -226,7 +226,7 @@ def balance_multiple_reactions(graph, factors, rxns, mass_vector, lower, upper, 
     for (i, comp) in enumerate(matrix.compounds):
         start[i] = 1. / float(sub.in_degree(comp) + sub.out_degree(comp))
     problem = openopt.LP(f=objective, Aeq=A_eq, beq=b_eq, lb=lb, ub=ub, x0=start)
-    result = problem.solve(options.solver, iprint=-5)
+    result = problem.solve(options.solver, iprint=-10)
     if not result.isFeasible:
         raise PyMetabolismError("Unable to balance reaction system.")
     for (i, comp) in enumerate(matrix.compounds):
@@ -541,7 +541,14 @@ def random_fba(graph, num_inputs, num_outputs):
                 if rxn.reversible:
                     lb[matrix.reaction_map[rxn]] = -10.
         problem = openopt.LP(f=objective, Aeq=A_eq, beq=b_eq, lb=lb, ub=ub)
-        result = problem.solve(options.solver, iprint=-2, goal="max")
+        result = problem.maximize(options.solver, iprint=-10)
         logger.debug(result.xf)
+        for rxn in graph.reactions:
+            if rxn in outputs:
+                logger.info("Biomass - %s - %G", rxn.identifier, result.xf[matrix.reaction_map[rxn]])
+            elif rxn in inputs:
+                logger.info("Transport - %s - %G", rxn.identifier, result.xf[matrix.reaction_map[rxn]])
+            else:
+                logger.info("%s - %G", rxn.identifier, result.xf[matrix.reaction_map[rxn]])
         results.append((result.isFeasible, result.xf))
     return results

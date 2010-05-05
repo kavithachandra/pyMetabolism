@@ -163,26 +163,42 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
         fh = open(filename, 'w')
         fh.write("# %s %s\n" % (self.__class__.__name__, self._name))
         for (src, tar, val) in self.edges_iter(data=True):
-            fh.write("%s %s %f\n" % (src.identifier, tar.identifier, val["factor"]))
+            s = src.identifier
+            if isinstance(src, Reaction):
+                if src.reversible:
+                     s += self._options.rev_reaction_suffix
+            t = tar.identifier
+            if isinstance(tar, Reaction):
+                if tar.reversible:
+                     t += self._options.rev_reaction_suffix
+            fh.write("%s %s %f\n" % (s, t, val["factor"]))
         fh.close()
 
     def read_edgelist(self, filename):
         fh = open(filename, 'r')
         contents = fh.readlines()
         fh.close()
+        reversible = False
         for line in contents:
-            (src, tar, val) = line.split(delimiter=None)
+            if line.startswith("#") or line.startswith("\n"):
+                continue
+            reversible = False
+            (src, tar, val) = line.split()
             if src.startswith(self._options.compound_prefix):
                 s = Compound(src)
                 self.add_compound(s)
             else:
-                s = Reaction(src, (), (), ())
+                if src.endswith(self._options.rev_reaction_suffix):
+                    reversible = True
+                s = Reaction(src, (), (), (), reversible=reversible)
                 self.add_reaction(s)
             if tar.startswith(self._options.compound_prefix):
                 t = Compound(tar)
                 self.add_compound(t)
             else:
-                t = Reaction(tar, (), (), ())
+                if tar.endswith(self._options.rev_reaction_suffix):
+                    reversible = True
+                t = Reaction(tar, (), (), (), reversible=reversible)
                 self.add_reaction(t)
             self.add_edge(s, t, factor=float(val))
 
