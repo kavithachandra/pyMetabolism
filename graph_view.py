@@ -190,6 +190,7 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
             else:
                 if src.endswith(self._options.rev_reaction_suffix):
                     reversible = True
+                    src = src.replace(self._options.rev_reaction_suffix, "")
                 s = Reaction(src, (), (), (), reversible=reversible)
                 self.add_reaction(s)
             if tar.startswith(self._options.compound_prefix):
@@ -198,6 +199,7 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
             else:
                 if tar.endswith(self._options.rev_reaction_suffix):
                     reversible = True
+                    tar = tar.replace(self._options.rev_reaction_suffix, "")
                 t = Reaction(tar, (), (), (), reversible=reversible)
                 self.add_reaction(t)
             self.add_edge(s, t, factor=float(val))

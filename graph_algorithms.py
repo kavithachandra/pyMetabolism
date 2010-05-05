@@ -25,6 +25,7 @@ import matplotlib.pyplot
 
 
 from pyMetabolism import OptionsManager
+from pyMetabolism.metabolism import Reaction
 from pyMetabolism.stoichiometry import StoichiometricMatrix
 from pyMetabolism.stoichiometry_algorithms import verify_consistency
 from pyMetabolism.metabolism_exceptions import PyMetabolismError
@@ -490,19 +491,13 @@ def random_fba(graph, num_inputs, num_outputs):
     # perform FBA for varying numbers of source compounds
     matrix = StoichiometricMatrix()
     matrix.make_new_from_network(graph)
+    
+    # add biomass reaction
+    biomass = Reaction("Biomass", tuple(outputs), (), [-1.]*num_outputs)
+    
     # equality constraints
-    A_eq = numpy.array(matrix.matrix, dtype=float, copy=False)
     b_eq = numpy.zeros(matrix.num_compounds)
-    # objective function
-    objective = numpy.zeros(matrix.num_reactions)
-    for comp in outputs:
-        for rxn in graph.predecessors_iter(comp):
-            objective[matrix.reaction_map[rxn]] = 1.
-#            b_eq[matrix.reaction_map[rxn]] = 1.
-#        for rxn in graph.successors_iter(comp):
-#            objective[matrix.reaction_map[rxn]] = 1.
-#            b_eq[matrix.reaction_map[rxn]] = 1.
-        
+
     # start with the largest number of inputs, then reduce
     num_inputs.sort()
     num_inputs.reverse()
@@ -519,36 +514,52 @@ def random_fba(graph, num_inputs, num_outputs):
         count -= 1
     
     for num in num_inputs:
+        system = numpy.array(matrix, dtype=float, copy=True)
+        system.add_reaction(biomass)
         logger.info("%d uptake compounds.", num)
-
+        input_rxns = list()
         # adjust source numbers
         while len(inputs) > num:
             comp = random.choice(inputs)
             inputs.remove(comp)
 
+        transp = list()
+        for comp in inputs:
+            rxn = Reaction("Transport_%s" % comp.identifier,\
+                (), (comp), (1.), reversible=True)
+            system.add_reaction(rxn)
+            transp.append(rxn)
+
+        # objective function
+        objective = numpy.zeros(system.num_reactions)
+        objective[system.reaction_map[biomass]] = 1.
+
+        # equality constraints
+        A_eq = system
+
         # prepare flux balance analysis linear programming problem
         
         # boundaries
-        lb = numpy.zeros(matrix.num_reactions)
-        for rxn in graph.reactions:
+        lb = numpy.zeros(system.num_reactions)
+        for rxn in system.reactions:
             if rxn.reversible:
-                lb[matrix.reaction_map[rxn]] = -numpy.inf
-        ub = numpy.empty(matrix.num_reactions)
+                lb[system.reaction_map[rxn]] = -numpy.inf
+        ub = numpy.empty(system.num_reactions)
         ub.fill(numpy.inf)
-        for comp in inputs:
-            for rxn in graph.successors_iter(comp):
-                ub[matrix.reaction_map[rxn]] = 10.
-                if rxn.reversible:
-                    lb[matrix.reaction_map[rxn]] = -10.
+        # constrain transport reactions
+        for rxn in transp:
+            ub[system.reaction_map[rxn]] = 1.
+            lb[system.reaction_map[rxn]] = -1.
+                    
         problem = openopt.LP(f=objective, Aeq=A_eq, beq=b_eq, lb=lb, ub=ub)
         result = problem.maximize(options.solver, iprint=-10)
         logger.debug(result.xf)
         for rxn in graph.reactions:
-            if rxn in outputs:
-                logger.info("Biomass - %s - %G", rxn.identifier, result.xf[matrix.reaction_map[rxn]])
-            elif rxn in inputs:
-                logger.info("Transport - %s - %G", rxn.identifier, result.xf[matrix.reaction_map[rxn]])
+            if rxn == biomass:
+                logger.info("%s : %G", rxn.identifier, result.xf[system.reaction_map[rxn]])
+            elif rxn in transp:
+                logger.info("%s : %G", rxn.identifier, result.xf[system.reaction_map[rxn]])
             else:
-                logger.info("%s - %G", rxn.identifier, result.xf[matrix.reaction_map[rxn]])
+                logger.info("%s : %G", rxn.identifier, result.xf[system.reaction_map[rxn]])
         results.append((result.isFeasible, result.xf))
     return results

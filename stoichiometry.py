@@ -18,6 +18,7 @@ one can from the stoichiometric matrix of a list of reactions.
 
 
 import logging
+import copy
 from numpy import hstack, vstack, zeros
 from pyMetabolism import OptionsManager, new_property
 
@@ -93,16 +94,19 @@ class StoichiometricMatrix(object):
     def reaction_vector(self, rxn):
         """
         """
-        return self._matrix[self._reaction_map[rxn]]
+        return self._matrix[:, self._reaction_map[rxn]]
 
     def compound_vector(self, comp):
         """
         """
-        return self._matrix[self._compound_map[comp]]
+        return self._matrix[self._compound_map[comp], :]
 
     def __str__(self):
         """docstring for __str__"""
         return self._matrix.__str__()
+
+    def __copy__(self):
+        raise NotImplementedError
 
     def make_new_from_system(self, metabolism):
         """
@@ -157,3 +161,15 @@ class StoichiometricMatrix(object):
             self._matrix[self._compound_map[compound],\
                 self._reaction_map[reaction]] = \
                 reaction.stoich_coeff(compound)
+
+    def remove_reaction(self, reaction):
+        """
+        @todo: doc
+        """
+        raise NotImplementedError
+        # have to adjust crappy indices
+        participants = list()
+        column = self.reaction_vector(reaction)
+        for (i, val) in enumerate(column):
+            if val != 0.:
+                participants.append(column[i])
