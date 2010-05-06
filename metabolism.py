@@ -15,8 +15,8 @@ Basic classes modelling compounds, reactions, and metabolism.
 
 
 import logging
-from pyMetabolism import OptionsManager
-from pyMetabolism import new_property
+from pyMetabolism import OptionsManager, new_property
+from pyMetabolism.metabolism_exceptions import PyMetabolismError
 
 
 class Compartment(object):
@@ -36,7 +36,6 @@ class Compartment(object):
 
     @type identifier: @todo description
     """
-
     _memory = dict()
 
     def __new__(cls, name, constant, suffix="", spatial_dimensions=None, \
@@ -75,10 +74,6 @@ class Compartment(object):
         self.__class__._memory[self._name] = self
 
     @new_property
-    def options():
-        return {"fset": None, "doc": "get method"}
-
-    @new_property
     def name():
         return {"fset": None, "doc": "get method"}
 
@@ -107,7 +102,9 @@ class Compartment(object):
         pass
 
     def __str__(self):
-        """docstring for __str__"""
+        """
+        docstring for __str__
+        """
         return self._name
 
 
@@ -198,10 +195,6 @@ class Compound(object):
         self.__class__._memory[self._identifier] = self
 
     @new_property
-    def options():
-        return {"fset": None, "doc": "get method"}
-
-    @new_property
     def identifier():
         return {"fset": None, "doc": "get method"}
 
@@ -257,7 +250,8 @@ class Compound(object):
         """
         @rtype: C{int}
         """
-        return cmp(id(self), id(other))
+        assert isinstance(other, Compound)
+        return cmp(self.identifier, other.identifier)
 
 
 class CompartCompound(object):
@@ -265,7 +259,7 @@ class CompartCompound(object):
     """
     _memory = dict()
 
-    def __new__(cls, compound, compartment,*args, **kwargs):
+    def __new__(cls, compound, compartment, *args, **kwargs):
         """
         @return: Either returns an old L{Compound} instance if the name already exists
         or passes a new L{Compound} C{class instance} to be initialised.
@@ -274,11 +268,11 @@ class CompartCompound(object):
         @attention: This method is never called directly.
         """
         if not isinstance(compound, Compound):
-            raise TypeError("Argument '%s' is an instance of %s, not Compound!"\
-                % (str(compound), str(type(compound))))
+            raise TypeError("Argument '%s' is an instance of %s, not %s!"\
+                % (str(compound), type(compound), repr(Compound)))
         if not isinstance(compartment, Compartment):
-            raise TypeError("Argument '%s' is an instance of %s, not Compartment!"\
-                % (str(compartment), str(type(compartment))))
+            raise TypeError("Argument '%s' is an instance of %s, not %s!"\
+                % (str(compound), type(compound), repr(Compartment)))
         if (compound.identifier, compartment.name) in cls._memory:
             return cls._memory[(compound.identifier, compartment.name)]
         else:
@@ -301,16 +295,8 @@ class CompartCompound(object):
         self.__class__._memory[(compound.identifier, compartment.name)] = self
 
     @new_property
-    def options():
-        return {"fset": None, "doc": "get method"}
-
-    @new_property
     def logger():
         pass
-
-    @new_property
-    def compound():
-        return {"fset": None, "doc": "get method"}
 
     @new_property
     def compartment():
@@ -320,18 +306,10 @@ class CompartCompound(object):
         """
         @rtype: C{str}
         """
-        return self._identifier  + '(' + self._compartment.name + ')'
-
-
-    # def __str__(self):
-    #     """
-    #     @rtype: C{str}
-    #     """
-    #     return self._identifier + self._compartment.suffix
+        return "%s(%s)" % (self._identifier, self._compartment.name)
 
     def __getattr__(self, name):
         return type(self._compound).__getattribute__(self._compound, name)
-
 
 
 class Reaction(object):
@@ -421,10 +399,6 @@ class Reaction(object):
         self.__class__._memory[self._identifier] = self
 
     @new_property
-    def options():
-        return {"fset": None, "doc": "get method"}
-
-    @new_property
     def identifier():
         return {"fset": None, "doc": "get method"}
 
@@ -466,7 +440,6 @@ class Reaction(object):
         @return: Return a list of all L{Compound}s participating in this reaction.
         @rtype: C{list}
         """
-#        return list(self._substrates + self._products)
         return {"fset": None, "fget": lambda self: list(self._substrates + self._products)}
 
     def stoich_coeff(self, compound):
@@ -588,6 +561,8 @@ class Reaction(object):
         @param compound: Presence tested for.
         @type compound: L{Compound} or C{str}
         @rtype: C{bool}
+
+        @todo: proper searching
         """
         if isinstance(compound, str):
             for c in self.compounds:
@@ -609,12 +584,18 @@ class Reaction(object):
     def __cmp__(self, other):
         """
         @rtype: C{int}
+
+        @raise: C{AttributeError}
         """
-        return cmp(id(self), id(other))
+        if isinstance(other, str):
+            if self.__class__._memory.has_key(other):
+                return cmp(self.identifier, other)
+        elif isinstance(other, Reaction):
+            return cmp(self.identifier, other.identifier)
 
     def index(self, compound):
         """
-
+        @todo: proper searching
         """
         if compound in self:
             if isinstance(compound, str):
@@ -626,11 +607,122 @@ class Reaction(object):
 
     def is_substrate(self, compound):
         """
-
+        @todo: proper searching
         """
         if isinstance(compound, str):
             compound = Compound(compound)
         return compound in self._substrates
+
+
+#class DirectionalReaction(object):
+#    """
+#    """
+#    _memory = dict()
+#
+#    def __new__(cls, reaction, direction, *args, **kwargs):
+#        """
+#        @todo: doc
+#        """
+#        if not isinstance(reaction, Reaction):
+#            raise TypeError("Argument '%s' is an instance of %s, not %s!"\
+#                % (str(reaction), type(reaction), repr(Reaction)))
+#        if not isinstance(direction, str):
+#            raise TypeError("Argument '%s' is an instance of %s, not %s!"\
+#                % (str(reaction), type(reaction), repr(str)))
+#        if (reaction.identifier, direction) in cls._memory:
+#            return cls._memory[(reaction.identifier, direction)]
+#        else:
+#            return super(DirectionalReaction, cls).__new__(cls, *args, **kwargs)
+#
+#    def __init__(self, reaction, direction, *args, **kwargs):
+#        """
+#        @todo: doc
+#        """
+#        if (reaction.identifier, direction) in self.__class__._memory:
+#            return None
+#        super(DirectionalReaction, self).__init__(*args, **kwargs)
+#        self._options = OptionsManager()
+#        self._logger = logging.getLogger("%s.%s.%s"\
+#            % (self._options.main_logger_name, self.__class__.__name__,\
+#            reaction.identifier))
+#        self._reaction = reaction
+#        if direction == "forward" or direction == "backward":
+#            self._direction = direction
+#        else:
+#            raise PyMetabolismError("Unknown reaction direction!")
+#        self.__class__._memory[(reaction.identifier, self._direction)] = self
+#
+#    @new_property
+#    def logger():
+#        pass
+#
+#    @new_property
+#    def direction():
+#        return {"fset": None, "fget": lambda self: self._direction,\
+#            "doc": "get method"}
+#
+#    def __str__(self):
+#        """
+#        @rtype: C{str}
+#        """
+#        return "%s(%s)" % (self._identifier, self._direction)
+#
+#    def __str__(self):
+#        """
+#        @return: A C{str} representation of the reaction, e.g., 2 A + 4 B -> 1 C or
+#                 2 A + 4 B <=> 1 C for a reversible reaction.
+#        @rtype: C{str}
+#        """
+#        def util(compound_list):
+#            reaction_str = list()
+#            for compound in compound_list:
+#                reaction_str.append(str(abs(self._stoichiometry_dict[compound])))
+#                reaction_str.append(compound.__str__())
+#                if not (compound == compound_list[-1]):
+#                    reaction_str.append('+')
+#            return reaction_str
+#        reaction_str = list()
+#        if self._direction == "forward":
+#            reaction_str.extend(util(self._substrates))
+#            reaction_str.append('->')
+#            reaction_str.extend(util(self._products))
+#        else:
+#            reaction_str.extend(util(self._products))
+#            reaction_str.append('->')
+#            reaction_str.extend(util(self._substrates))
+#        return ' '.join(reaction_str)
+#
+#    def __getattr__(self, name):
+#        return type(self._reaction).__getattribute__(self._reaction, name)
+#
+#    def stoich_coeff(self, compound):
+#        """
+#        @param compound: The compound whose stoichiometric factor is queried.
+#        @type compound: L{Compound} or C{str}
+#        @return: Return the stoichiometric coefficient of a compound.
+#        @rtype: C{int}
+#        @raise KeyError: If C{compound} is not contained in the reaction.
+#        @todo: reaction proper __contains__
+#        """
+#        if self._direction == "forward":
+#            if compound in self._substrates:
+#                return -self._stoichiometry_dict[compound]
+#            elif compound in self._products:
+#                return self._stoichiometry_dict[compound]
+#            else:
+#                raise KeyError("'%s' is not participating in reaction '%s'"\
+#                    % (compound, self._identifier))
+#        else:
+#            if compound in self._substrates:
+#                return self._stoichiometry_dict[compound]
+#            elif compound in self._products:
+#                return -self._stoichiometry_dict[compound]
+#            else:
+#                raise KeyError("'%s' is not participating in reaction '%s'"\
+#                    % (compound, self._identifier))
+#
+#    def __getattr__(self, name):
+#        return type(self._reaction).__getattribute__(self._reaction, name)
 
 
 class Metabolism(object):
@@ -756,11 +848,14 @@ class Metabolism(object):
         @rtype: C{bool}
         """
         if isinstance(reaction, str):
-            return reaction in [rxn.identifier for rxn in self._reactions]
-        if isinstance(reaction, Reaction):
+            for rxn in self._reactions:
+                if reaction == rxn.identifier:
+                    return True
+            return False
+        elif isinstance(reaction, Reaction):
             return reaction in self._reactions
         else:
-            return False
+            raise TypeError("Cannot identify reaction by this type.")
 
     def __getitem__(self, rxn):
         """
@@ -790,4 +885,4 @@ class Metabolism(object):
         """
         @rtype: C{int}
         """
-        return cmp(id(self), id(other))
+        raise NotImplementedError

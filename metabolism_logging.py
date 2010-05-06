@@ -1,7 +1,3 @@
-#! /usr/bin/env python
-# encoding: utf-8
-
-
 """
 Logging of information from the pyMetabolism package is organised in a
 hierarchical fashion. pyMetabolism uses L{logging} for this pupose. If you want
@@ -49,4 +45,3 @@ class NullHandler(logging.Handler):
     """
     def emit(self, record):
         pass
-# eof

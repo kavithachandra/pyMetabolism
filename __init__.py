@@ -28,7 +28,7 @@ def new_property(func):
     A decorator function for easy property creation.
     @author: runsun pan
     @copyright: MIT License
-    @contact: http://code.activestate.com/recipes/576742/
+    @see: http://code.activestate.com/recipes/576742/
     """
     ops = func() or dict()
     name = ops.get("prefix", '_') + func.__name__ # property name
@@ -57,25 +57,27 @@ class OptionsManager(object):
         if self.__class__._singleton:
             return None
         super(OptionsManager, self).__init__(*args, **kwargs)
-        self._metb_prefix = "M_"
-        self._rxn_prefix = "R_"
-        self._rev_rxn_suffix = "_Rev"
+        self._compound_prefix = "M"
+        self._reaction_prefix = "R_"
+        self._rev_reaction_suffix = "_Rev"
         self._main_logger_name = "pyMetabolism"
         self._logger = logging.getLogger(self.main_logger_name)
-        self._logger.addHandler(NullHandler)
+        handler = NullHandler()
+        self._logger.addHandler(handler)
+        self._solver = "glpk"
         self._n_cpus = self._find_num_cpus()
         self.__class__._singleton = self
 
     @new_property
-    def metb_prefix():
+    def compound_prefix():
         pass
 
     @new_property
-    def rxn_prefix():
+    def reaction_prefix():
         pass
 
     @new_property
-    def rev_rxn_suffix():
+    def rev_reaction_suffix():
         pass
 
     @new_property
@@ -84,6 +86,10 @@ class OptionsManager(object):
 
     @new_property
     def main_logger_name():
+        pass
+
+    @new_property
+    def solver():
         pass
 
     @new_property
@@ -96,7 +102,7 @@ class OptionsManager(object):
         Python.
         @author: Vitalii Vanovschi
         @copyright: (c) 2005-2010. All rights reserved.
-        @contact: http://www.parallelpython.com
+        @see: http://www.parallelpython.com
         """
         num_cpus = None
         # for Linux, Unix and MacOS

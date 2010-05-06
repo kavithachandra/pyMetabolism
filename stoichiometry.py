@@ -18,11 +18,9 @@ one can from the stoichiometric matrix of a list of reactions.
 
 
 import logging
-from numpy import hstack
-from numpy import shape
-from numpy import vstack
-from numpy import zeros
-from pyMetabolism.metabolism_logging import NullHandler
+import copy
+from numpy import hstack, vstack, zeros
+from pyMetabolism import OptionsManager, new_property
 
 
 class StoichiometricMatrix(object):
@@ -35,84 +33,143 @@ class StoichiometricMatrix(object):
 
     _counter = 0
 
-    def __init__(self, * args, ** kwargs):
+    def __init__(self, *args, **kwargs):
         self.__class__._counter += 1
-        super(StoichiometricMatrix, self).__init__(*args, ** kwargs)
-        self.logger = logging.getLogger("pyMetabolism.StoichiometricMatrix.%d"\
-                                        % self.__class__._counter)
-        self.handler = NullHandler
-        self.logger.addHandler(self.handler)
-        self.matrix = None
-        self.compound_map = dict()
-        self.reaction_map = dict()
+        super(StoichiometricMatrix, self).__init__(*args, **kwargs)
+        self._options = OptionsManager()
+        self._logger = logging.getLogger("%s.%s.%d"\
+            % (self._options.main_logger_name, self.__class__,\
+            self.__class__._counter))
+        self._matrix = zeros(shape=(0,0))
+        self._compound_map = dict()
+        self._reaction_map = dict()
+#        self._compound_index = dict()
+#        self._reaction_index = dict()
+#        self._permutation = None
+
+    @new_property
+    def logger():
+        pass
+
+    @new_property
+    def matrix():
+        return {"fset": None, "doc": "get method"}
+
+    @new_property
+    def compound_map():
+        return {"fset": None, "doc": "get method"}
+
+    @new_property
+    def reaction_map():
+        return {"fset": None, "doc": "get method"}
+
+    @new_property
+    def compounds():
+        return {"fset": None, "fget": lambda self: self._compound_map.keys(),\
+            "doc": "get method"}
+
+    @new_property
+    def reactions():
+        return {"fset": None, "fget": lambda self: self._reaction_map.keys(),\
+            "doc": "get method"}
+
+    @new_property
+    def num_compounds():
+        """
+        @return: Returns the number of rows
+        @rtype: C{int}
+        """
+        return {"fset": None, "fget": lambda self: self._matrix.shape[0],\
+            "doc": "get method"}
+
+    @new_property
+    def num_reactions():
+        """
+        @return: Returns the number of rows
+        @rtype: C{int}
+        """
+        return {"fset": None, "fget": lambda self: self._matrix.shape[1],\
+            "doc": "get method"}
+
+    def reaction_vector(self, rxn):
+        """
+        """
+        return self._matrix[:, self._reaction_map[rxn]]
+
+    def compound_vector(self, comp):
+        """
+        """
+        return self._matrix[self._compound_map[comp], :]
 
     def __str__(self):
         """docstring for __str__"""
-        return self.matrix.__str__()
+        return self._matrix.__str__()
 
-    def get_num_rows(self):
+    def __copy__(self):
+        raise NotImplementedError
+
+    def make_new_from_system(self, metabolism):
         """
-        @return: Returns the number of rows
-        @rtype: C{int}
         """
-        return shape(self.matrix)[0]
+        self._matrix = zeros((len(metabolism.compounds),\
+            len(metabolism.reactions)))
+        for (i, comp) in enumerate(metabolism.compounds):
+            self._compound_map[comp] = i
+        for (i, rxn) in enumerate(metabolism.reactions):
+            self._reaction_map[rxn] = i
+        for rxn in metabolism.reactions:
+            for comp in rxn:
+                self._matrix[self._compound_map[comp], self._reaction_map[rxn]]\
+                    = rxn.stoich_coeff(comp)
 
-    def get_num_cols(self):
+    def make_new_from_network(self, graph):
         """
-        @return: Returns the number of rows
-        @rtype: C{int}
         """
-        return shape(self.matrix)[1]
+        self._matrix = zeros(shape=(len(graph.compounds), len(graph.reactions)))
+        for (i, comp) in enumerate(graph.compounds):
+            self._compound_map[comp] = i
+        for (i, rxn) in enumerate(graph.reactions):
+            self._reaction_map[rxn] = i
+        for rxn in graph.reactions:
+            self._logger.debug("Reaction: %s", rxn.identifier)
+            self._logger.debug("Substrates:")
+            for comp in graph.predecessors(rxn):
+                self._logger.debug("%s", comp.identifier)
+                self._matrix[self._compound_map[comp], self._reaction_map[rxn]]\
+                    = -graph[comp][rxn]["factor"]
+            self._logger.debug("Products:")
+            for comp in graph.successors(rxn):
+                self._logger.debug("%s", comp.identifier)
+                self._matrix[self._compound_map[comp], self._reaction_map[rxn]]\
+                    = graph[rxn][comp]["factor"]
 
-    def add_stoichiometry_from(self, metabolism):
-        """"""
-        j = len(self.reaction_map)
-        i = len(self.compound_map)
-        for reaction in metabolism.reactions:
-            if reaction not in self.reaction_map:
-                if self.matrix == None:
-                    i = self._init_matrix(reaction)
-                    j = 1
-                    continue
-                self.reaction_map[reaction] = j
-                j += 1
-                self.matrix = hstack((self.matrix, zeros((self.matrix.shape[0],
-                                     1))))
-                for compound in reaction:
-                    if compound not in self.compound_map:
-                        self.compound_map[compound] = i
-                        i += 1
-                        self.matrix = vstack((self.matrix, zeros((1,
-                                             self.matrix.shape[1]))))
-                    self.matrix[self.compound_map[compound]]\
-                        [self.reaction_map[reaction]] = \
-                        reaction.get_stoich_coeff(compound)
+    def add_reaction(self, reaction):
+        """
+        @todo: doc
+        """
+        j = self.num_reactions
+        i = self.num_compounds
+        self._reaction_map[reaction] = j
+        self._matrix = hstack((self._matrix, zeros((self.num_compounds,
+                             1))))
+        for compound in reaction:
+            if compound not in self._compound_map:
+                self._compound_map[compound] = i
+                i += 1
+                self._matrix = vstack((self._matrix, zeros((1,
+                                     self.num_reactions))))
+            self._matrix[self._compound_map[compound],\
+                self._reaction_map[reaction]] = \
+                reaction.stoich_coeff(compound)
 
-    def _init_matrix(self, reaction):
-        num = len(reaction)
-        self.matrix = zeros((num, 1))
-        for i, compound in enumerate(reaction):
-            self.compound_map[compound] = i
-            self.matrix[i][0] = reaction.get_stoich_coeff(compound)
-        self.reaction_map[reaction] = 0
-        return num
-
-if __name__ == '__main__':
-    from pyMetabolism.io.sbml import SBMLParser
-    from pyMetabolism.metabolism import Compound, CompartCompound, Compartment
-    from numpy import *
-    import re
-    # set_printoptions(threshold='nan')
-    smallModel = './test_data/Ec_core_flux1.xml'
-    bigModel = './test_data/iAF1260.xml'
-    # parser = SBMLParser(bigModel)
-    parser = SBMLParser(smallModel, rprefix='R_', rsuffix='', cprefix='M_', csuffix=re.compile('_.$'))
-    metbol = parser.get_metabolic_system(parser)
-    print metbol[0].identifier
-    print metbol[0]
-    print "M_actp_c(Cytosol) is in reacs: ", CompartCompound(Compound('M_actp_c'), Compartment("Cytosol"))
-    s = StoichiometricMatrix()
-    s.add_stoichiometry_from(metbol)
-    # print s.matrix[0:7]
-    # print shape(s)
-    # print [(c, s.compound_map[c]) for c in metbol[0].get_compounds()]
+    def remove_reaction(self, reaction):
+        """
+        @todo: doc
+        """
+        raise NotImplementedError
+        # have to adjust crappy indices
+        participants = list()
+        column = self.reaction_vector(reaction)
+        for (i, val) in enumerate(column):
+            if val != 0.:
+                participants.append(column[i])
