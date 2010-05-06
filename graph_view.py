@@ -23,8 +23,10 @@ Generation of a stoichiometric matrix is also possible.
 #import random
 import logging
 import networkx
-from pyMetabolism.metabolism_logging import NullHandler
-#from pyMetabolism.metabolism import Compound, Reaction, Compartment, Metabolism
+
+
+from pyMetabolism import OptionsManager, new_property
+from pyMetabolism.metabolism import Compound, Reaction, Compartment, Metabolism, CompartCompound
 
 
 class BipartiteMetabolicNetwork(networkx.DiGraph):
@@ -37,52 +39,70 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
 
     _counter = 0
 
-    def __init__(self, reactions=None, name='', weighted=True, node_info=False,
-                 * args, ** kwargs):
+    def __init__(self, reactions=None, name='',
+             split=True, edge_info=False,* args, ** kwargs):
         """
         @param reactions: A list of L{Reaction<pyMetabolism.metabolism.Reaction>}s from
                           which the graph can be populated.
         @type reactions: C{list}
 
+        @param split: Whether to have separate nodes for forward and backward
+            direction of reversible reactions.
+
+        @param edge_info: Whether edges should carry 
+
         @param name: A simple string to identify the graph if desired.
         @type name: C{str}
-
-        @param weighted: By default the stoichiometric factors are used as edge
-            weights, this can be turned off.
-        @type weighted: C{bool}
-
-        @param node_info: If true, information will be added to the graph's
-            nodes.
-            For compound nodes the following information will be tried in
-            order:
-
-                1. L{Compound.charge<pyMetabolism.metabolism.Compound.charge>}
-                2. L{Compound.mass<pyMetabolism.metabolism.Compound.mass>}
-
-            For reaction nodes
-            L{Reaction.rate_constant<pyMetabolism.metabolism.Reaction.rate_constant>} will
-            be used.
-        @type node_info: C{bool}
         """
-        self.__class__._counter += 1
+        super(BipartiteMetabolicNetwork, self).__init__(name=name, *args, ** kwargs)
+        self._options = OptionsManager()
         if name:
-            self.name = str(name)
+            self._name = str(name)
         else:
-            self.name = "BipartiteMetabolicNetwork-%d" % self.__class__._counter
-        super(BipartiteMetabolicNetwork, self).__init__(*args, ** kwargs)
-        self.logger = logging.getLogger(\
-                                        "pyMetabolism.BipartiteMetabolicNetwork.%s" % self.name)
-        self.handler = NullHandler
-        self.logger.addHandler(self.handler)
-        self.weighted = weighted
+            self.__class__._counter += 1
+            self._name = "BipartiteMetabolicNetwork-%d" % self.__class__._counter
+        self._logger = logging.getLogger("%s.%s.%s"\
+             % (self._options.main_logger_name, self.__class__.__name__, self._name))
+        # maintain lists of compounds and reactions for easy iteration over them
+        self._reactions = set()
+        self._compounds = set()
+        self._split = bool(split)
+        self._edge_info = bool(edge_info)
         if reactions:
-            self._populate_graph_on_init(reactions, node_info)
+            for rxn in reactions:
+                self.add_reaction(rxn)
 
-    def _populate_graph_on_init(self, reactions, node_info):
-        for rxn in reactions:
-            self.add_reaction(rxn, node_info)
+    @new_property
+    def name():
+        pass
 
-    def add_reaction(self, rxn, node_info=False):
+    @new_property
+    def network():
+        return {"fset": None, "doc": "get method"}
+
+    @new_property
+    def reactions():
+        return {"fset": None, "doc": "get method"}
+
+    @new_property
+    def compounds():
+        return {"fset": None, "doc": "get method"}
+
+    @new_property
+    def split():
+        return {"fset": None, "doc": "get method"}
+
+    def add_compound(self, compound):
+        assert isinstance(compound, (Compound, CompartCompound))
+        self._compounds.add(compound)
+        self.add_node(compound)
+
+    def remove_compound(self, compound):
+        assert isinstance(compound, (Compound, CompartCompound))
+        self._compounds.remove(compound)
+        self.remove_node(compound)
+
+    def add_reaction(self, rxn):
         """
         Add edges to the bipartite representation of
         L{Metabolism<pyMetabolism.metabolism.Metabolism>} as necessary
@@ -90,65 +110,77 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
 
         @param rxn: Instance to be added.
         @type rxn: L{Reaction<pyMetabolism.metabolism.Reaction>}
-
-        @param node_info: If true, information will be added to the graph's
-            nodes.
-            For compound nodes the following information will be tried in
-            order and are availabe as charge and mass attribute respectively.
-
-                1. L{Compound.charge<pyMetabolism.metabolism.Compound.charge>}
-                2. L{Compound.mass<pyMetabolism.metabolism.Compound.mass>}
-
-            For reaction nodes
-            L{Reaction.rate_constant<pyMetabolism.metabolism.Reaction.rate_constant>}
-            will be used.
-        @type node_info: C{bool}
-        @note: C{node_info} is purely aimed at graph output to a format that supports
-            node attributes.
         """
-        if node_info and rxn.rate_constant:
-            self.add_node(rxn, rate_constant=rxn.rate_constant)
-        for compound in rxn.substrates:
-            if node_info and compound.charge:
-                self.add_node(compound, charge=compound.charge)
-            if node_info and compound.mass:
-                self.add_node(compound, mass=compound.mass)
-            if self.weighted:
-                self.add_edge(compound, rxn, \
-                              compartment=rxn.compartments_dict[compound], \
-                              weight=rxn.stoichiometry_dict[compound])
+        assert isinstance(rxn, Reaction)
+        self._reactions.add(rxn)
+        # in case there are no compounds involved we add the reaction node
+        # individually
+        self.add_node(rxn)
+        if self._split and rxn.reversible:
+            subs = list(rxn.substrates)
+            subs.reverse()
+            prods = list(rxn.products)
+            prods.reverse()
+            coeffs = list(rxn.stoichiometry)
+            coeffs.reverse()
+            back = Reaction(rxn.identifier + self._options.rev_reaction_suffix,
+                prods, subs, coeffs)
+            self._reactions.add(back)
+            # in case there are no compounds involved we add the reaction node
+            # individually
+            self.add_node(back)
+            for src in prods:
+                self.add_edge(src, back)
+            for tar in subs:
+                self.add_edge(back, tar)
+        for src in rxn.substrates:
+            self._compounds.add(src)
+            self.add_edge(src, rxn)
+            if rxn.reversible and not self._split:
+                self.add_edge(rxn, src)
+        for tar in rxn.products:
+            self._compounds.add(tar)
+            self.add_edge(rxn, tar)
+            if rxn.reversible and not self._split:
+                self.add_edge(tar, rxn)
+
+    def remove_reaction(self, rxn):
+        assert isinstance(rxn, Reaction)
+        self._reactions.remove(rxn)
+        self.remove_node(rxn)
+
+    def update_reactions(self):
+        """
+        Update the substrate, product, stoichiometry information of reactions
+        according to changes that were done in the graph.
+        """
+        raise NotImplementedError
+
+#    def __getattr__(self, name):
+#        return type(self._network).__getattribute__(self._network, name)
+
+    def write_edgelist(self, filename):
+        fh = open(filename, 'w')
+        fh.write("# %s %s\n" % (self.__class__.__name__, self._name))
+        for (src, tar, val) in self.edges_iter(data=True):
+            fh.write("%s %s %f\n" % (src.identifier, tar.identifier, val["factor"]))
+        fh.close()
+
+    def read_edgelist(self, filename):
+        fh = open(filename, 'r')
+        contents = fh.readlines()
+        fh.close()
+        for line in contents:
+            (src, tar, val) = line.split(delimiter=None)
+            if src.startswith(self._options.compound_prefix):
+                self.add_compound(Compound(src))
             else:
-                self.add_edge(compound, rxn,
-                              compartment=rxn.compartments_dict[compound])
-        for compound in rxn.products:
-            if node_info and compound.charge:
-                self.add_node(compound, charge=compound.charge)
-            if node_info and compound.mass:
-                self.add_node(compound, mass=compound.mass)
-            if self.weighted:
-                self.add_edge(rxn, compound, \
-                              compartment=rxn.compartments_dict[compound], \
-                              weight=rxn.stoichiometry_dict[compound])
+                self.add_reaction(Reaction(src, (), (), ()))
+            if tar.startswith(self._options.compound_prefix):
+                self.add_compound(Compound(tar))
             else:
-                self.add_edge(rxn, compound,
-                              compartment=rxn.compartments_dict[compound])
-        if rxn.reversible:
-            for compound in rxn.substrates:
-                if self.weighted:
-                    self.add_edge(rxn, compound, \
-                                  compartment=rxn.compartments_dict[compound], \
-                                  weight=abs(rxn.stoichiometry_dict[compound]))
-                else:
-                    self.add_edge(rxn, compound,
-                                  compartment=rxn.compartments_dict[compound])
-            for compound in rxn.products:
-                if self.weighted:
-                    self.add_edge(compound, rxn, \
-                                  compartment=rxn.compartments_dict[compound], \
-                                  weight=-rxn.stoichiometry_dict[compound])
-                else:
-                    self.add_edge(compound, rxn,
-                                  compartment=rxn.compartments_dict[compound])
+                self.add_reaction(Reaction(tar, (), (), ()))
+            self.add_edge(src, tar, factor=float(val))
 
 
 class MetaboliteCentricNetwork(networkx.MultiDiGraph):
@@ -212,8 +244,6 @@ class ReactionCentricNetwork(networkx.MultiDiGraph):
         super(MetaboliteCentricNetwork, self).__init__(*args, ** kwargs)
         self.logger = logging.getLogger(\
                                         "pyMetabolism.ReactionCentricNetwork.%s" % self.name)
-        self.handler = NullHandler
-        self.logger.addHandler(self.handler)
         self.labelled = labelled
         if reactions:
             self._populate_graph_on_init(reactions)

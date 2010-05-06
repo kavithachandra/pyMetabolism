@@ -199,46 +199,6 @@ object --+
       
     </td>
   </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>list</code></span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Metabolism-class.html#get_compounds" class="summary-sig-name">get_compounds</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Returns:
-      Return a list of all <a 
-      href="pyMetabolism.metabolism.Compound-class.html" 
-      class="link">Compound</a>s.</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Metabolism.get_compounds">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>list</code></span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pyMetabolism.metabolism.Metabolism-class.html#get_reactions" class="summary-sig-name">get_reactions</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Returns:
-      Return a list of all <a 
-      href="pyMetabolism.metabolism.Reaction-class.html" 
-      class="link">Reaction</a>s.</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Metabolism.get_reactions">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -359,17 +319,9 @@ object --+
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type"><code>set</code></span>
-    </td><td class="summary">
-        <a name="compounds"></a><span class="summary-name">compounds</span><br />
-      A set of all compounds found in all the reactions.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>str</code></span>
     </td><td class="summary">
-        <a name="name"></a><span class="summary-name">name</span><br />
+        <a href="pyMetabolism.metabolism.Metabolism-class.html#name" class="summary-name">name</a><br />
       Identifier of the metabolism, automatically set if not provided.
     </td>
   </tr>
@@ -377,15 +329,23 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>list</code></span>
     </td><td class="summary">
-        <a name="reactions"></a><span class="summary-name">reactions</span><br />
+        <a href="pyMetabolism.metabolism.Metabolism-class.html#reactions" class="summary-name">reactions</a><br />
       A list of all reactions.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><code>set</code></span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Metabolism-class.html#compounds" class="summary-name">compounds</a><br />
+      A set of all compounds found in all the reactions.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type"><code>dict</code></span>
     </td><td class="summary">
-        <a name="reactions_dict"></a><span class="summary-name">reactions_dict</span><br />
+        <a href="pyMetabolism.metabolism.Metabolism-class.html#reactions_dict" class="summary-name">reactions_dict</a><br />
       Convenience dictionary allows access to reactions (values) by their 
       identifier (key).
     </td>
@@ -408,6 +368,30 @@ object --+
     </table>
   </td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Metabolism-class.html#options" class="summary-name">options</a><br />
+      get method
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Metabolism-class.html#logger" class="summary-name">logger</a><br />
+      get/set method
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pyMetabolism.metabolism.Metabolism-class.html#currency_metabolites" class="summary-name">currency_metabolites</a><br />
+      get/set method
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -614,49 +598,148 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="get_compounds"></a>
+<br />
+<!-- ==================== INSTANCE VARIABLE DETAILS ==================== -->
+<a name="section-InstanceVariableDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Variable Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceVariableDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="name"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_compounds</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Metabolism.get_compounds">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  
+  <h3 class="epydoc">name</h3>
+  Identifier of the metabolism, automatically set if not provided.
   <dl class="fields">
-    <dt>Returns: <code>list</code></dt>
-        <dd>Return a list of all <a 
-          href="pyMetabolism.metabolism.Compound-class.html" 
-          class="link">Compound</a>s.</dd>
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
   </dl>
 </td></tr></table>
 </div>
-<a name="get_reactions"></a>
+<a name="reactions"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_reactions</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyMetabolism.metabolism-pysrc.html#Metabolism.get_reactions">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  
+  <h3 class="epydoc">reactions</h3>
+  A list of all reactions.
   <dl class="fields">
-    <dt>Returns: <code>list</code></dt>
-        <dd>Return a list of all <a 
-          href="pyMetabolism.metabolism.Reaction-class.html" 
-          class="link">Reaction</a>s.</dd>
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="compounds"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">compounds</h3>
+  A set of all compounds found in all the reactions.
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="reactions_dict"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">reactions_dict</h3>
+  Convenience dictionary allows access to reactions (values) by their 
+  identifier (key).
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Property Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-PropertyDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="options"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">options</h3>
+  <p>get method</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="logger"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">logger</h3>
+  <p>get/set method</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="currency_metabolites"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">currency_metabolites</h3>
+  <p>get/set method</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -687,7 +770,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Feb 12 19:06:19 2010
+    Generated by Epydoc 3.0.1 on Mon Apr 12 00:10:21 2010
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -20,7 +20,7 @@ class Metabolism2glpk(object):
         super(Metabolism2glpk, self).__init__()
         self.metabolism = metabolism
         self.stoich = StoichiometricMatrix()
-        self.stoich.add_stoichiometry_from(self.metabolism)
+        self.stoich.make_new_from_system(self.metabolism)
     
     def __stoich_to_sparse_triplet(self):
         """docstring for fname"""
@@ -43,23 +43,23 @@ class Metabolism2glpk(object):
         """docstring for convert_to_ifba_metabolism"""
         lp = glp_create_prob()
         (num_non_zero, ia, ja, ar) = self.__stoich_to_sparse_triplet()
-        glp_add_rows(lp, self.stoich.get_num_rows())
-        glp_add_cols(lp, self.stoich.get_num_cols())
+        glp_add_rows(lp, self.stoich.num_compounds)
+        glp_add_cols(lp, self.stoich.num_reactions)
         glp_load_matrix(lp, num_non_zero, ia, ja, ar)
-        for i in range(self.stoich.get_num_rows()):
+        for i in range(self.stoich.num_compounds):
             rev_compound_map = dict((v,k) for k, v in self.stoich.compound_map.iteritems())
-            glp_set_row_name(lp, i+1, rev_compound_map[i].get_id())
-        for i in range(self.stoich.get_num_cols()):
+            glp_set_row_name(lp, i+1, rev_compound_map[i].identifier+"_"+rev_compound_map[i].compartment.name)
+        for i in range(self.stoich.num_reactions):
             rev_reaction_map = dict((v,k) for k, v in self.stoich.reaction_map.iteritems())
-            glp_set_col_name(lp, i+1, rev_reaction_map[i].get_id())
+            glp_set_col_name(lp, i+1, rev_reaction_map[i].identifier)
         fba_object = ifba.Metabolism(lp)
         col_bounds = dict()
         for r in self.metabolism:
             if r.reversible:
                 print r
-                col_bounds[r.get_id()] = (-1000, 1000)
+                col_bounds[r.identifier] = (-1000, 1000)
             else:
-                col_bounds[r.get_id()] = (0, 1000)
+                col_bounds[r.identifier] = (0, 1000)
         fba_object.modifyColumnBounds(col_bounds)
         fba_object.modifyRowBounds(dict([(r, (0., 0.)) for r in fba_object.getRowIDs()]))
         return fba_object
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     metbol = parser.get_metabolic_system()
     print metbol[0]
     s = StoichiometricMatrix()
-    s.add_stoichiometry_from(metbol)
+    s.make_new_from_system(metbol)
     print s.matrix
     converter = Metabolism2glpk(metbol)
     lp = converter.convert_to_ifba_metabolism()
@@ -86,10 +86,10 @@ if __name__ == '__main__':
     print lp.getObjectiveFunction()
     lp.simplex()
     print lp
-    extra_mets = [m.get_id() for m in metbol.get_compounds() if m.compartment == 'Extra_organism']
+    extra_mets = [m.get_id() for m in metbol.compounds if m.compartment == 'Extra_organism']
     lp.freeMetabolites(extra_mets)
     lp.setOptFlag('Max')
-    lp.setReactionObjective('R_Biomass_Ecoli_core_N__w_GAM_')
+    lp.setReactionObjective('Biomass_Ecoli_core_N__w_GAM_')
     print lp.getObjectiveFunction()
     print lp.fba()
     print lp
