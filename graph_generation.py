@@ -143,6 +143,9 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
         rxn_targets.append(comp)
     # target nodes for compounds
     comp_targets = []
+    # biased lists for preferential attachment
+    repeated_cmpds = []
+    repeated_rxns = []
     # choose a number of reactions as reversible
     reversibles = random.sample(xrange(reactions), reversible)
     reversibles.sort()
@@ -156,9 +159,17 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
                 (), (), (), reversible=False)
         graph.add_reaction(rxn)
         comp_targets.append(rxn)
-    # biased lists for preferential attachment
-    repeated_cmpds = []
-    repeated_rxns = []
+        for comp in rxn_targets:
+            if random.random() < 0.5:
+                logger.debug("Adding edge %s -> %s.", rxn.identifier,\
+                    comp.identifier)
+                graph.add_edge(rxn, comp, factor=0)
+            else:
+                logger.debug("Adding edge %s -> %s.", comp.identifier,\
+                    rxn.identifier)
+                graph.add_edge(comp, rxn, factor=0)
+        repeated_cmpds.extend(rxn_targets)
+        repeated_rxns.extend([rxn] * m)
     # current vertices being added
     current_rxn = n
     current_comp = m
@@ -171,11 +182,11 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
             graph.add_compound(source)
             for rxn in comp_targets:
                 if random.random() < 0.5:
-                    logger.debug("Adding edge %s-%s.", source.identifier,\
+                    logger.debug("Adding edge %s -> %s.", source.identifier,\
                         rxn.identifier)
                     graph.add_edge(source, rxn, factor=0)
                 else:
-                    logger.debug("Adding edge %s-%s.", rxn.identifier,\
+                    logger.debug("Adding edge %s -> %s.", rxn.identifier,\
                         source.identifier)
                     graph.add_edge(rxn, source, factor=0)
             repeated_rxns.extend(comp_targets)
@@ -206,11 +217,11 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
                     rm_targets.append(comp)
                     continue
                 if random.random() < 0.5:
-                    logger.debug("Adding edge %s-%s.", source.identifier,\
+                    logger.debug("Adding edge %s -> %s.", source.identifier,\
                         comp.identifier)
                     graph.add_edge(source, comp, factor=0)
                 else:
-                    logger.debug("Adding edge %s-%s.", comp.identifier,\
+                    logger.debug("Adding edge %s -> %s.", comp.identifier,\
                         source.identifier)
                     graph.add_edge(comp, source, factor=0)
             for comp in rm_targets:
@@ -218,11 +229,11 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
             for comp in new_targets:
                 rxn_targets.add(comp)
                 if random.random() < 0.5:
-                    logger.debug("Adding edge %s-%s.", source.identifier,\
+                    logger.debug("Adding edge %s -> %s.", source.identifier,\
                         comp.identifier)
                     graph.add_edge(source, comp, factor=0)
                 else:
-                    logger.debug("Adding edge %s-%s.", comp.identifier,\
+                    logger.debug("Adding edge %s -> %s.", comp.identifier,\
                         source.identifier)
                     graph.add_edge(comp, source, factor=0)
             repeated_cmpds.extend(rxn_targets)
