@@ -141,7 +141,7 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
         comp = Compound("%s%d" % (options.compound_prefix, i))
         graph.add_compound(comp)
         rxn_targets.append(comp)
-    logger.debug("Targets for reactions: %s", rxn_targets)
+#    logger.debug("Targets for reactions: %s", rxn_targets)
     # target nodes for compounds
     comp_targets = []
     # biased lists for preferential attachment
@@ -171,7 +171,7 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
                 graph.add_edge(comp, rxn, factor=0)
         repeated_cmpds.extend(rxn_targets)
         repeated_rxns.extend([rxn] * m)
-    logger.debug("Targets for compounds: %s", comp_targets)
+#    logger.debug("Targets for compounds: %s", comp_targets)
     # current vertices being added
     current_rxn = n
     current_comp = m
