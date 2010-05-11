@@ -152,8 +152,8 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
         # products become substrates
         subs = self.successors(rxn)
         # get coefficients
-        back = Reaction(rxn.identifier + self._options.rev_reaction_suffix,
-            (), (), ())
+        back = Reaction(rxn.identifier + "_Backward",
+            (), (), (), reversible=False)
         self._reactions.add(back)
         self.add_node(back)
         for comp in prods:
