@@ -157,9 +157,9 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
         self._reactions.add(back)
         self.add_node(back)
         for comp in prods:
-            self.add_edge(back, comp, factor=self[comp][back]["factor"])
+            self.add_edge(back, comp, factor=self[comp][rxn]["factor"])
         for comp in subs:
-            self.add_edge(comp, back, factor=self[back][comp]["factor"])
+            self.add_edge(comp, back, factor=self[rxn][comp]["factor"])
 
     def remove_reaction(self, rxn):
         assert isinstance(rxn, Reaction)
