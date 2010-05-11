@@ -32,7 +32,7 @@ class Metabolism2glpk(object):
         ar = doubleArray(num_non_zero)
         print non_zero
         for i in range(0, num_non_zero):
-            ia[i+1] = non_zero[0][i] + 1
+            ia[i+1] = int(non_zero[0][i] + 1.)
             ja[i+1] = non_zero[1][i] + 1
             ar[i+1] = non_zero_elements[i]
         print num_non_zero
@@ -67,6 +67,57 @@ class Metabolism2glpk(object):
     def convert_to_ifba_glpk(self):
         """docstring for convert_to_ifba_metabolism"""
         pass
+
+class StoichiometricMatrix2glpk(object):
+    """docstring for StoichiometricMatrix2glpk"""
+    def __init__(self, stoich):
+        super(StoichiometricMatrix2glpk, self).__init__()
+        self.stoich = stoich
+    
+    def __stoich_to_sparse_triplet(self):
+        """docstring for fname"""
+        non_zero = self.stoich.matrix.nonzero()
+        num_non_zero = len(non_zero[0])
+        non_zero_elements = self.stoich.matrix[non_zero]
+        ia = intArray(num_non_zero)
+        ja = intArray(num_non_zero)
+        ar = doubleArray(num_non_zero)
+        for i in range(0, num_non_zero):
+            ia[i+1] = int(non_zero[0][i] + 1.)
+            ja[i+1] = non_zero[1][i] + 1
+            ar[i+1] = non_zero_elements[i]
+        # print num_non_zero
+        # print ia[1]
+        return (num_non_zero, ia, ja, ar)
+    
+    def convert_to_ifba_metabolism(self):
+        """docstring for convert_to_ifba_metabolism"""
+        lp = glp_create_prob()
+        (num_non_zero, ia, ja, ar) = self.__stoich_to_sparse_triplet()
+        glp_add_rows(lp, self.stoich.num_compounds)
+        glp_add_cols(lp, self.stoich.num_reactions)
+        glp_load_matrix(lp, num_non_zero, ia, ja, ar)
+        for i in range(self.stoich.num_compounds):
+            rev_compound_map = dict((v,k) for k, v in self.stoich.compound_map.iteritems())
+            glp_set_row_name(lp, i+1, rev_compound_map[i].identifier)
+        for i in range(self.stoich.num_reactions):
+            rev_reaction_map = dict((v,k) for k, v in self.stoich.reaction_map.iteritems())
+            glp_set_col_name(lp, i+1, rev_reaction_map[i].identifier)
+        fba_object = ifba.Metabolism(lp)
+        col_bounds = dict()
+        for r in self.stoich.reactions:
+            if r.reversible:
+                col_bounds[r.identifier] = (-1000, 1000)
+            else:
+                col_bounds[r.identifier] = (0, 1000)
+        fba_object.modifyColumnBounds(col_bounds)
+        fba_object.modifyRowBounds(dict([(r, (0., 0.)) for r in fba_object.getRowIDs()]))
+        return fba_object
+        
+    def convert_to_ifba_glpk(self):
+        """docstring for convert_to_ifba_metabolism"""
+        pass
+
     
 
 if __name__ == '__main__':
