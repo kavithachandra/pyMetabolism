@@ -360,10 +360,14 @@ def make_consistent_stoichiometry(graph, factors):
     total = float(len(graph.reactions))
     maxi = max(factors)
     for (i, rxn) in enumerate(graph.reactions):
-        try:
-            balance_reaction_by_mass(graph, factors, rxn, mass_vector, maxi, logger)
-        except PyMetabolismError:
-            balance_reaction_by_mass(graph, factors, rxn, mass_vector, numpy.inf, logger)
+        upper = maxi
+        while True:
+            try:
+                balance_reaction_by_mass(graph, factors, rxn, mass_vector, upper, logger)
+                break
+            except PyMetabolismError:
+                upper *= 2
+                continue
         logger.info("%.2f %% complete.", float(i + 1) / total * 100.)
 
 def grow_consistent_stoichiometry(graph, factors):
