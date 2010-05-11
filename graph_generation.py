@@ -26,7 +26,7 @@ from pyMetabolism.metabolism import Compound, Reaction
 from pyMetabolism.graph_view import BipartiteMetabolicNetwork
 
 
-def prune_network(graph):
+def prune_network(graph, logger):
     """
     Removes stub reactions (in- or out-degree of 1 and 0 respectively) and
     assures that all other reactions consume and produce something.
@@ -69,6 +69,8 @@ def prune_network(graph):
                     graph.add_edge(rxn, target, factor=factor)
                     targets.remove(target)
                     flips -= 1
+    logger.info("The network consists of %d reactions and %d nodes.",\
+        len(graph.reactions), len(graph.compounds))
 
 
 def random_metabolic_network(compounds, reactions, reversible, p, seed=None):
@@ -119,7 +121,7 @@ def random_metabolic_network(compounds, reactions, reversible, p, seed=None):
                 logger.debug("Adding edge %s-%s.", tar.identifier,\
                     src.identifier)
                 graph.add_edge(tar, src, factor=0)
-    prune_network(graph)
+    prune_network(graph, logger)
     return graph
 
 def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
@@ -245,5 +247,5 @@ def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
                 comp = random.choice(repeated_cmpds)
                 rxn_targets.add(comp)
             current_rxn += 1
-    prune_network(graph)
+    prune_network(graph, logger)
     return graph
