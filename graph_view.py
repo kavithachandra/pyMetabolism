@@ -176,17 +176,21 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
 #    def __getattr__(self, name):
 #        return type(self._network).__getattribute__(self._network, name)
 
-    def write_edgelist(self, filename):
+    def write_edgelist(self, filename, reversibility=True):
+        """
+        @param reversibility: Modifies whether a reversibility suffix is added
+            when writing reaction names, this influences how they are read again
+        """
         fh = open(filename, 'w')
         fh.write("# %s %s\n" % (self.__class__.__name__, self._name))
         for (src, tar, val) in self.edges_iter(data=True):
             s = src.identifier
             if isinstance(src, Reaction):
-                if src.reversible:
+                if src.reversible and reversibility:
                      s += self._options.rev_reaction_suffix
             t = tar.identifier
             if isinstance(tar, Reaction):
-                if tar.reversible:
+                if tar.reversible and reversibility:
                      t += self._options.rev_reaction_suffix
             fh.write("%s %s %f\n" % (s, t, val["factor"]))
         fh.close()
