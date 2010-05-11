@@ -144,6 +144,23 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
             if rxn.reversible and not self._split:
                 self.add_edge(tar, rxn)
 
+    def make_reversible(self, rxn):
+        """
+        """
+        # substrates become products
+        prods = self.predecessors(rxn)
+        # products become substrates
+        subs = self.successors(rxn)
+        # get coefficients
+        back = Reaction(rxn.identifier + self._options.rev_reaction_suffix,
+            (), (), ())
+        self._reactions.add(back)
+        self.add_node(back)
+        for comp in prods:
+            self.add_edge(back, comp, factor=self[comp][back]["factor"])
+        for comp in subs:
+            self.add_edge(comp, back, factor=self[back][comp]["factor"])
+
     def remove_reaction(self, rxn):
         assert isinstance(rxn, Reaction)
         self._reactions.remove(rxn)
@@ -205,97 +222,96 @@ class BipartiteMetabolicNetwork(networkx.DiGraph):
             self.add_edge(s, t, factor=float(val))
 
 
-class MetaboliteCentricNetwork(networkx.MultiDiGraph):
-    """
-
-    """
-
-    _counter = 0
-
-    def __init__(self, reactions=None, name='', labelled=True, * args, ** kwargs):
-        self.__class__._counter += 1
-        if name:
-            self.name = str(name)
-        else:
-            self.name = "MetaboliteCentricNetwork-%d" % self.__class__._counter
-        super(MetaboliteCentricNetwork, self).__init__(*args, ** kwargs)
-        self.logger = logging.getLogger(\
-                                        "pyMetabolism.MetaboliteCentricNetwork.%s" % self.name)
-        self.handler = NullHandler
-        self.logger.addHandler(self.handler)
-        self.labelled = labelled
-        if reactions:
-            self._populate_graph_on_init(reactions)
-
-    def _populate_graph_on_init(self, reactions):
-        for rxn in reactions:
-            self.add_reaction(rxn)
-
-    def add_reaction(self, rxn):
-        """docstring for add_reaction"""
-        for sub in rxn.substrates:
-            for prod in rxn.substrates:
-                if sub == prod:
-                    continue
-                if self.labelled:
-                    if rxn.reversible and not\
-                        (self.has_edge(sub, prod, key=rxn.identifier) or\
-                         self.has_edge(prod, sub, key=rxn.identifier)):
-                        self.add_edge(sub, prod, key=rxn.identifier)
-                        self.add_edge(prod, sub, key=rxn.identifier)
-                    elif not self.has_edge(sub, prod, key=rxn.identifier):
-                        self.add_edge(sub, prod, key=rxn.identifier)
-                else:
-                    if rxn.reversible:
-                        self.add_edge(sub, prod)
-                        self.add_edge(prod, sub)
-                    else:
-                        self.add_edge(sub, prod)
-
-
-class ReactionCentricNetwork(networkx.MultiDiGraph):
-    """
-
-    """
-    def __init__(self, reactions=None, name='', labelled=True, * args, ** kwargs):
-        self.__class__._counter += 1
-        if name:
-            self.name = str(name)
-        else:
-            self.name = "ReactionCentricNetwork-%d" % self.__class__._counter
-        super(MetaboliteCentricNetwork, self).__init__(*args, ** kwargs)
-        self.logger = logging.getLogger(\
-                                        "pyMetabolism.ReactionCentricNetwork.%s" % self.name)
-        self.labelled = labelled
-        if reactions:
-            self._populate_graph_on_init(reactions)
-
-    def _populate_graph_on_init(self, reactions):
-        for rxn1 in reactions:
-            for rxn2 in reactions:
-                if not rxn1 == rxn2:
-                    self.add_reaction_pair(rxn1, rxn2)
-
-    def add_reaction_pair(self, rxn1, rxn2):
-        """
-        docstring for add_reaction
-        """
-        def connect_pair(self, rxn1, rxn2, compartment):
-            if self.labelled:
-                if not self.has_edge(rxn1, rxn2, key=compartment):
-                    self.add_edge(rxn1, rxn2, key=compartment)
-            else:
-                self.add_edge(rxn1, rxn2)
-        # find potential targets
-        targets = set(rxn1.substrates + rxn1.products).intersection(
-                                                                    set(rxn2.substrates + rxn2.products))
-        # compartments!
-        for compound in targets:
-            if rxn1.compartments_dict[compound] != rxn2.compartments[compound]:
-                continue
-            rxn1_sub = compound in rxn1.substrates
-            rxn2_sub = compound in rxn2.substrates
-            if not rxn1_sub and rxn2_sub:
-                connect_pair(rxn1, rxn2, rxn1.compartments_dict[compound])
-            if not rxn2_sub and rxn1_sub:
-                connect_pair(rxn1, rxn2, rxn1.compartments_dict[compound])
+#class MetaboliteCentricNetwork(networkx.MultiDiGraph):
+#    """
+#
+#    """
+#
+#    _counter = 0
+#
+#    def __init__(self, reactions=None, name='', labelled=True, * args, ** kwargs):
+#        self.__class__._counter += 1
+#        if name:
+#            self.name = str(name)
+#        else:
+#            self.name = "MetaboliteCentricNetwork-%d" % self.__class__._counter
+#        super(MetaboliteCentricNetwork, self).__init__(*args, ** kwargs)
+#        self.logger = logging.getLogger(\
+#                                        "pyMetabolism.MetaboliteCentricNetwork.%s" % self.name)
+#        self.logger.addHandler(self.handler)
+#        self.labelled = labelled
+#        if reactions:
+#            self._populate_graph_on_init(reactions)
+#
+#    def _populate_graph_on_init(self, reactions):
+#        for rxn in reactions:
+#            self.add_reaction(rxn)
+#
+#    def add_reaction(self, rxn):
+#        """docstring for add_reaction"""
+#        for sub in rxn.substrates:
+#            for prod in rxn.substrates:
+#                if sub == prod:
+#                    continue
+#                if self.labelled:
+#                    if rxn.reversible and not\
+#                        (self.has_edge(sub, prod, key=rxn.identifier) or\
+#                         self.has_edge(prod, sub, key=rxn.identifier)):
+#                        self.add_edge(sub, prod, key=rxn.identifier)
+#                        self.add_edge(prod, sub, key=rxn.identifier)
+#                    elif not self.has_edge(sub, prod, key=rxn.identifier):
+#                        self.add_edge(sub, prod, key=rxn.identifier)
+#                else:
+#                    if rxn.reversible:
+#                        self.add_edge(sub, prod)
+#                        self.add_edge(prod, sub)
+#                    else:
+#                        self.add_edge(sub, prod)
+#
+#
+#class ReactionCentricNetwork(networkx.MultiDiGraph):
+#    """
+#
+#    """
+#    def __init__(self, reactions=None, name='', labelled=True, * args, ** kwargs):
+#        self.__class__._counter += 1
+#        if name:
+#            self.name = str(name)
+#        else:
+#            self.name = "ReactionCentricNetwork-%d" % self.__class__._counter
+#        super(MetaboliteCentricNetwork, self).__init__(*args, ** kwargs)
+#        self.logger = logging.getLogger(\
+#                                        "pyMetabolism.ReactionCentricNetwork.%s" % self.name)
+#        self.labelled = labelled
+#        if reactions:
+#            self._populate_graph_on_init(reactions)
+#
+#    def _populate_graph_on_init(self, reactions):
+#        for rxn1 in reactions:
+#            for rxn2 in reactions:
+#                if not rxn1 == rxn2:
+#                    self.add_reaction_pair(rxn1, rxn2)
+#
+#    def add_reaction_pair(self, rxn1, rxn2):
+#        """
+#        docstring for add_reaction
+#        """
+#        def connect_pair(self, rxn1, rxn2, compartment):
+#            if self.labelled:
+#                if not self.has_edge(rxn1, rxn2, key=compartment):
+#                    self.add_edge(rxn1, rxn2, key=compartment)
+#            else:
+#                self.add_edge(rxn1, rxn2)
+#        # find potential targets
+#        targets = set(rxn1.substrates + rxn1.products).intersection(
+#                                                                    set(rxn2.substrates + rxn2.products))
+#        # compartments!
+#        for compound in targets:
+#            if rxn1.compartments_dict[compound] != rxn2.compartments[compound]:
+#                continue
+#            rxn1_sub = compound in rxn1.substrates
+#            rxn2_sub = compound in rxn2.substrates
+#            if not rxn1_sub and rxn2_sub:
+#                connect_pair(rxn1, rxn2, rxn1.compartments_dict[compound])
+#            if not rxn2_sub and rxn1_sub:
+#                connect_pair(rxn1, rxn2, rxn1.compartments_dict[compound])
