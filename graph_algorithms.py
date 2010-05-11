@@ -22,6 +22,7 @@ import logging
 import random
 import numpy
 import matplotlib.pyplot
+from networkx import cycle_basis
 
 
 from pyMetabolism import OptionsManager
@@ -347,9 +348,14 @@ def make_consistent_stoichiometry(graph, factors):
         % options.main_logger_name)
     # generate mass vector for compounds
     mass_vector = dict()
+    degrees = list()
     for comp in graph.compounds:
-        mass_vector[comp] = round(abs(random.gauss(len(graph.compounds),\
-            len(graph.compounds) / 2)))
+        degrees.append(graph.in_degree(comp) + graph.out_degree(comp))
+    degrees.sort()
+    for comp in graph.compounds:
+#        mass_vector[comp] = round(abs(random.gauss(len(graph.compounds),\
+#            len(graph.compounds) / 2)))
+        mass_vector[comp] = degrees[-degrees.index(graph.in_degree(comp) + graph.out_degree(comp))]
     logger.debug(str(mass_vector))
     total = float(len(graph.reactions))
     maxi = max(factors)
@@ -449,6 +455,20 @@ def propagate_consistent_stoichiometry(graph, factors):
             discover_partners(graph, comp, discovered_rxns, complete_rxns)
         logger.info(mass_vector.values())
 
+def cycles_consistent_stoichiometry(graph, factors):
+    """
+    Attempt to create a consistent stoichiometry by stabilising cycles within the
+    network.
+    """
+    options = OptionsManager()
+    logger = logging.getLogger("%s.cycles_consistent_stoichiometry"\
+        % options.main_logger_name)
+    cmpds = list(graph.compounds)
+    un_graph = graph.to_undirected()
+    # attempt to get a consistent
+    cycles = cycle_basis(un_graph)
+    cycles.sort(cmp=lambda x, y: cmp(len(x), len(y)), reverse=True)
+
 def random_fba(graph, num_inputs, num_outputs):
     """
     @param graph: BipartiteMetabolicNetwork
@@ -499,8 +519,7 @@ def random_fba(graph, num_inputs, num_outputs):
     b_eq = numpy.zeros(matrix.num_compounds)
 
     # start with the largest number of inputs, then reduce
-    num_inputs.sort()
-    num_inputs.reverse()
+    num_inputs.sort(reverse=True)
     maxi = num_inputs[0]
     for comp in potential_inputs:
             if len(inputs) < maxi:
