@@ -124,6 +124,59 @@ def random_metabolic_network(compounds, reactions, reversible, p, seed=None):
     prune_network(graph, logger)
     return graph
 
+def random_metabolic_network2(compounds, reactions, reversible, p, seed=None):
+    """
+    Creates a bipartite graph that models metabolism according to the principles
+    of an Erdos-Renyi-like random graph.
+
+    @param compounds: Integer specifying the number of compounds.
+
+    @param reactions: Integer, specifying the number of reactions.
+
+    @param p: Probability for an edge to be set (on average this is the density
+        of the graph).
+
+    @rtype: L{BipartiteMetabolicNetwork
+        <pyMetabolism.graph_view.BipartiteMetabolicNetwork>}
+
+    @raise ValueError: If either compounds or reactions are not integers.
+    """
+    if seed:
+        random.seed(seed)
+    options = OptionsManager()
+    logger = logging.getLogger("%s.random_metabolic_network"\
+        % (options.main_logger_name))
+    graph = BipartiteMetabolicNetwork(name="random model")
+    for i in xrange(compounds):
+        graph.add_compound(Compound("%s%d" % (options.compound_prefix, i)))
+    # choose a number of reactions as reversible
+    reversibles = random.sample(xrange(reactions), reversible)
+    reversibles.sort()
+    for i in xrange(reactions):
+        if len(reversibles) > 0 and i == reversibles[0]:
+            del reversibles[0]
+            graph.add_reaction(Reaction("%s%d" % (options.reaction_prefix, i),\
+                (), (), (), reversible=True))
+        else:
+            graph.add_reaction(Reaction("%s%d" % (options.reaction_prefix, i),\
+                (), (), (), reversible=False))
+    for src in graph.compounds:
+        for tar in graph.reactions:
+            if not graph.has_edge(tar, src):
+                if random.random() < p:
+                    logger.debug("Adding edge %s-%s.", src.identifier,\
+                        tar.identifier)
+                    graph.add_edge(src, tar, factor=0)
+    for src in graph.reactions:
+        for tar in graph.compounds:
+            if not graph.has_edge(tar, src):
+                if random.random() < p:
+                    logger.debug("Adding edge %s-%s.", src.identifier,\
+                        tar.identifier)
+                    graph.add_edge(src, tar, factor=0)
+    prune_network(graph, logger)
+    return graph
+
 def scale_free_metabolic_network(compounds, reactions, reversible, m, n):
     """
     Uses a Barabasi-Alberts-like preferential attachment algorithm. Adopted from
